@@ -1,0 +1,30 @@
+/**
+ *  $classname
+#foreach( $row in $reducedTableRows ) 
+ * $row
+#end
+ */
+package $packagename;
+
+$classvisibility class $classname {
+	public void run() {
+	}
+
+#foreach( $condition in $conditions )
+	/**
+	 * $condition()
+	 */
+	protected abstract boolean $condition() {
+	}
+	
+#end
+
+#foreach( $action in $actions )
+	/**
+	 * $action()
+	 */
+	protected abstract void $action() {
+	}
+	
+#end
+}
