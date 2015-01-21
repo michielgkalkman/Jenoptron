@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>www.taHjaj-wo.org</groupId>
+  <artifactId>JDTGenerators</artifactId>
+  <name>JDTGenerators</name>
+  <version>0.27</version>
+  <build>
+    <plugins>
+      <plugin>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <configuration>
+          <source>1.6</source>
+          <target>1.6</target>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+  <dependencies>
+    <dependency>
+    	<groupId>www.taHjaj-wo.org</groupId>
+    	<artifactId>JDTCore</artifactId>
+    	<version>0.28-SNAPSHOT</version>
+    </dependency>
+    <dependency>
+    	<groupId>org.taHjaj.wo</groupId>
+    	<artifactId>UtilK</artifactId>
+    	<version>0.0.6-SNAPSHOT</version>
+    </dependency>
+  </dependencies>
+  <distributionManagement>
+    <site>
+      <id>Jenoptron</id>
+      <name>Jenoptron</name>
+      <url>file:F:/j3me/Jenoptron/JDTCore</url>
+    </site>
+  </distributionManagement>
+</project>

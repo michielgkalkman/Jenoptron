@@ -1,0 +1,17 @@
+package dt.generators;
+
+import java.io.FileFilter;
+import java.io.IOException;
+import java.io.Writer;
+
+import jdt.icore.IDecisionTable;
+
+public interface Generator {
+	public Generator setDecisionTable( final IDecisionTable decisionTable);
+	public String getShortDescription();
+	public GeneratorOptions getGeneratorOptions();
+
+	public FileFilter getFileFilter();
+	public String getSuffix();
+	public boolean write( final Writer writer) throws IOException;
+}
