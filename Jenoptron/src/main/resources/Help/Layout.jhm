@@ -1,0 +1,8 @@
+<?xml version='1.0' encoding='ISO-8859-1' ?>
+<map version="1.0">
+  <mapID target="top" url="LayoutFrame.html" />
+  <mapID target="FlowLayout" url="FlowLayout.html" />
+  <mapID target="GridLayout" url="GridLayout.html" />
+  <mapID target="BorderLayout" url="BorderLayout.html" />
+  <mapID target="BoxLayout" url="BoxLayout.html" />
+</map>

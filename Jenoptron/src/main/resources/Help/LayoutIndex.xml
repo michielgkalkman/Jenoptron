@@ -1,0 +1,16 @@
+<?xml version='1.0' encoding='ISO-8859-1' ?>
+<index version="1.0">
+  <indexitem text="Index">
+    <indexitem text="B">
+      <indexitem target="BorderLayout" text="BorderLayout"/>
+      <indexitem target="BoxLayout" text="BoxLayout"/>
+    </indexitem>
+    <indexitem text="F">
+      <indexitem target="FlowLayout" text="FlowLayout"/>
+      <indexitem target="top" text="Frame"/>
+    </indexitem>
+    <indexitem text="G">
+      <indexitem target="GridLayout" text="GridLayout"/>
+    </indexitem>
+  </indexitem>
+</index>

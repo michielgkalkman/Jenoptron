@@ -1,0 +1,89 @@
+<?xml version="1.0" standalone="no"?>
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
+          "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd">
+<book>
+  <bookinfo>
+    <title>FooMatic 5000</title> 
+  </bookinfo>
+  <chapter>
+    <title>Quick Start</title>
+    <para>You know you can't wait! Lets get started.</para>
+    <para>Loxercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</para>
+    <para>involved with the FooMatic 5000, this chapter will get you off to a quick start!</para>
+    <para>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum</para>
+  </chapter>
+  <chapter>
+    <title>Introduction</title>
+    <para>FooMatic 5000 is an application that allows you maximum
+      productivity when creating widgets in your factory.</para>
+  </chapter>
+  <chapter>
+    <title>Installation</title>
+    <para>Installation for your system.</para>
+    <para>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum</para>
+    <para>Adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. </para>
+    <para>Now that we have finished installing, lets learn about some <link linkend="concepts">Concepts</link> used in FooMatic 5000</para>
+  </chapter>
+  <chapter id="concepts">
+    <title>Concepts</title>
+    <para>Let's look at the basic concepts involved with FooMatic 5000.</para>
+  </chapter>
+  <chapter>
+    <title>How Do I...</title>
+    <section>
+      <title>New File</title>
+      <para>This example Chapter is going to be extra long, so we can see what
+      different sections look like. Sound good? Let procced.</para>
+      <para>p</para><para>p</para><para>p</para><para>p</para><para>p</para><para>p</para><para>p</para><para>p</para><para>p</para><para>p</para><para>p</para><para>p</para>
+      <section id="new_foo_section">
+              <title id="new_foo_id">New Foo</title>
+              <para>New Foo can be created by going to the file menu and 
+              selecting new and then clicking Foo. This launches the New Foo
+              Wizard.</para>
+              <para>Keep in mind that Creating new foo may lead to foopeltunnel
+              syndrome. You have been warned.</para>
+      </section>
+      <section id="new_bar_section">
+              <title id="new_baz_id" name="new_baz">New Bar</title>
+              <para>New Bar is easy to integrate. In the Orgaznization screen,
+              select 2 or more Foos which you would like to work with. While
+              they are onscreen and selected, goto the File menu and click New
+              then Bar. After a few minutes a new Bar widget will appear with
+              the characteristics of all your favorite Foo</para>
+              
+              <tip>Keep in mind that Bar is derived from Foos so if you delete
+              a foo, Bar will be automagically updated to reflect this.
+              If you delete all of the Foos that a Bar depends on, it will silently
+              die.</tip>
+              
+              <para>The number of Bars your system can create is limited to 5. Why?
+              No good reason. Just deal with it.</para>
+      </section>
+      <section id="new_baz_section">
+              <title id="new_baz_title">New Baz</title>
+              <para>We would advise you not to create Baz. I mean come on, what do you
+              really want to do with all this Baz. Baz may actually be considered
+              harmful by Jakob Nielsen, so just don't do it.</para>
+      </section>
+      <para>Okis tas mol nuf me nuf xu nu Xanika nu sefem xos nex. Otey pi xamus titim noy xu okis. Yokes xu xoxox ney pi ko tey sasuy fe Elas fe Loma yel mi. Pul pi sines xu nu mifef noy nu fako. Tone las xu titim. Fele xu uni lal ki sitef nof. Fake xu uni lal ki suf alix sal. Nu suf ayes nu axu noy mi ney utex pi ko pelol xomay pi suf alix yal xu sitef. Po fetim ki efel nu neno fele ney ixi nu Mas ney lokas sosuy mi xu fosuy. Foxox ki tey kux fimam nuf xu nu fimam ikay nu ney ofus.</para>
+      <para>Okis tas mol nuf me nuf xu nu Xanika nu sefem xos nex. Otey pi xamus titim noy xu okis. Yokes xu xoxox ney pi ko tey sasuy fe Elas fe Loma yel mi. Pul pi sines xu nu mifef noy nu fako. Tone las xu titim. Fele xu uni lal ki sitef nof. Fake xu uni lal ki suf alix sal. Nu suf ayes nu axu noy mi ney utex pi ko pelol xomay pi suf alix yal xu sitef. Po fetim ki efel nu neno fele ney ixi nu Mas ney lokas sosuy mi xu fosuy. Foxox ki tey kux fimam nuf xu nu fimam ikay nu ney ofus.</para>
+    </section>
+    <section>
+      <title>Exporting</title>
+      <para>You can Export our Foo into
+      many diffent file types. One reason to <indexterm><secondary>export</secondary> is to 
+      <primary>Import</primary></indexterm> this data back into
+      some other system.</para>
+    </section>
+    <section>
+      <title>Copying</title>
+      <para>Okis tas mol nuf me nuf xu nu Xanika nu sefem xos nex. Otey pi xamus titim noy xu okis. Yokes xu xoxox ney pi ko tey sasuy fe Elas fe Loma yel mi. Pul pi sines xu nu mifef noy nu fako. Tone las xu titim. Fele xu uni lal ki sitef nof. Fake xu uni lal ki suf alix sal. Nu suf ayes nu axu noy mi ney utex pi ko pelol xomay pi suf alix yal xu sitef. Po fetim ki efel nu neno fele ney ixi nu Mas ney lokas sosuy mi xu fosuy. Foxox ki tey kux fimam nuf xu nu fimam ikay nu ney ofus.</para>
+    </section>
+    <section>
+      <title>Importing</title>
+      <para><indexterm><primary>Importing</primary>  an <secondary>alien</secondary> file format from </indexterm> our competators file formats has never been easier!</para>
+      <para>Okis tas mol nuf me nuf xu nu Xanika nu sefem xos nex. Otey pi xamus titim noy xu okis. Yokes xu xoxox ney pi ko tey sasuy fe Elas fe Loma yel mi. Pul pi sines xu nu mifef noy nu fako. Tone las xu titim. Fele xu uni lal ki sitef nof. Fake xu uni lal ki suf alix sal. Nu suf ayes nu axu noy mi ney utex pi ko pelol xomay pi suf alix yal xu sitef. Po fetim ki efel nu neno fele ney ixi nu Mas ney lokas sosuy mi xu fosuy. Foxox ki tey kux fimam nuf xu nu fimam ikay nu ney ofus.</para>
+      <para>Okis tas mol nuf me nuf xu nu Xanika nu sefem xos nex. Otey pi xamus titim noy xu okis. Yokes xu xoxox ney pi ko tey sasuy fe Elas fe Loma yel mi. Pul pi sines xu nu mifef noy nu fako. Tone las xu titim. Fele xu uni lal ki sitef nof. Fake xu uni lal ki suf alix sal. Nu suf ayes nu axu noy mi ney utex pi ko pelol xomay pi suf alix yal xu sitef. Po fetim ki efel nu neno fele ney ixi nu Mas ney lokas sosuy mi xu fosuy. Foxox ki tey kux fimam nuf xu nu fimam ikay nu ney ofus.</para>
+    </section>
+  </chapter>
+</book>

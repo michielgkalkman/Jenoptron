@@ -1,0 +1,10 @@
+<?xml version='1.0' encoding='ISO-8859-1' ?>
+<toc version="1.0">
+  <tocitem>Basic Layout Example - TOC
+<tocitem text="Frame" target="top"/>
+    <tocitem text="FlowLayout" target="FlowLayout"/>
+    <tocitem text="GridLayout" target="GridLayout"/>
+    <tocitem text="BorderLayout" target="BorderLayout"/>
+    <tocitem text="BoxLayout" target="BoxLayout"/>
+  </tocitem>
+</toc>
