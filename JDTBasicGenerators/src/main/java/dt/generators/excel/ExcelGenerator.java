@@ -1,0 +1,92 @@
+package dt.generators.excel;
+
+import java.io.FileFilter;
+import java.io.IOException;
+import java.io.Writer;
+
+import jdt.icore.IAction;
+import jdt.icore.ICondition;
+import jdt.icore.IConditionValue;
+import jdt.icore.IDecisionTable;
+import jdt.icore.IRule;
+import jdt.icore.IValue;
+import dt.generators.Generator;
+import dt.generators.GeneratorOptions;
+import dt.generators.TextGenerator;
+
+public class ExcelGenerator implements TextGenerator {
+
+	/**
+	 *
+	 */
+	private static final long serialVersionUID = -670292186612685316L;
+
+	@Override
+	public String getText(final IDecisionTable decisionTable) {
+
+		final StringBuffer stringBuffer = new StringBuffer();
+		
+		for( final ICondition condition : decisionTable.getConditions()) {
+			stringBuffer.append( condition.getShortDescription());
+			for( final IRule rule : decisionTable.getRules()) {
+				final IConditionValue conditionValue = rule.getConditionValue( condition);
+				stringBuffer.append( '\t').append( conditionValue);
+			}
+			stringBuffer.append( '\n');
+		}
+
+		for( final IAction action : decisionTable.getActions()) {
+			stringBuffer.append( action.getShortDescription());
+			for( final IRule rule : decisionTable.getRules()) {
+				final IValue value = rule.getActionValue(action);
+				stringBuffer.append( '\t').append( value);
+			}
+			stringBuffer.append( '\n');
+		}
+
+		return stringBuffer.toString();
+	}
+
+	@Override
+	public String getSuffix() {
+		return ".txt";
+	}
+
+	public boolean write(final Writer writer) throws IOException {
+		writer.write( getText());
+		return true;
+	}
+
+	@Override
+	public FileFilter getFileFilter() {
+		return null;
+	}
+
+	private final ExcelTableOptionsWrapper excelTableOptionsWrapper;
+	private IDecisionTable decisionTable;
+
+	@Override
+	public String getText() {
+		return getText( this.decisionTable);
+	}
+
+	@Override
+	public GeneratorOptions getGeneratorOptions() {
+		return excelTableOptionsWrapper.getTableOptions();
+	}
+
+	public ExcelGenerator() {
+		super();
+		excelTableOptionsWrapper = new ExcelTableOptionsWrapper( false, false, false, 20);
+	}
+
+	public String getShortDescription() {
+		return "Excel";
+	}
+
+	public Generator setDecisionTable( final IDecisionTable decisionTable) {
+		this.decisionTable = decisionTable;
+		return this;
+	}
+}
+
