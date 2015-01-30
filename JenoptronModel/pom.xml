@@ -14,9 +14,32 @@
 	</parent>
 
 	<build>
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>org.pitest</groupId>
+					<artifactId>pitest-maven</artifactId>
+					<version>1.0.0</version>
+				</plugin>
+			</plugins>
+		</pluginManagement>
 		<plugins>
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<!-- Run with: mvn org.pitest:pitest-maven:mutationCoverage -->
+				<groupId>org.pitest</groupId>
+				<artifactId>pitest-maven</artifactId>
+				<configuration>
+					<targetClasses>
+						<param>jdt.core*</param>
+					</targetClasses>
+					<targetTests>
+						<param>jdt.core*</param>
+					</targetTests>
+					<timeoutConstant>12000</timeoutConstant>
+				</configuration>
 			</plugin>
 		</plugins>
 	</build>
@@ -75,29 +98,8 @@
 				<artifactId>changes-maven-plugin</artifactId>
 			</plugin>
 			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-pmd-plugin</artifactId>
-				<configuration>
-					<targetJdk>1.7</targetJdk>
-					<rulesets>
-						<ruleset>/rulesets/basic.xml</ruleset>
-						<ruleset>/rulesets/braces.xml</ruleset>
-						<ruleset>/rulesets/imports.xml</ruleset>
-						<ruleset>/rulesets/unusedcode.xml
-						</ruleset>
-						<ruleset>/rulesets/optimizations.xml
-						</ruleset>
-						<!-- ruleset>/rulesets/controversial.xml</ruleset -->
-						<ruleset>/rulesets/design.xml</ruleset>
-						<ruleset>/rulesets/coupling.xml</ruleset>
-						<ruleset>/rulesets/codesize.xml</ruleset>
-						<ruleset>/rulesets/strictexception.xml
-						</ruleset>
-					</rulesets>
-					<format>xml</format>
-					<linkXref>true</linkXref>
-					<sourceEncoding>utf-8</sourceEncoding>
-					<minimumTokens>75</minimumTokens>
-				</configuration>
 			</plugin>
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
