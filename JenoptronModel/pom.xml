@@ -16,11 +16,6 @@
 	<build>
 		<pluginManagement>
 			<plugins>
-				<plugin>
-					<groupId>org.pitest</groupId>
-					<artifactId>pitest-maven</artifactId>
-					<version>1.0.0</version>
-				</plugin>
 			</plugins>
 		</pluginManagement>
 		<plugins>
