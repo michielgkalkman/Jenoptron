@@ -1,31 +1,14 @@
 package dt.fx;
 
-import java.util.Collection;
 import java.util.List;
 
-import org.controlsfx.control.spreadsheet.Grid;
-import org.controlsfx.control.spreadsheet.GridBase;
-import org.controlsfx.control.spreadsheet.SpreadsheetCell;
-import org.controlsfx.control.spreadsheet.SpreadsheetCellType;
-import org.controlsfx.control.spreadsheet.SpreadsheetView;
-
 import javafx.application.Application;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
-import javafx.geometry.Rectangle2D;
-import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.StackPane;
-import javafx.scene.paint.Color;
-import javafx.scene.text.Text;
-import javafx.stage.Screen;
 import javafx.stage.Stage;
-import javafx.stage.WindowEvent;
 import jdt.core.DecisionTable;
 import jdt.core.binary.BinaryAction;
 import jdt.core.binary.BinaryCondition;
@@ -33,18 +16,28 @@ import jdt.icore.IAction;
 import jdt.icore.ICondition;
 import jdt.icore.IDecisionTable;
 
+import org.controlsfx.control.spreadsheet.Grid;
+import org.controlsfx.control.spreadsheet.GridBase;
+import org.controlsfx.control.spreadsheet.SpreadsheetCell;
+import org.controlsfx.control.spreadsheet.SpreadsheetCellBase;
+import org.controlsfx.control.spreadsheet.SpreadsheetCellType;
+import org.controlsfx.control.spreadsheet.SpreadsheetView;
+
 public class SpreadsheetMain extends Application {
 
 	@Override
 	public void start(final Stage stage) throws Exception {
 		stage.setTitle("JenoptronFx");
 
+		final IDecisionTable iDecisionTable = createDecisionTable();
+
+		final Grid grid = getSampleGrid(iDecisionTable);
 
 		final StackPane sp = new StackPane();
 		final Button btnOpen = new Button("Open Dialog");
 		
 		
-		SpreadsheetView spreadsheetView = new  SpreadsheetView(getSampleGrid());
+		SpreadsheetView spreadsheetView = new  SpreadsheetView(grid);
 		
 		sp.getChildren().add(btnOpen);
 		sp.getChildren().add(spreadsheetView);
@@ -57,6 +50,37 @@ public class SpreadsheetMain extends Application {
 		stage.show();
 	}
 
+
+    private Grid getSampleGrid( final IDecisionTable decisionTable) {
+    	final int nrRows = decisionTable.getConditions().size()
+    			+ decisionTable.getActions().size();
+    	
+    	final int nrRules = decisionTable.getRules().size();
+    	
+        GridBase gridBase = new GridBase( nrRows, nrRules);
+        List<ObservableList<SpreadsheetCell>> rows = FXCollections.observableArrayList();
+
+        for (int row = 0; row < gridBase.getRowCount(); ++row) {
+            ObservableList<SpreadsheetCell> currentRow = FXCollections.observableArrayList();
+            for (int column = 0; column < gridBase.getColumnCount(); ++column) {
+                SpreadsheetCellBase spreadsheetCell = (SpreadsheetCellBase) SpreadsheetCellType.STRING.createCell(row, column, 1, 1, "X");
+				currentRow.add(spreadsheetCell);
+				
+            }
+            rows.add(currentRow);
+        }
+        gridBase.setRows(rows);
+        
+        
+        decisionTable.getConditions().forEach(  c -> { gridBase.getRowHeaders().add( c.getShortDescription()); } );
+
+        decisionTable.getActions().forEach(action -> { gridBase.getRowHeaders().add( action.getShortDescription()); });
+        
+//        gridBase.getRowHeaders().add("Victor");
+        
+        return gridBase;
+    }
+
     private Grid getSampleGrid() {
         GridBase gridBase = new GridBase(10, 15);
         List<ObservableList<SpreadsheetCell>> rows = FXCollections.observableArrayList();
@@ -64,13 +88,15 @@ public class SpreadsheetMain extends Application {
         for (int row = 0; row < gridBase.getRowCount(); ++row) {
             ObservableList<SpreadsheetCell> currentRow = FXCollections.observableArrayList();
             for (int column = 0; column < gridBase.getColumnCount(); ++column) {
-                currentRow.add(SpreadsheetCellType.STRING.createCell(row, column, 1, 1, ""));
+                SpreadsheetCellBase spreadsheetCell = (SpreadsheetCellBase) SpreadsheetCellType.STRING.createCell(row, column, 1, 1, "X");
+				currentRow.add(spreadsheetCell);
             }
             rows.add(currentRow);
         }
         gridBase.setRows(rows);
         return gridBase;
     }
+
 
 	private IDecisionTable createDecisionTable() {
 		final IDecisionTable decisionTable = new DecisionTable();
