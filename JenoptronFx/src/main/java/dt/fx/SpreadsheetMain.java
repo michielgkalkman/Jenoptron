@@ -37,7 +37,7 @@ public class SpreadsheetMain extends Application {
 		final Button btnOpen = new Button("Open Dialog");
 		
 		
-		SpreadsheetView spreadsheetView = new  SpreadsheetView(grid);
+		final SpreadsheetView spreadsheetView = new  SpreadsheetView(grid);
 		
 		sp.getChildren().add(btnOpen);
 		sp.getChildren().add(spreadsheetView);
@@ -51,23 +51,44 @@ public class SpreadsheetMain extends Application {
 	}
 
 
+    /**
+     * The {@link SpreadsheetCell} {@link String} type instance.
+     */
+    public static final CheckBoxType CheckBox = new CheckBoxType();
+
+    /**
+     * The {@link SpreadsheetCell} {@link String} type base class.
+     */
     private Grid getSampleGrid( final IDecisionTable decisionTable) {
     	final int nrRows = decisionTable.getConditions().size()
     			+ decisionTable.getActions().size();
     	
     	final int nrRules = decisionTable.getRules().size();
     	
-        GridBase gridBase = new GridBase( nrRows, nrRules);
-        List<ObservableList<SpreadsheetCell>> rows = FXCollections.observableArrayList();
+        final GridBase gridBase = new GridBase( nrRows, nrRules);
+        final List<ObservableList<SpreadsheetCell>> rows = FXCollections.observableArrayList();
 
         for (int row = 0; row < gridBase.getRowCount(); ++row) {
-            ObservableList<SpreadsheetCell> currentRow = FXCollections.observableArrayList();
+            final ObservableList<SpreadsheetCell> currentRow = FXCollections.observableArrayList();
             for (int column = 0; column < gridBase.getColumnCount(); ++column) {
-                SpreadsheetCellBase spreadsheetCell = (SpreadsheetCellBase) SpreadsheetCellType.STRING.createCell(row, column, 1, 1, "X");
+
+                final SpreadsheetCellBase spreadsheetCell = (SpreadsheetCellBase) CheckBox.createCell(row, column, 1, 1, true);
+//            	
+//                
+//            	
+            	final SpreadsheetCellBase spreadsheetCell2 = (SpreadsheetCellBase) SpreadsheetCellType.STRING.createCell(row, column, 1, 1, "X");
+
 				currentRow.add(spreadsheetCell);
+			
+				System.out.println( "format:" + spreadsheetCell.getItem());
 				
             }
+            
+            
+            
             rows.add(currentRow);
+            
+            
         }
         gridBase.setRows(rows);
         
@@ -75,20 +96,19 @@ public class SpreadsheetMain extends Application {
         decisionTable.getConditions().forEach(  c -> { gridBase.getRowHeaders().add( c.getShortDescription()); } );
 
         decisionTable.getActions().forEach(action -> { gridBase.getRowHeaders().add( action.getShortDescription()); });
-        
-//        gridBase.getRowHeaders().add("Victor");
-        
+
+
         return gridBase;
     }
 
     private Grid getSampleGrid() {
-        GridBase gridBase = new GridBase(10, 15);
-        List<ObservableList<SpreadsheetCell>> rows = FXCollections.observableArrayList();
+        final GridBase gridBase = new GridBase(10, 15);
+        final List<ObservableList<SpreadsheetCell>> rows = FXCollections.observableArrayList();
 
         for (int row = 0; row < gridBase.getRowCount(); ++row) {
-            ObservableList<SpreadsheetCell> currentRow = FXCollections.observableArrayList();
+            final ObservableList<SpreadsheetCell> currentRow = FXCollections.observableArrayList();
             for (int column = 0; column < gridBase.getColumnCount(); ++column) {
-                SpreadsheetCellBase spreadsheetCell = (SpreadsheetCellBase) SpreadsheetCellType.STRING.createCell(row, column, 1, 1, "X");
+                final SpreadsheetCellBase spreadsheetCell = (SpreadsheetCellBase) SpreadsheetCellType.STRING.createCell(row, column, 1, 1, "X");
 				currentRow.add(spreadsheetCell);
             }
             rows.add(currentRow);
