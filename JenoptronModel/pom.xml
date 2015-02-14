@@ -67,6 +67,12 @@
 			<groupId>com.google.guava</groupId>
 			<artifactId>guava</artifactId>
 		</dependency>
+
+		<dependency>
+			<groupId>com.netflix.rxjava</groupId>
+			<artifactId>rxjava-core</artifactId>
+			<version>0.20.7</version>
+		</dependency>
 	</dependencies>
 	<reporting>
 		<plugins>
