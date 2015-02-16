@@ -24,7 +24,7 @@ public class CheckBoxType extends SpreadsheetCellType<Boolean> {
 
     @Override
     public boolean match(final Object value) {
-        return value instanceof Boolean;
+        return Boolean.TRUE.toString().equalsIgnoreCase((String)value) || Boolean.FALSE.toString().equalsIgnoreCase((String)value); 
     }
 
     /**
@@ -45,6 +45,7 @@ public class CheckBoxType extends SpreadsheetCellType<Boolean> {
     */
     public SpreadsheetCell createCell(final int row, final int column, final int rowSpan, final int columnSpan,
             final Boolean value) {
+    	System.out.println("createCell: " + value);
         final SpreadsheetCell cell = new SpreadsheetCellBase(row, column, rowSpan, columnSpan, this);
         cell.setItem(value);
         return cell;
