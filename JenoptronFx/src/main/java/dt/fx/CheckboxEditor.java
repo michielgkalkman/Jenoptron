@@ -1,8 +1,10 @@
 package dt.fx;
 
 import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
+import javafx.event.EventHandler;
 import javafx.scene.control.CheckBox;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 
 import org.controlsfx.control.spreadsheet.SpreadsheetCellEditor;
 import org.controlsfx.control.spreadsheet.SpreadsheetView;
@@ -56,6 +58,19 @@ public class CheckboxEditor extends SpreadsheetCellEditor {
      **************************************************************************/
 
     private void attachEnterEscapeEventHandler() {
+
+            checkBox.setOnKeyPressed(new EventHandler<KeyEvent>() {
+                @Override
+                public void handle(final KeyEvent t) {
+                    if (t.getCode() == KeyCode.ENTER) {
+                        endEdit(true);
+                    } else if (t.getCode() == KeyCode.ESCAPE) {
+                        endEdit(false);
+                    }
+                }
+            });
+
+    	
         /**
          * We need to add an EventFilter because otherwise the DatePicker
          * will block "escape" and "enter". But when "enter" is hit, we need
@@ -64,12 +79,12 @@ public class CheckboxEditor extends SpreadsheetCellEditor {
          */
 //        eh = new EventHandler<KeyEvent>() {
 //            @Override
-//            public void handle(KeyEvent t) {
+//            public void handle(final KeyEvent t) {
 //                if (t.getCode() == KeyCode.ENTER) {
 //                    ending = true;
 //                    endEdit(true);
 //                    ending = false;
-//                } else if (t.getCode() == KeyCode.ESCAPE) {
+//				} else if (t.getCode() == KeyCode.ESCAPE) {
 //                    endEdit(false);
 //                }
 //            }
@@ -77,14 +92,14 @@ public class CheckboxEditor extends SpreadsheetCellEditor {
 //
 //        datePicker.addEventFilter(KeyEvent.KEY_PRESSED, eh);
 
-        cl = new ChangeListener<Boolean>() {
-            @Override
-            public void changed(final ObservableValue<? extends Boolean> arg0, final Boolean arg1, final Boolean arg2) {
-                if (!ending)
-                    endEdit(true);
-            }
-        };
-        
-        checkBox.selectedProperty().addListener(cl);
+//        cl = new ChangeListener<Boolean>() {
+//            @Override
+//            public void changed(final ObservableValue<? extends Boolean> arg0, final Boolean arg1, final Boolean arg2) {
+//                if (!ending)
+//                    endEdit(true);
+//            }
+//        };
+//        
+//        checkBox.selectedProperty().addListener(cl);
     }
 }
