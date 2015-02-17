@@ -45,7 +45,6 @@ public class CheckBoxType extends SpreadsheetCellType<Boolean> {
     */
     public SpreadsheetCell createCell(final int row, final int column, final int rowSpan, final int columnSpan,
             final Boolean value) {
-    	System.out.println("createCell: " + value);
         final SpreadsheetCell cell = new SpreadsheetCellBase(row, column, rowSpan, columnSpan, this);
         cell.setItem(value);
         return cell;

@@ -1,5 +1,6 @@
 package dt.fx;
 
+import java.util.Arrays;
 import java.util.List;
 
 import javafx.application.Application;
@@ -7,6 +8,8 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import jdt.core.DecisionTable;
@@ -51,6 +54,8 @@ public class SpreadsheetMain extends Application {
 	}
 
 
+    private final List<String> logoList = Arrays.asList("/Add-icon.png", "/Delete-icon.png");
+    
     /**
      * The {@link SpreadsheetCell} {@link String} type instance.
      */
@@ -72,11 +77,21 @@ public class SpreadsheetMain extends Application {
             final ObservableList<SpreadsheetCell> currentRow = FXCollections.observableArrayList();
             for (int column = 0; column < gridBase.getColumnCount(); ++column) {
 
-                final SpreadsheetCellBase spreadsheetCell = (SpreadsheetCellBase) CheckBox.createCell(row, column, 1, 1, true);
+
+            	final SpreadsheetCellBase spreadsheetCell = (SpreadsheetCellBase) SpreadsheetCellType.LIST(logoList).createCell(row, column, 1, 1, "true");
+            	spreadsheetCell.setGraphic(new ImageView(new Image(getClass().getResourceAsStream("/Add-icon.png"))));
+            	spreadsheetCell.getStyleClass().add("logo");
+
+//                final SpreadsheetCellBase spreadsheetCell = (SpreadsheetCellBase) CheckBox.createCell(row, column, 1, 1, true);
+//                
+//                
+//                
+//                spreadsheetCell.setGraphic(new ImageView(new Image(getClass().getResourceAsStream("/Add-icon.png"))));
+                
 //            	
 //                
 //            	
-            	final SpreadsheetCellBase spreadsheetCell2 = (SpreadsheetCellBase) SpreadsheetCellType.STRING.createCell(row, column, 1, 1, "X");
+//            	final SpreadsheetCellBase spreadsheetCell2 = (SpreadsheetCellBase) SpreadsheetCellType.STRING.createCell(row, column, 1, 1, "X");
 
 				currentRow.add(spreadsheetCell);
 			
