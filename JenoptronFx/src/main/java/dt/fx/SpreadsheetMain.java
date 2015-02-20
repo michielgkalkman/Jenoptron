@@ -77,26 +77,12 @@ public class SpreadsheetMain extends Application {
             final ObservableList<SpreadsheetCell> currentRow = FXCollections.observableArrayList();
             for (int column = 0; column < gridBase.getColumnCount(); ++column) {
 
-
-            	final SpreadsheetCellBase spreadsheetCell = (SpreadsheetCellBase) SpreadsheetCellType.LIST(logoList).createCell(row, column, 1, 1, "true");
+//            	final SpreadsheetCellBase spreadsheetCell = (SpreadsheetCellBase) SpreadsheetCellType.LIST(logoList).createCell(row, column, 1, 1, "true");
+            	final SpreadsheetCellBase spreadsheetCell = (SpreadsheetCellBase) CheckBox.createCell(row, column, 1, 1, true);
             	spreadsheetCell.setGraphic(new ImageView(new Image(getClass().getResourceAsStream("/Add-icon.png"))));
             	spreadsheetCell.getStyleClass().add("logo");
 
-//                final SpreadsheetCellBase spreadsheetCell = (SpreadsheetCellBase) CheckBox.createCell(row, column, 1, 1, true);
-//                
-//                
-//                
-//                spreadsheetCell.setGraphic(new ImageView(new Image(getClass().getResourceAsStream("/Add-icon.png"))));
-                
-//            	
-//                
-//            	
-//            	final SpreadsheetCellBase spreadsheetCell2 = (SpreadsheetCellBase) SpreadsheetCellType.STRING.createCell(row, column, 1, 1, "X");
-
-				currentRow.add(spreadsheetCell);
-			
-				System.out.println( "format:" + spreadsheetCell.getItem());
-				
+				currentRow.add(spreadsheetCell);				
             }
             
             
