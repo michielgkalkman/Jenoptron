@@ -85,11 +85,7 @@ public class SpreadsheetMain extends Application {
 				currentRow.add(spreadsheetCell);				
             }
             
-            
-            
             rows.add(currentRow);
-            
-            
         }
         gridBase.setRows(rows);
         
