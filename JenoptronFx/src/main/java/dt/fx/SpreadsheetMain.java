@@ -9,7 +9,6 @@ import javafx.collections.ObservableList;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import jdt.core.DecisionTable;
@@ -75,28 +74,41 @@ public class SpreadsheetMain extends Application {
      * The {@link SpreadsheetCell} {@link String} type base class.
      */
     private Grid getSampleGrid( final IDecisionTable decisionTable) {
-    	final int nrRows = decisionTable.getConditions().size()
-    			+ decisionTable.getActions().size();
+    	
+    	System.out.println(decisionTable.toString());
+    	
+    	final int nrConditions = decisionTable.getConditions().size();
+		final int nrActions = decisionTable.getActions().size();
+		final int nrRows = nrConditions + nrActions;
     	
     	final int nrRules = decisionTable.getRules().size();
     	
         final GridBase gridBase = new GridBase( nrRows, nrRules);
         final List<ObservableList<SpreadsheetCell>> rows = FXCollections.observableArrayList();
 
-        for (int row = 0; row < gridBase.getRowCount(); ++row) {
+        for (int row = 0; row < nrConditions; ++row) {
             final ObservableList<SpreadsheetCell> currentRow = FXCollections.observableArrayList();
             for (int column = 0; column < gridBase.getColumnCount(); ++column) {
 
-//            	final SpreadsheetCellBase spreadsheetCell = (SpreadsheetCellBase) SpreadsheetCellType.LIST(logoList).createCell(row, column, 1, 1, "true");
             	final Image image = new Image(getClass().getResourceAsStream("/Add-icon.png"));
-				final ImageView imageView = new ImageView(image);
             	final SpreadsheetCellBase spreadsheetCell = (SpreadsheetCellBase) IMAGE_CELL_TYPE.createCell(row, column, 1, 1, image);
             	spreadsheetCell.getStyleClass().add("logo");
 
-            	
-//            	final SpreadsheetCellBase spreadsheetCell = (SpreadsheetCellBase) CheckBox.createCell(row, column, 1, 1, true);
-//            	spreadsheetCell.setEditable(false);
-//				spreadsheetCell.setGraphic(graphic);
+
+				currentRow.add(spreadsheetCell);				
+            }
+            
+            rows.add(currentRow);
+        }
+
+        for (int row = 0; row < nrActions; ++row) {
+            final ObservableList<SpreadsheetCell> currentRow = FXCollections.observableArrayList();
+            for (int column = 0; column < gridBase.getColumnCount(); ++column) {
+
+            	final Image image = new Image(getClass().getResourceAsStream("/Add-icon.png"));
+            	final SpreadsheetCellBase spreadsheetCell = (SpreadsheetCellBase) IMAGE_CELL_TYPE.createCell(row + nrRows, column, 1, 1, image);
+            	spreadsheetCell.getStyleClass().add("logo");
+
 
 				currentRow.add(spreadsheetCell);				
             }
