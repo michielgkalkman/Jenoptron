@@ -28,7 +28,6 @@ import org.controlsfx.control.spreadsheet.Grid;
 import org.controlsfx.control.spreadsheet.GridBase;
 import org.controlsfx.control.spreadsheet.SpreadsheetCell;
 import org.controlsfx.control.spreadsheet.SpreadsheetCellBase;
-import org.controlsfx.control.spreadsheet.SpreadsheetCellType;
 import org.controlsfx.control.spreadsheet.SpreadsheetView;
 
 public class SpreadsheetMain extends Application {
@@ -45,6 +44,7 @@ public class SpreadsheetMain extends Application {
 		final Button btnOpen = new Button("Open Dialog");
 
 		final SpreadsheetView spreadsheetView = new SpreadsheetView(grid);
+		spreadsheetView.getStylesheets().add(getClass().getResource("/spreadsheetSample.css").toExternalForm());
 
 		sp.getChildren().add(btnOpen);
 		sp.getChildren().add(spreadsheetView);
@@ -161,27 +161,8 @@ public class SpreadsheetMain extends Application {
 
 		return gridBase;
 	}
-
-	private Grid getSampleGrid() {
-		final GridBase gridBase = new GridBase(10, 15);
-		final List<ObservableList<SpreadsheetCell>> rows = FXCollections
-				.observableArrayList();
-
-		for (int row = 0; row < gridBase.getRowCount(); ++row) {
-			final ObservableList<SpreadsheetCell> currentRow = FXCollections
-					.observableArrayList();
-			for (int column = 0; column < gridBase.getColumnCount(); ++column) {
-				final SpreadsheetCellBase spreadsheetCell = (SpreadsheetCellBase) SpreadsheetCellType.STRING
-						.createCell(row, column, 1, 1, "X");
-				currentRow.add(spreadsheetCell);
-			}
-			rows.add(currentRow);
-		}
-		gridBase.setRows(rows);
-		return gridBase;
-	}
-
-	private IDecisionTable createDecisionTable() {
+    
+   	private IDecisionTable createDecisionTable() {
 		final IDecisionTable decisionTable = new DecisionTable();
 
 		// Add condition
