@@ -57,6 +57,7 @@ public class CheckBoxType extends SpreadsheetCellType<Boolean> {
 
 	@Override
 	public String toString(final Boolean object) {
+		
         return "";
 	}
 

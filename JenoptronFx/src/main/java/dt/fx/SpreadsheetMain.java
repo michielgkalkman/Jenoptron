@@ -55,11 +55,21 @@ public class SpreadsheetMain extends Application {
 
 
     private final List<String> logoList = Arrays.asList("/Add-icon.png", "/Delete-icon.png");
+
+    /**
+     * The {@link SpreadsheetCell} {@link String} type instance.
+     */
+    public static final CheckBoxType CheckBoxTYPE = new CheckBoxType();
+
+    /**
+     * The {@link SpreadsheetCell} {@link String} type instance.
+     */
+    public static final ImageCellType IMAGE_CELL_TYPE = new ImageCellType();
     
     /**
      * The {@link SpreadsheetCell} {@link String} type instance.
      */
-    public static final CheckBoxType CheckBox = new CheckBoxType();
+    public static final ImageCellType IMAGE_BOX_TYPE = new ImageCellType();
 
     /**
      * The {@link SpreadsheetCell} {@link String} type base class.
@@ -78,9 +88,15 @@ public class SpreadsheetMain extends Application {
             for (int column = 0; column < gridBase.getColumnCount(); ++column) {
 
 //            	final SpreadsheetCellBase spreadsheetCell = (SpreadsheetCellBase) SpreadsheetCellType.LIST(logoList).createCell(row, column, 1, 1, "true");
-            	final SpreadsheetCellBase spreadsheetCell = (SpreadsheetCellBase) CheckBox.createCell(row, column, 1, 1, true);
-            	spreadsheetCell.setGraphic(new ImageView(new Image(getClass().getResourceAsStream("/Add-icon.png"))));
+            	final Image image = new Image(getClass().getResourceAsStream("/Add-icon.png"));
+				final ImageView imageView = new ImageView(image);
+            	final SpreadsheetCellBase spreadsheetCell = (SpreadsheetCellBase) IMAGE_CELL_TYPE.createCell(row, column, 1, 1, image);
             	spreadsheetCell.getStyleClass().add("logo");
+
+            	
+//            	final SpreadsheetCellBase spreadsheetCell = (SpreadsheetCellBase) CheckBox.createCell(row, column, 1, 1, true);
+//            	spreadsheetCell.setEditable(false);
+//				spreadsheetCell.setGraphic(graphic);
 
 				currentRow.add(spreadsheetCell);				
             }
