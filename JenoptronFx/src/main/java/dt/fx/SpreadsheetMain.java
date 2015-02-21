@@ -87,7 +87,9 @@ public class SpreadsheetMain extends Application {
 
 		final int nrRules = decisionTable.getRules().size();
 
-		final GridBase gridBase = new GridBase(nrRows, nrRules);
+		// +1 because the first column describes conditions/actions
+		final int nrColumns = nrRules+1;
+		final GridBase gridBase = new GridBase(nrRows, nrColumns);
 		final List<ObservableList<SpreadsheetCell>> rows = FXCollections
 				.observableArrayList();
 
@@ -100,13 +102,21 @@ public class SpreadsheetMain extends Application {
 			condition2Value.put(BinaryConditionValue.IRRELEVANT, new Image(
 					getClass().getResourceAsStream("/Help-icon.png")));
 
-			for (int row = 0; row < nrConditions; ++row) {
+			for (int row = 0; row < nrConditions; row++) {
 				final ObservableList<SpreadsheetCell> currentRow = FXCollections
 						.observableArrayList();
-				for (int column = 0; column < gridBase.getColumnCount(); ++column) {
+				
+				// add condition description
+				{
+					final String shortDescription = decisionTable.getConditions().get(row).getShortDescription();
+					final SpreadsheetCell spreadsheetCell = SpreadsheetCellType.STRING.createCell(row, 0, 1, 1, shortDescription);
+					currentRow.add(spreadsheetCell);
+				}				
+				
+				for (int column = 1; column < nrColumns; column++) {
 
 					final IConditionValue conditionValue = decisionTable
-							.getRule(column).getConditionValue(
+							.getRule(column-1).getConditionValue(
 									decisionTable.getConditions().get(row));
 
 					final Image image = condition2Value.get(conditionValue);
@@ -136,10 +146,18 @@ public class SpreadsheetMain extends Application {
 			for (int row = 0; row < nrActions; ++row) {
 				final ObservableList<SpreadsheetCell> currentRow = FXCollections
 						.observableArrayList();
-				for (int column = 0; column < gridBase.getColumnCount(); ++column) {
+				
+				// add action description
+				{
+					final String shortDescription = decisionTable.getActions().get(row).getShortDescription();
+					final SpreadsheetCell spreadsheetCell = SpreadsheetCellType.STRING.createCell(nrConditions + row, 0, 1, 1, shortDescription);
+					currentRow.add(spreadsheetCell);
+				}				
+
+				for (int column = 1; column < nrColumns; ++column) {
 
 					final IValue actionValue = decisionTable
-							.getRule(column).getActionValue(
+							.getRule(column-1).getActionValue(
 									decisionTable.getActions().get(row));
 
 					final Image image = action2Value.get(actionValue);
