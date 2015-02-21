@@ -11,6 +11,7 @@ import javafx.collections.ObservableList;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import jdt.core.DecisionTable;
@@ -27,7 +28,7 @@ import jdt.icore.IValue;
 import org.controlsfx.control.spreadsheet.Grid;
 import org.controlsfx.control.spreadsheet.GridBase;
 import org.controlsfx.control.spreadsheet.SpreadsheetCell;
-import org.controlsfx.control.spreadsheet.SpreadsheetCellBase;
+import org.controlsfx.control.spreadsheet.SpreadsheetCellType;
 import org.controlsfx.control.spreadsheet.SpreadsheetView;
 
 public class SpreadsheetMain extends Application {
@@ -109,10 +110,13 @@ public class SpreadsheetMain extends Application {
 									decisionTable.getConditions().get(row));
 
 					final Image image = condition2Value.get(conditionValue);
-					final SpreadsheetCellBase spreadsheetCell = (SpreadsheetCellBase) IMAGE_CELL_TYPE
-							.createCell(row, column, 1, 1, image);
-					spreadsheetCell.getStyleClass().add("logo");
+					
 
+					final SpreadsheetCell spreadsheetCell = SpreadsheetCellType.STRING.createCell(row, column, 1, 1, null);
+					spreadsheetCell.setGraphic(new ImageView(image));
+					spreadsheetCell.getStyleClass().add("logo");
+					spreadsheetCell.setEditable(false);
+					
 					currentRow.add(spreadsheetCell);
 				}
 
@@ -139,10 +143,12 @@ public class SpreadsheetMain extends Application {
 									decisionTable.getActions().get(row));
 
 					final Image image = action2Value.get(actionValue);
-					final SpreadsheetCellBase spreadsheetCell = (SpreadsheetCellBase) IMAGE_CELL_TYPE
-							.createCell(row + nrRows, column, 1, 1, image);
+					
+					final SpreadsheetCell spreadsheetCell = SpreadsheetCellType.STRING.createCell(row + nrRows, column, 1, 1, null);
+					spreadsheetCell.setGraphic(new ImageView(image));
 					spreadsheetCell.getStyleClass().add("logo");
-
+					spreadsheetCell.setEditable(false);
+					
 					currentRow.add(spreadsheetCell);
 				}
 
