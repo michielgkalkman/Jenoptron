@@ -45,8 +45,12 @@ public class SpreadsheetMain extends Application {
 		final Button btnOpen = new Button("Open Dialog");
 
 		final SpreadsheetView spreadsheetView = new SpreadsheetView(grid);
-		spreadsheetView.getStylesheets().add(getClass().getResource("/spreadsheetSample.css").toExternalForm());
-
+		spreadsheetView.getStylesheets().add(
+				getClass().getResource("/spreadsheetSample.css")
+						.toExternalForm());
+		spreadsheetView.setShowRowHeader(false);
+		spreadsheetView.setShowColumnHeader(false);
+		
 		sp.getChildren().add(btnOpen);
 		sp.getChildren().add(spreadsheetView);
 
@@ -88,7 +92,7 @@ public class SpreadsheetMain extends Application {
 		final int nrRules = decisionTable.getRules().size();
 
 		// +1 because the first column describes conditions/actions
-		final int nrColumns = nrRules+1;
+		final int nrColumns = nrRules + 1;
 		final GridBase gridBase = new GridBase(nrRows, nrColumns);
 		final List<ObservableList<SpreadsheetCell>> rows = FXCollections
 				.observableArrayList();
@@ -105,28 +109,30 @@ public class SpreadsheetMain extends Application {
 			for (int row = 0; row < nrConditions; row++) {
 				final ObservableList<SpreadsheetCell> currentRow = FXCollections
 						.observableArrayList();
-				
+
 				// add condition description
 				{
-					final String shortDescription = decisionTable.getConditions().get(row).getShortDescription();
-					final SpreadsheetCell spreadsheetCell = SpreadsheetCellType.STRING.createCell(row, 0, 1, 1, shortDescription);
+					final String shortDescription = decisionTable
+							.getConditions().get(row).getShortDescription();
+					final SpreadsheetCell spreadsheetCell = SpreadsheetCellType.STRING
+							.createCell(row, 0, 1, 1, shortDescription);
 					currentRow.add(spreadsheetCell);
-				}				
-				
+				}
+
 				for (int column = 1; column < nrColumns; column++) {
 
 					final IConditionValue conditionValue = decisionTable
-							.getRule(column-1).getConditionValue(
+							.getRule(column - 1).getConditionValue(
 									decisionTable.getConditions().get(row));
 
 					final Image image = condition2Value.get(conditionValue);
-					
 
-					final SpreadsheetCell spreadsheetCell = SpreadsheetCellType.STRING.createCell(row, column, 1, 1, null);
+					final SpreadsheetCell spreadsheetCell = SpreadsheetCellType.STRING
+							.createCell(row, column, 1, 1, null);
 					spreadsheetCell.setGraphic(new ImageView(image));
 					spreadsheetCell.getStyleClass().add("logo");
 					spreadsheetCell.setEditable(false);
-					
+
 					currentRow.add(spreadsheetCell);
 				}
 
@@ -146,27 +152,31 @@ public class SpreadsheetMain extends Application {
 			for (int row = 0; row < nrActions; ++row) {
 				final ObservableList<SpreadsheetCell> currentRow = FXCollections
 						.observableArrayList();
-				
+
 				// add action description
 				{
-					final String shortDescription = decisionTable.getActions().get(row).getShortDescription();
-					final SpreadsheetCell spreadsheetCell = SpreadsheetCellType.STRING.createCell(nrConditions + row, 0, 1, 1, shortDescription);
+					final String shortDescription = decisionTable.getActions()
+							.get(row).getShortDescription();
+					final SpreadsheetCell spreadsheetCell = SpreadsheetCellType.STRING
+							.createCell(nrConditions + row, 0, 1, 1,
+									shortDescription);
 					currentRow.add(spreadsheetCell);
-				}				
+				}
 
 				for (int column = 1; column < nrColumns; ++column) {
 
 					final IValue actionValue = decisionTable
-							.getRule(column-1).getActionValue(
+							.getRule(column - 1).getActionValue(
 									decisionTable.getActions().get(row));
 
 					final Image image = action2Value.get(actionValue);
-					
-					final SpreadsheetCell spreadsheetCell = SpreadsheetCellType.STRING.createCell(row + nrRows, column, 1, 1, null);
+
+					final SpreadsheetCell spreadsheetCell = SpreadsheetCellType.STRING
+							.createCell(row + nrRows, column, 1, 1, null);
 					spreadsheetCell.setGraphic(new ImageView(image));
 					spreadsheetCell.getStyleClass().add("logo");
 					spreadsheetCell.setEditable(false);
-					
+
 					currentRow.add(spreadsheetCell);
 				}
 
@@ -185,8 +195,8 @@ public class SpreadsheetMain extends Application {
 
 		return gridBase;
 	}
-    
-   	private IDecisionTable createDecisionTable() {
+
+	private IDecisionTable createDecisionTable() {
 		final IDecisionTable decisionTable = new DecisionTable();
 
 		// Add condition
