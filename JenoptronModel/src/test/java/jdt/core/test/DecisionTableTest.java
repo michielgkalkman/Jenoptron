@@ -81,7 +81,37 @@ public class DecisionTableTest extends AbstractTestCase {
 					"XX X action 2\n", string);
 		}
 		
+		decisionTable.setActionValues( BinaryActionValue.DO, BinaryActionValue.DONT);
 		
+		{
+			final String string = dump( decisionTable);
+			assertEquals( "YYNN condition 1\n" +
+					"YNYN condition 2\n" +
+					"XXXX action 1\n" +
+					"     action 2\n", string);
+		}
+		
+		decisionTable.setActionValues( BinaryActionValue.DO, BinaryActionValue.DO)
+		.setActionValues( BinaryActionValue.DONT, action2);
+	
+		{
+			final String string = dump( decisionTable);
+			assertEquals( "YYNN condition 1\n" +
+					"YNYN condition 2\n" +
+					"XXXX action 1\n" +
+					"     action 2\n", string);
+		}
+		
+		decisionTable.setActionValues( BinaryActionValue.DO, action2)
+			.setActionValues( BinaryActionValue.DONT, BinaryActionValue.DO);
+	
+		{
+			final String string = dump( decisionTable);
+			assertEquals( "YYNN condition 1\n" +
+					"YNYN condition 2\n" +
+					"     action 1\n" +
+					"XXXX action 2\n", string);
+		}
 
 	}
 }
