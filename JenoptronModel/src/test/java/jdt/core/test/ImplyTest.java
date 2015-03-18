@@ -151,7 +151,29 @@ public class ImplyTest extends AbstractTestCase {
 
 		decisionTable.reduce();
 
-		logger.debug( dump( decisionTable));
-		logger.debug( "TestSimple3");
+		{
+			final String tableTekst = dump( decisionTable);
+			logger.debug( tableTekst);
+
+			assertEquals(
+					"- A\n" +
+					"- B\n" +
+					"? F\n" +
+					"? G\n", tableTekst);
+		}
+		
+		decisionTable.split();
+		
+		{
+			final String tableTekst = dump( decisionTable);
+			logger.debug( tableTekst);
+
+			assertEquals(
+					"YYNN A\n" +
+					"YNYN B\n" +
+					"???? F\n" +
+					"???? G\n", tableTekst);
+		}
+		
 	}
 }
