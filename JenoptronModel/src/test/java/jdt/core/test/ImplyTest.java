@@ -89,6 +89,8 @@ public class ImplyTest extends AbstractTestCase {
 		logger.debug( "TestSimple2a");
 		final IDecisionTable decisionTable  = new DecisionTable();
 
+		assertFalse(decisionTable.hasGroups());
+		
 		final IImplyGroup implyGroup = new ImplyGroup();
 
 		final ICondition A = new BinaryCondition( "A");
@@ -114,6 +116,8 @@ public class ImplyTest extends AbstractTestCase {
 
 		decisionTable.add( implyGroup);
 
+		assertTrue(decisionTable.hasGroups());
+		
 		{
 			final String tableTekst = dump( decisionTable);
 			logger.debug( tableTekst);
