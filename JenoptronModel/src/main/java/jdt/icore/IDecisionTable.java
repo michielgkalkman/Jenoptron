@@ -1,7 +1,6 @@
 package jdt.icore;
 
 import java.beans.PropertyChangeListener;
-import java.io.File;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
@@ -40,6 +39,7 @@ public interface IDecisionTable extends CUDDecisionTable,
 	/**
 	 * Deepcopy this table.
 	 */
+	@Override
 	IDecisionTable deepcopy();
 
 	/**
@@ -156,11 +156,6 @@ public interface IDecisionTable extends CUDDecisionTable,
 	void setShortDescription(final String shortDescription);
 
 	static final String CHANGE_EVENT = "CHANGE_EVENT";
-
-	// @deprecated
-	File getFile();
-
-	void setFile(final File file);
 
 	public StringBuffer simpleDump();
 

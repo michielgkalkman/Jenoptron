@@ -1,7 +1,6 @@
 package jdt.core;
 
 import java.beans.PropertyChangeEvent;
-import java.io.File;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -45,8 +44,6 @@ public class DecisionTable extends JDTModel implements IDecisionTable {
 	private final List<ICondition> tableConditions;
 	private final List<IGroup> groups;
 	private String shortDescription;
-	// @deprecated
-	private File file;
 
 	private final transient Predicate predicateLegalRule = new LegalRulePredicate(
 			this);
@@ -119,6 +116,7 @@ public class DecisionTable extends JDTModel implements IDecisionTable {
 		return fEquals;
 	}
 
+	@Override
 	public IDecisionTable deepcopy() {
 		final IDecisionTable table = new DecisionTable();
 
@@ -138,6 +136,7 @@ public class DecisionTable extends JDTModel implements IDecisionTable {
 		return table;
 	}
 
+	@Override
 	public IDecisionTable add(final IAction action) {
 		doAdd(action);
 		fire();
@@ -146,6 +145,7 @@ public class DecisionTable extends JDTModel implements IDecisionTable {
 		return this;
 	}
 
+	@Override
 	public IDecisionTable add(final IAction... newActions) {
 		for (final IAction action : newActions) {
 			doAdd(action);
@@ -157,6 +157,7 @@ public class DecisionTable extends JDTModel implements IDecisionTable {
 		return this;
 	}
 
+	@Override
 	public IDecisionTable addActions(
 			final Collection<? extends IAction> newActions) {
 		for (final IAction action : newActions) {
@@ -187,6 +188,7 @@ public class DecisionTable extends JDTModel implements IDecisionTable {
 		return this;
 	}
 
+	@Override
 	public IDecisionTable add(final ICondition condition) throws DTException {
 		doAdd(condition);
 		fire();
@@ -195,6 +197,7 @@ public class DecisionTable extends JDTModel implements IDecisionTable {
 		return this;
 	}
 
+	@Override
 	public IDecisionTable add(final ICondition... conditions)
 			throws DTException {
 		for (final ICondition condition : conditions) {
@@ -244,6 +247,7 @@ public class DecisionTable extends JDTModel implements IDecisionTable {
 		return this;
 	}
 
+	@Override
 	public IDecisionTable split() {
 		suppressFire();
 
@@ -350,6 +354,7 @@ public class DecisionTable extends JDTModel implements IDecisionTable {
 		logger.debug("END createRules(final List<IRule> rules2, final Queue<ICondition> queue, final Map<ICondition,IValue> values)");
 	}
 
+	@Override
 	@SuppressWarnings("unchecked")
 	public List<IRule> getRules() {
 		final List<IRule> applicableRules = (List<IRule>) CollectionUtils
@@ -359,11 +364,13 @@ public class DecisionTable extends JDTModel implements IDecisionTable {
 		return applicableRules;
 	}
 
+	@Override
 	public List<IRule> getAllRules() {
 		logger.debug("END List<IRule> getRules(): " + rules.size());
 		return rules;
 	}
 
+	@Override
 	public Iterable<IRule> getLegalRulesIterable() {
 		logger.debug("END List<IRule> getLegalRules(): " + rules.size());
 
@@ -411,16 +418,19 @@ public class DecisionTable extends JDTModel implements IDecisionTable {
 		return rule;
 	}
 
+	@Override
 	public List<ICondition> getConditions() {
 		logger.debug("END getConditions(): " + tableConditions.size());
 		return tableConditions;
 	}
 
+	@Override
 	public List<IAction> getActions() {
 		logger.debug("END getActions()");
 		return actions;
 	}
 
+	@Override
 	public boolean isValid(final IRule rule) {
 		boolean fValid = true;
 
@@ -434,6 +444,7 @@ public class DecisionTable extends JDTModel implements IDecisionTable {
 		return fValid;
 	}
 
+	@Override
 	public boolean isInvalid(final IRule rule) {
 		boolean fInvalid = false;
 
@@ -447,6 +458,7 @@ public class DecisionTable extends JDTModel implements IDecisionTable {
 		return fInvalid;
 	}
 
+	@Override
 	public IDecisionTable reduce() {
 		suppressFire();
 
@@ -515,6 +527,7 @@ public class DecisionTable extends JDTModel implements IDecisionTable {
 		}
 	}
 
+	@Override
 	public StringBuffer simpleDump() {
 		return simpleDump(null, getRules());
 	}
@@ -594,7 +607,7 @@ public class DecisionTable extends JDTModel implements IDecisionTable {
 	private void reduce(final ICondition condition,
 			final List<ICondition> handledConditions, final int step,
 			final boolean[] reduced, final boolean[] invalidRules,
-			List<IRule> _rules) {
+			final List<IRule> _rules) {
 		final int size = rules.size();
 		final boolean[] processedRules = new boolean[size];
 
@@ -690,22 +703,27 @@ public class DecisionTable extends JDTModel implements IDecisionTable {
 		return fEquals;
 	}
 
+	@Override
 	public int nrConditions() {
 		return tableConditions.size();
 	}
 
+	@Override
 	public int nrActions() {
 		return actions.size();
 	}
 
+	@Override
 	public int nrRules() {
 		return rules.size();
 	}
 
+	@Override
 	public boolean showsAllRules() {
 		return Math.pow(2.0, tableConditions.size()) == rules.size();
 	}
 
+	@Override
 	public IDecisionTable insert(final int position, final IAction action) {
 		actions.add(position, action);
 		addToAllRules(action);
@@ -717,6 +735,7 @@ public class DecisionTable extends JDTModel implements IDecisionTable {
 		return this;
 	}
 
+	@Override
 	public IDecisionTable insert(final int position, final ICondition condition) {
 		tableConditions.add(position, condition);
 		addToAllRules(condition);
@@ -742,10 +761,12 @@ public class DecisionTable extends JDTModel implements IDecisionTable {
 		logger.debug("END addToAllRules(IAction action)");
 	}
 
+	@Override
 	public IRule getRule(final int ruleNr) {
 		return new ArrayList<IRule>(rules).get(ruleNr);
 	}
 
+	@Override
 	public void setRules(final List<IRule> possibleReducedRules) {
 		suppressFire();
 
@@ -766,6 +787,7 @@ public class DecisionTable extends JDTModel implements IDecisionTable {
 		logger.debug("END setRules( List<IRule> rules)");
 	}
 
+	@Override
 	public IDecisionTable down(final IAction action) {
 		final int index = actions.indexOf(action);
 
@@ -781,6 +803,7 @@ public class DecisionTable extends JDTModel implements IDecisionTable {
 		return this;
 	}
 
+	@Override
 	public IDecisionTable up(final IAction action) {
 		final int index = actions.indexOf(action);
 
@@ -796,6 +819,7 @@ public class DecisionTable extends JDTModel implements IDecisionTable {
 		return this;
 	}
 
+	@Override
 	public IDecisionTable down(final ICondition condition) {
 		final int index = tableConditions.indexOf(condition);
 
@@ -813,6 +837,7 @@ public class DecisionTable extends JDTModel implements IDecisionTable {
 		return this;
 	}
 
+	@Override
 	public IDecisionTable up(final ICondition condition) {
 		final int index = tableConditions.indexOf(condition);
 
@@ -838,6 +863,7 @@ public class DecisionTable extends JDTModel implements IDecisionTable {
 	}
 
 	// @Override
+	@Override
 	public IDecisionTable getSubtable(final String... conditions) {
 		final IDecisionTable subtable = new DecisionTable();
 
@@ -859,6 +885,7 @@ public class DecisionTable extends JDTModel implements IDecisionTable {
 	}
 
 	// @Override
+	@Override
 	public IDecisionTable getSubtable(final int[] requestedConditions,
 			final int[] requestedActions) {
 		final IDecisionTable subtable = new DecisionTable();
@@ -913,6 +940,7 @@ public class DecisionTable extends JDTModel implements IDecisionTable {
 		}
 	}
 
+	@Override
 	public List<IRule> getRules(
 			final Map<ICondition, IConditionValue> certainConditions) {
 		final List<IRule> certainConditionRules = new ArrayList<IRule>();
@@ -936,6 +964,7 @@ public class DecisionTable extends JDTModel implements IDecisionTable {
 		return certainConditionRules;
 	}
 
+	@Override
 	public void remove(final IAction action) {
 		for (final IRule rule : rules) {
 			rule.remove(action);
@@ -947,6 +976,7 @@ public class DecisionTable extends JDTModel implements IDecisionTable {
 		fire();
 	}
 
+	@Override
 	public void remove(final ICondition condition) {
 		final List<IRule> newRules = new ArrayList<IRule>();
 
@@ -982,6 +1012,7 @@ public class DecisionTable extends JDTModel implements IDecisionTable {
 		fire();
 	}
 
+	@Override
 	public void propertyChange(final PropertyChangeEvent propertyChangeEvent) {
 		logger.debug("propertyChange on " + getClass().getName() + ":"
 				+ propertyChangeEvent.getPropertyName());
@@ -1000,10 +1031,12 @@ public class DecisionTable extends JDTModel implements IDecisionTable {
 		logger.debug("END setConditions(List<ICondition> conditions)");
 	}
 
+	@Override
 	public String getShortDescription() {
 		return shortDescription;
 	}
 
+	@Override
 	public void setShortDescription(final String shortDescription) {
 		final String oldShortDescription = this.shortDescription;
 		this.shortDescription = shortDescription;
@@ -1012,11 +1045,12 @@ public class DecisionTable extends JDTModel implements IDecisionTable {
 		fire(new PropChangeEvent(oldShortDescription, shortDescription));
 	}
 
-	private void fire(PropChangeEvent propChangeEvent) {
+	private void fire(final PropChangeEvent propChangeEvent) {
 		// TODO Auto-generated method stub
 
 	}
 
+	@Override
 	public IDecisionTable add(final IGroup group) {
 		{
 			for (final ICondition condition : group.conditions()) {
@@ -1043,6 +1077,7 @@ public class DecisionTable extends JDTModel implements IDecisionTable {
 		return this;
 	}
 
+	@Override
 	public List<IGroup> getGroups() {
 		return groups;
 	}
@@ -1052,25 +1087,18 @@ public class DecisionTable extends JDTModel implements IDecisionTable {
 		logger.debug("END setConditionGroups(List<IGroup> groups)");
 	}
 
-	public File getFile() {
-		return file;
-	}
-
-	public void setFile(final File file) {
-		this.file = file;
-	}
-
+	@Override
 	public boolean hasGroups() {
 		return groups.size() > 0;
 	}
 
 	@Override
-	public IDecisionTable addBinaryAction(String action) {
+	public IDecisionTable addBinaryAction(final String action) {
 		return add(new BinaryAction(action));
 	}
 
 	@Override
-	public IDecisionTable addBinaryActions(String... actions) {
+	public IDecisionTable addBinaryActions(final String... actions) {
 		for (final String action : actions) {
 			addBinaryAction(action);
 		}
@@ -1078,12 +1106,12 @@ public class DecisionTable extends JDTModel implements IDecisionTable {
 	}
 
 	@Override
-	public IDecisionTable addBinaryCondition(String condition) {
+	public IDecisionTable addBinaryCondition(final String condition) {
 		return add(new BinaryCondition(condition));
 	}
 
 	@Override
-	public IDecisionTable addBinaryConditions(String... conditions) {
+	public IDecisionTable addBinaryConditions(final String... conditions) {
 		for (final String condition : conditions) {
 			addBinaryCondition(condition);
 		}
