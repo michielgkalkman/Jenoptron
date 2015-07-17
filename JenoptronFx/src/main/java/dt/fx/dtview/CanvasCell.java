@@ -3,6 +3,7 @@ package dt.fx.dtview;
 import java.util.List;
 
 import javafx.geometry.Pos;
+import javafx.geometry.VPos;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.ContentDisplay;
@@ -15,6 +16,7 @@ import javafx.scene.paint.LinearGradient;
 import javafx.scene.paint.Paint;
 import javafx.scene.paint.Stop;
 import javafx.scene.text.Font;
+import javafx.scene.text.TextAlignment;
 import jdt.core.binary.BinaryConditionValue;
 import jdt.icore.IRule;
 
@@ -112,7 +114,7 @@ public class CanvasCell extends ListCell<DTEntry> {
 
 			gc.setFill(gradient);
 
-			final double availableHeight = getHeight();
+			final double availableHeight = 0;
 			double counter = 0;
 
 			if (entry != null) {
@@ -125,18 +127,22 @@ public class CanvasCell extends ListCell<DTEntry> {
 					final BinaryConditionValue conditionValue = (BinaryConditionValue) rule
 							.getConditionValue(entry.getCondition());
 					final Paint p;
+					final String text2;
 
 					switch (conditionValue.getBinaryConditionValue()) {
 					case YES: {
 						p = Paint.valueOf(Color.DARKOLIVEGREEN.toString());
+						text2 = "Y";
 						break;
 					}
 					case NO: {
 						p = Paint.valueOf(Color.INDIANRED.toString());
+						text2 = "N";
 						break;
 					}
 					default: {
 						p = Paint.valueOf(Color.KHAKI.toString());
+						text2 = "-";
 						break;
 					}
 					}
@@ -144,11 +150,23 @@ public class CanvasCell extends ListCell<DTEntry> {
 					gc.setFill(p);
 					final Font font = yearLabel.getFont();
 
-					final javafx.scene.text.Text text = new javafx.scene.text.Text(yearLabel.getText());
-
 					final double height = yearLabel.getHeight();
 
-					gc.fillRect(x, height + 2, w, availableHeight - 2);
+					final javafx.scene.text.Text text = new javafx.scene.text.Text(text2);
+
+					// text.setFont(Font.font(font.getFamily(),
+					// availableHeight));
+
+					text.setFill(p);
+
+					gc.setTextAlign(TextAlignment.CENTER);
+					gc.setTextBaseline(VPos.CENTER);
+					gc.setFont(Font.font(font.getFamily(), getHeight() - height));
+
+					gc.fillText(text2, x + w / 2, height + (getHeight() - height) / 2, w);
+					// gc.fillText(text2, x, height + 2, w);
+
+					// gc.fillRect(x, height + 2, w, availableHeight - 2);
 					counter++;
 				}
 			}
