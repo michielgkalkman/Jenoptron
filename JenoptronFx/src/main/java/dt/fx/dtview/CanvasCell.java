@@ -14,6 +14,7 @@ import javafx.scene.paint.CycleMethod;
 import javafx.scene.paint.LinearGradient;
 import javafx.scene.paint.Paint;
 import javafx.scene.paint.Stop;
+import javafx.scene.text.Font;
 import jdt.core.binary.BinaryConditionValue;
 import jdt.icore.IRule;
 
@@ -141,7 +142,13 @@ public class CanvasCell extends ListCell<DTEntry> {
 					}
 
 					gc.setFill(p);
-					gc.fillRect(x, 2, w, availableHeight - 2);
+					final Font font = yearLabel.getFont();
+
+					final javafx.scene.text.Text text = new javafx.scene.text.Text(yearLabel.getText());
+
+					final double height = yearLabel.getHeight();
+
+					gc.fillRect(x, height + 2, w, availableHeight - 2);
 					counter++;
 				}
 			}

@@ -59,11 +59,19 @@ public class DTViewApp extends Application {
 			decisionTable.add(condition);
 		}
 
+		// Add condition
+		{
+			final ICondition condition = new BinaryCondition("condition2");
+			decisionTable.add(condition);
+		}
+
 		// Add action
 		{
 			final IAction action = new BinaryAction();
 			decisionTable.add(action);
 		}
+
+		decisionTable.split();
 
 		return decisionTable;
 	}
