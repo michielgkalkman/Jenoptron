@@ -35,6 +35,7 @@ public class DTViewApp extends Application {
 
 		final ListView<DTEntry> listView = new ListView<>(data);
 		listView.setCellFactory(param -> new CanvasCell());
+
 		listView.setFixedCellSize(200);
 
 		final Scene scene = new Scene(listView);
@@ -62,6 +63,18 @@ public class DTViewApp extends Application {
 		// Add condition
 		{
 			final ICondition condition = new BinaryCondition("condition2");
+			decisionTable.add(condition);
+		}
+
+		// Add condition
+		{
+			final ICondition condition = new BinaryCondition("condition3");
+			decisionTable.add(condition);
+		}
+
+		// Add condition
+		{
+			final ICondition condition = new BinaryCondition("condition4");
 			decisionTable.add(condition);
 		}
 

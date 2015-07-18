@@ -9,6 +9,8 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.CycleMethod;
@@ -33,6 +35,9 @@ public class CanvasCell extends ListCell<DTEntry> {
 
 		yearLabel = new Label();
 		yearLabel.setStyle("-fx-padding: 10px; -fx-font-size: 1.2em; -fx-font-weight: bold;");
+		final BackgroundFill fills = new BackgroundFill(Paint.valueOf(Color.GOLD.toString()), null, null);
+		final Background background = new Background(fills);
+		yearLabel.setBackground(background);
 		StackPane.setAlignment(yearLabel, Pos.TOP_LEFT);
 
 		/*
@@ -53,9 +58,9 @@ public class CanvasCell extends ListCell<DTEntry> {
 	@Override
 	protected void updateItem(final DTEntry entry, final boolean empty) {
 		if (empty || entry == null) {
-			yearLabel.setText("");
-			canvas.setData(null);
-			canvas.draw();
+			// yearLabel.setText("");
+			// canvas.setData(null);
+			// canvas.draw();
 		} else {
 			yearLabel.setText(entry.getLabelText());
 			canvas.setData(entry);
@@ -122,6 +127,10 @@ public class CanvasCell extends ListCell<DTEntry> {
 
 				final double w = getWidth() / allRules.size();
 
+				final Font font = yearLabel.getFont();
+
+				final double height = yearLabel.getHeight();
+
 				for (final IRule rule : allRules) {
 					final double x = w * counter;
 					final BinaryConditionValue conditionValue = (BinaryConditionValue) rule
@@ -148,9 +157,6 @@ public class CanvasCell extends ListCell<DTEntry> {
 					}
 
 					gc.setFill(p);
-					final Font font = yearLabel.getFont();
-
-					final double height = yearLabel.getHeight();
 
 					final javafx.scene.text.Text text = new javafx.scene.text.Text(text2);
 
