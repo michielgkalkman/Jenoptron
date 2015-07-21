@@ -3,11 +3,14 @@ package dt.fx.dtcanvas;
 import javafx.geometry.VPos;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
+import jdt.icore.ICondition;
 import jdt.icore.IDecisionTable;
 
 public class DTCanvasPane extends Pane {
@@ -22,6 +25,10 @@ public class DTCanvasPane extends Pane {
 		this.iDecisionTable = iDecisionTable;
 		this.font = font;
 		getChildren().add(canvas);
+
+		final BackgroundFill fills = new BackgroundFill(Paint.valueOf(Color.BLUEVIOLET.toString()), null, null);
+		final Background background = new Background(fills);
+		this.setBackground(background);
 	}
 
 	@Override
@@ -30,63 +37,51 @@ public class DTCanvasPane extends Pane {
 		final int right = (int) snappedRightInset();
 		final int bottom = (int) snappedBottomInset();
 		final int left = (int) snappedLeftInset();
-		canvas.setLayoutX(left);
-		canvas.setLayoutY(top);
 		final int w = (int) getWidth() - left - right;
 		final int h = (int) getHeight() - top - bottom;
 		canvas.setLayoutX(left);
 		canvas.setLayoutY(top);
+
 		if (w != canvas.getWidth() || h != canvas.getHeight()) {
 			canvas.setWidth(w);
 			canvas.setHeight(h);
-			final GraphicsContext g = canvas.getGraphicsContext2D();
-			g.clearRect(0, 0, w, h);
-			g.setFill(Color.gray(0, 0.2));
+			// final GraphicsContext g = canvas.getGraphicsContext2D();
+			// g.clearRect(0, 0, w, h);
+			// g.setFill(Color.gray(0, 0.2));
+			//
+			// for (int x = 0; x < w; x += SPACING_X) {
+			// for (int y = 0; y < h; y += SPACING_Y) {
+			// final double offsetY = (y % (2 * SPACING_Y)) == 0 ? SPACING_X / 2
+			// : 0;
+			// g.fillOval(x - RADIUS + offsetY, y - RADIUS, RADIUS + RADIUS,
+			// RADIUS + RADIUS);
+			// }
+			// }
+			draw(w, h, 0, 0, 0.0);
 
-			for (int x = 0; x < w; x += SPACING_X) {
-				for (int y = 0; y < h; y += SPACING_Y) {
-					final double offsetY = (y % (2 * SPACING_Y)) == 0 ? SPACING_X / 2 : 0;
-					g.fillOval(x - RADIUS + offsetY, y - RADIUS, RADIUS + RADIUS, RADIUS + RADIUS);
-				}
-			}
 		}
+	}
 
+	private void draw(final int w, final int h, final int dtx, final int dty, final double zoom) {
 		final GraphicsContext g = canvas.getGraphicsContext2D();
+
 		g.clearRect(0, 0, w, h);
 
-		g.setFill(Paint.valueOf(Color.KHAKI.toString()));
+		g.setFill(Paint.valueOf(Color.RED.toString()));
+		g.fillText("X", w / 2, (getHeight()) / 2, w);
 
-		// final javafx.scene.text.Text text = new javafx.scene.text.Text("C");
-		// text.setFill(p);
-
-		g.setTextAlign(TextAlignment.CENTER);
+		g.setTextAlign(TextAlignment.LEFT);
 		g.setTextBaseline(VPos.CENTER);
-		g.setFont(Font.font(font.getFamily(), getHeight()));
+		final int fontHeight = 40;
+		g.setFont(Font.font(font.getFamily(), fontHeight));
 
-		g.fillText("C", w / 2, (getHeight()) / 2, w);
-		// gc.fillText(text2, x, height + 2, w);
+		final ICondition iCondition = iDecisionTable.getConditions().get(0);
 
-		// final int top = (int) snappedTopInset();
-		// final int right = (int) snappedRightInset();
-		// final int bottom = (int) snappedBottomInset();
-		// final int left = (int) snappedLeftInset();
-		// canvas.setLayoutX(left);
-		// canvas.setLayoutY(top);
-		// if (w != canvas.getWidth() || h != canvas.getHeight()) {
-		// canvas.setWidth(w);
-		// canvas.setHeight(h);
-		// final GraphicsContext g = canvas.getGraphicsContext2D();
-		// g.clearRect(0, 0, w, h);
-		// g.setFill(Color.gray(0, 0.2));
-		//
-		// for (int x = 0; x < w; x += SPACING_X) {
-		// for (int y = 0; y < h; y += SPACING_Y) {
-		// final double offsetY = (y % (2 * SPACING_Y)) == 0 ? SPACING_X / 2 :
-		// 0;
-		// g.fillOval(x - RADIUS + offsetY, y - RADIUS, RADIUS + RADIUS, RADIUS
-		// + RADIUS);
-		// }
-		// }
-		// }
+		final String shortDescription = iCondition.getShortDescription();
+
+		g.setFill(Paint.valueOf(Color.WHITE.toString()));
+
+		final int widthDescription = 300;
+		g.fillText(shortDescription, 0, fontHeight / 2, widthDescription);
 	}
 }

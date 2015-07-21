@@ -3,6 +3,7 @@ package dt.fx.dtcanvas;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javafx.stage.Stage;
@@ -33,9 +34,10 @@ public class DTCanvasApp extends Application {
 		//
 		// root.getChildren().add(canvas);
 
-		final Font font = new Label("x").getFont();
+		final Label label = new Label("x");
+		final Font font = label.getFont();
 
-		final Scene scene = new Scene(new DTCanvasPane(iDecisionTable, font));
+		final Scene scene = new Scene(new DTCanvasPane(iDecisionTable, font), Color.YELLOW);
 
 		stage.setTitle("Canvas Cell");
 		stage.setScene(scene);
