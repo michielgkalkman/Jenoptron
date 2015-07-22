@@ -10,8 +10,10 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
+import jdt.core.binary.BinaryConditionValue;
 import jdt.icore.ICondition;
 import jdt.icore.IDecisionTable;
+import jdt.icore.IRule;
 
 public class DTCanvasPane extends Pane {
 	private static final double SPACING_X = 25;
@@ -58,30 +60,72 @@ public class DTCanvasPane extends Pane {
 			// }
 			// }
 			draw(w, h, 0, 0, 0.0);
-
 		}
 	}
 
 	private void draw(final int w, final int h, final int dtx, final int dty, final double zoom) {
-		final GraphicsContext g = canvas.getGraphicsContext2D();
+		final GraphicsContext gc = canvas.getGraphicsContext2D();
+		gc.clearRect(0, 0, w, h);
 
-		g.clearRect(0, 0, w, h);
+		gc.setFill(Paint.valueOf(Color.RED.toString()));
+		gc.fillText("X", w / 2, (getHeight()) / 2, w);
 
-		g.setFill(Paint.valueOf(Color.RED.toString()));
-		g.fillText("X", w / 2, (getHeight()) / 2, w);
-
-		g.setTextAlign(TextAlignment.LEFT);
-		g.setTextBaseline(VPos.CENTER);
+		gc.setTextAlign(TextAlignment.LEFT);
+		gc.setTextBaseline(VPos.CENTER);
 		final int fontHeight = 40;
-		g.setFont(Font.font(font.getFamily(), fontHeight));
+		gc.setFont(Font.font(font.getFamily(), fontHeight));
 
-		final ICondition iCondition = iDecisionTable.getConditions().get(0);
+		int y = 0;
+		for (y = 0; y < iDecisionTable.getConditions().size(); y++) {
+			final ICondition iCondition = iDecisionTable.getConditions().get(y);
+			final String shortDescription = iCondition.getShortDescription();
 
-		final String shortDescription = iCondition.getShortDescription();
+			gc.setFill(Paint.valueOf(Color.WHITE.toString()));
 
-		g.setFill(Paint.valueOf(Color.WHITE.toString()));
+			final int widthDescription = 300;
+			gc.fillText(shortDescription, 0, fontHeight / 2, widthDescription);
 
-		final int widthDescription = 300;
-		g.fillText(shortDescription, 0, fontHeight / 2, widthDescription);
+			int counter = 0;
+			for (int i = 0; i < iDecisionTable.getRules().size(); i++) {
+				final IRule rule = iDecisionTable.getRule(i);
+				final BinaryConditionValue conditionValue = (BinaryConditionValue) rule.getConditionValue(iCondition);
+				final Paint p;
+				final String text2;
+
+				switch (conditionValue.getBinaryConditionValue()) {
+				case YES: {
+					p = Paint.valueOf(Color.DARKOLIVEGREEN.toString());
+					text2 = "Y";
+					break;
+				}
+				case NO: {
+					p = Paint.valueOf(Color.INDIANRED.toString());
+					text2 = "N";
+					break;
+				}
+				default: {
+					p = Paint.valueOf(Color.KHAKI.toString());
+					text2 = "-";
+					break;
+				}
+				}
+
+				gc.setFill(p);
+
+				final javafx.scene.text.Text text = new javafx.scene.text.Text(text2);
+
+				text.setFill(p);
+
+				gc.setTextAlign(TextAlignment.CENTER);
+				gc.setTextBaseline(VPos.CENTER);
+
+				final double width = 30; // text.getBoundsInLocal().getWidth();
+
+				gc.fillText(text2, widthDescription + counter * width + width / 2, y * fontHeight + fontHeight / 2,
+						width);
+
+				counter++;
+			}
+		}
 	}
 }
