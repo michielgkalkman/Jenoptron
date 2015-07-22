@@ -70,8 +70,6 @@ public class DTCanvasPane extends Pane {
 		gc.setFill(Paint.valueOf(Color.RED.toString()));
 		gc.fillText("X", w / 2, (getHeight()) / 2, w);
 
-		gc.setTextAlign(TextAlignment.LEFT);
-		gc.setTextBaseline(VPos.CENTER);
 		final int fontHeight = 40;
 		gc.setFont(Font.font(font.getFamily(), fontHeight));
 
@@ -80,10 +78,12 @@ public class DTCanvasPane extends Pane {
 			final ICondition iCondition = iDecisionTable.getConditions().get(y);
 			final String shortDescription = iCondition.getShortDescription();
 
+			gc.setTextAlign(TextAlignment.LEFT);
+			gc.setTextBaseline(VPos.CENTER);
 			gc.setFill(Paint.valueOf(Color.WHITE.toString()));
 
 			final int widthDescription = 300;
-			gc.fillText(shortDescription, 0, fontHeight / 2, widthDescription);
+			gc.fillText(shortDescription, 0, y * fontHeight + fontHeight / 2, widthDescription);
 
 			int counter = 0;
 			for (int i = 0; i < iDecisionTable.getRules().size(); i++) {
