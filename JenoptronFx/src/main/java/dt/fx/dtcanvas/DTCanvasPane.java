@@ -170,10 +170,13 @@ public class DTCanvasPane extends Pane {
 
 			gc.fillText(shortDescription, 0, y * fontHeight + fontHeightMiddle, widthDescription);
 
-			int counter = 0;
+			double start_w = widthDescription;
+
+			gc.setTextAlign(TextAlignment.CENTER);
+			gc.setTextBaseline(VPos.CENTER);
+
 			for (int i = 0; i < iDecisionTable.getRules().size(); i++) {
 
-				final double start_w = widthDescription + counter * width;
 				if (start_w < canvas_w) {
 					final IRule rule = iDecisionTable.getRule(i);
 					final BinaryConditionValue conditionValue = (BinaryConditionValue) rule
@@ -201,13 +204,9 @@ public class DTCanvasPane extends Pane {
 
 					gc.setFill(p);
 
-					gc.setTextAlign(TextAlignment.CENTER);
-					gc.setTextBaseline(VPos.CENTER);
-
 					gc.fillText(text2, start_w + widthMiddle, y_offset + fontHeightMiddle, width);
-
-					counter++;
 				}
+				start_w += width;
 			}
 			y_offset += fontHeight;
 		}
