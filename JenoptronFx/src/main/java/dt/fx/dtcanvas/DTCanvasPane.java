@@ -18,6 +18,9 @@ import jdt.icore.IDecisionTable;
 import jdt.icore.IRule;
 
 public class DTCanvasPane extends Pane {
+	private static final Paint PAINT_RESOLVED = Paint.valueOf(Color.KHAKI.toString());
+	private static final Paint PAINT_NO = Paint.valueOf(Color.INDIANRED.toString());
+	private static final Paint PAINT_YES = Paint.valueOf(Color.DARKOLIVEGREEN.toString());
 	private final Canvas canvas = new Canvas();
 	private final IDecisionTable iDecisionTable;
 	private final Font font;
@@ -67,27 +70,23 @@ public class DTCanvasPane extends Pane {
 		}
 	}
 
-	private void draw(final int w, final int h, final int dtx, final int dty, final double zoom) {
+	private void draw(final int canvas_w, final int h, final int dtx, final int dty, final double zoom) {
 		final GraphicsContext gc = canvas.getGraphicsContext2D();
-		gc.clearRect(0, 0, w, h);
+		gc.clearRect(0, 0, canvas_w, h);
 
-		gc.setFill(Paint.valueOf(Color.RED.toString()));
-		gc.moveTo(0.5, 0.5);
-		gc.lineTo(w / 2, h / 2);
-		gc.moveTo(w - 0.5, 0.5);
-		gc.lineTo(w - 0.5, h - 0.5);
-		gc.stroke();
-
-		gc.setFill(Paint.valueOf(Color.RED.toString()));
-		gc.fillText("X", w / 2, (getHeight()) / 2, w);
+		// gc.setFill(Paint.valueOf(Color.RED.toString()));
+		// gc.fillText("X", canvas_w / 2, (getHeight()) / 2, canvas_w);
 
 		final int fontHeight = 40;
-		final int y_offset = drawConditions(gc, fontHeight, w);
-		drawActions(gc, fontHeight, y_offset);
+		final int y_offset = drawConditions(gc, fontHeight, canvas_w);
+		drawActions(gc, fontHeight, y_offset, canvas_w);
 	}
 
-	private void drawActions(final GraphicsContext gc, final int fontHeight, final int y_offset_) {
+	private void drawActions(final GraphicsContext gc, final int fontHeight, final int y_offset_, final int canvas_w) {
 		gc.setFont(Font.font(font.getFamily(), fontHeight));
+
+		final double width = 30; // text.getBoundsInLocal().getWidth();
+		final double widthMiddle = width / 2;
 
 		int y_offset = y_offset_;
 		int y = 0;
@@ -100,52 +99,54 @@ public class DTCanvasPane extends Pane {
 			gc.setFill(Paint.valueOf(Color.WHITE.toString()));
 
 			final int widthDescription = 300;
-			gc.fillText(shortDescription, 0, y_offset_ + y * fontHeight + fontHeight / 2, widthDescription);
+			final int fontHeightMiddle = fontHeight / 2;
+			gc.fillText(shortDescription, 0, y_offset_ + y * fontHeight + fontHeightMiddle, widthDescription);
 
 			y_offset += fontHeight;
 
 			int counter = 0;
 			for (int i = 0; i < iDecisionTable.getRules().size(); i++) {
-				final IRule rule = iDecisionTable.getRule(i);
-				final BinaryActionValue actionValue = (BinaryActionValue) rule.getActionValue(iAction);
 
-				final Paint p;
-				final String text2;
+				final double start_w = widthDescription + counter * width;
+				if (start_w < canvas_w) {
+					final IRule rule = iDecisionTable.getRule(i);
+					final BinaryActionValue actionValue = (BinaryActionValue) rule.getActionValue(iAction);
 
-				switch (actionValue.getBinaryActionValue()) {
-				case DO: {
-					p = Paint.valueOf(Color.DARKOLIVEGREEN.toString());
-					text2 = "X";
-					break;
+					final Paint p;
+					final String text2;
+
+					switch (actionValue.getBinaryActionValue()) {
+					case DO: {
+						p = PAINT_YES;
+						text2 = "X";
+						break;
+					}
+					case DONT: {
+						p = PAINT_NO;
+						text2 = "-";
+						break;
+					}
+					case UNKNOWN:
+					default: {
+						p = PAINT_RESOLVED;
+						text2 = "?";
+						break;
+					}
+					}
+
+					gc.setFill(p);
+
+					final javafx.scene.text.Text text = new javafx.scene.text.Text(text2);
+
+					text.setFill(p);
+
+					gc.setTextAlign(TextAlignment.CENTER);
+					gc.setTextBaseline(VPos.CENTER);
+
+					gc.fillText(text2, start_w + widthMiddle, y_offset_ + y * fontHeight + fontHeightMiddle, width);
+
+					counter++;
 				}
-				case DONT: {
-					p = Paint.valueOf(Color.INDIANRED.toString());
-					text2 = "-";
-					break;
-				}
-				case UNKNOWN:
-				default: {
-					p = Paint.valueOf(Color.KHAKI.toString());
-					text2 = "?";
-					break;
-				}
-				}
-
-				gc.setFill(p);
-
-				final javafx.scene.text.Text text = new javafx.scene.text.Text(text2);
-
-				text.setFill(p);
-
-				gc.setTextAlign(TextAlignment.CENTER);
-				gc.setTextBaseline(VPos.CENTER);
-
-				final double width = 30; // text.getBoundsInLocal().getWidth();
-
-				gc.fillText(text2, widthDescription + counter * width + width / 2,
-						y_offset_ + y * fontHeight + fontHeight / 2, width);
-
-				counter++;
 			}
 		}
 	}
@@ -164,15 +165,17 @@ public class DTCanvasPane extends Pane {
 			gc.setTextBaseline(VPos.CENTER);
 			gc.setFill(Paint.valueOf(Color.WHITE.toString()));
 
-			gc.fillText(shortDescription, 0, y * fontHeight + fontHeight / 2, widthDescription);
+			final int fontHeightMiddle = fontHeight / 2;
+			gc.fillText(shortDescription, 0, y * fontHeight + fontHeightMiddle, widthDescription);
 
-			y_offset += fontHeight;
+			final double width = 30; // text.getBoundsInLocal().getWidth();
+			final double widthMiddle = width / 2;
 
 			int counter = 0;
 			for (int i = 0; i < iDecisionTable.getRules().size(); i++) {
-				final double width = 30; // text.getBoundsInLocal().getWidth();
 
-				if (widthDescription + counter * width < canvas_w) {
+				final double start_w = widthDescription + counter * width;
+				if (start_w < canvas_w) {
 					final IRule rule = iDecisionTable.getRule(i);
 					final BinaryConditionValue conditionValue = (BinaryConditionValue) rule
 							.getConditionValue(iCondition);
@@ -181,17 +184,17 @@ public class DTCanvasPane extends Pane {
 
 					switch (conditionValue.getBinaryConditionValue()) {
 					case YES: {
-						p = Paint.valueOf(Color.DARKOLIVEGREEN.toString());
+						p = PAINT_YES;
 						text2 = "Y";
 						break;
 					}
 					case NO: {
-						p = Paint.valueOf(Color.INDIANRED.toString());
+						p = PAINT_NO;
 						text2 = "N";
 						break;
 					}
 					default: {
-						p = Paint.valueOf(Color.KHAKI.toString());
+						p = PAINT_RESOLVED;
 						text2 = "-";
 						break;
 					}
@@ -199,19 +202,15 @@ public class DTCanvasPane extends Pane {
 
 					gc.setFill(p);
 
-					final javafx.scene.text.Text text = new javafx.scene.text.Text(text2);
-
-					text.setFill(p);
-
 					gc.setTextAlign(TextAlignment.CENTER);
 					gc.setTextBaseline(VPos.CENTER);
 
-					gc.fillText(text2, widthDescription + counter * width + width / 2, y * fontHeight + fontHeight / 2,
-							width);
+					gc.fillText(text2, start_w + widthMiddle, y_offset + fontHeightMiddle, width);
 
 					counter++;
 				}
 			}
+			y_offset += fontHeight;
 		}
 
 		return y_offset;
