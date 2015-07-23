@@ -156,6 +156,9 @@ public class DTCanvasPane extends Pane {
 
 		int y_offset = 0;
 		int y = 0;
+		final double width = 30; // text.getBoundsInLocal().getWidth();
+		final double widthMiddle = width / 2;
+		final int fontHeightMiddle = fontHeight / 2;
 		for (y = 0; y < iDecisionTable.getConditions().size(); y++) {
 			final int widthDescription = 300;
 			final ICondition iCondition = iDecisionTable.getConditions().get(y);
@@ -165,11 +168,7 @@ public class DTCanvasPane extends Pane {
 			gc.setTextBaseline(VPos.CENTER);
 			gc.setFill(Paint.valueOf(Color.WHITE.toString()));
 
-			final int fontHeightMiddle = fontHeight / 2;
 			gc.fillText(shortDescription, 0, y * fontHeight + fontHeightMiddle, widthDescription);
-
-			final double width = 30; // text.getBoundsInLocal().getWidth();
-			final double widthMiddle = width / 2;
 
 			int counter = 0;
 			for (int i = 0; i < iDecisionTable.getRules().size(); i++) {
