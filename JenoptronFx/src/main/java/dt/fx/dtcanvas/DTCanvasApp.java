@@ -42,27 +42,9 @@ public class DTCanvasApp extends Application {
 	private IDecisionTable createDecisionTable() {
 		final IDecisionTable decisionTable = new DecisionTable();
 
-		// Add condition
-		{
-			final ICondition condition = new BinaryCondition();
-			decisionTable.add(condition);
-		}
-
-		// Add condition
-		{
-			final ICondition condition = new BinaryCondition("condition2");
-			decisionTable.add(condition);
-		}
-
-		// Add condition
-		{
-			final ICondition condition = new BinaryCondition("condition3");
-			decisionTable.add(condition);
-		}
-
-		// Add condition
-		{
-			final ICondition condition = new BinaryCondition("condition4");
+		for (int i = 0; i < 10; i++) {
+			// Add condition
+			final ICondition condition = new BinaryCondition("condition " + i);
 			decisionTable.add(condition);
 		}
 
