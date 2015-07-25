@@ -84,13 +84,16 @@ public class DTCanvasPane extends Pane {
 
 		final Image yesImage = text2image(text_w, text_w, "Y", PAINT_YES);
 		final Image noImage = text2image(text_w, text_w, "N", PAINT_NO);
-		final Image resolvedImage = text2image(text_w, text_w, "-", PAINT_RESOLVED);
+		final Image resolvedImage = text2image(text_w, text_w, "*", PAINT_RESOLVED);
+		final Image doImage = text2image(text_w, text_w, "X", Color.WHITE);
+		final Image dontImage = text2image(text_w, text_w, "-", Color.WHITE);
+		final Image unknownImage = text2image(text_w, text_w, "?", Color.WHITE);
 
 		final int fontHeight = text_w;
 		gc.setFont(Font.font(font.getFamily(), fontHeight));
 
 		final int y_offset = drawConditions(gc, fontHeight, canvas_w, yesImage, noImage, resolvedImage, text_w);
-		drawActions(gc, fontHeight, y_offset, canvas_w);
+		drawActions(gc, fontHeight, y_offset, canvas_w, doImage, dontImage, unknownImage, text_w);
 	}
 
 	private WritableImage text2image(final int text_w, final int text_h, final String text, final Paint paintYes) {
@@ -119,12 +122,14 @@ public class DTCanvasPane extends Pane {
 		return snapshot;
 	}
 
-	private void drawActions(final GraphicsContext gc, final int fontHeight, int y_offset_, final int canvas_w) {
-		final double width = 30; // text.getBoundsInLocal().getWidth();
-		final double widthMiddle = width / 2;
+	private void drawActions(final GraphicsContext gc, final int fontHeight, final int vertical_offset,
+			final int canvas_w, final Image doImage, final Image dontImage, final Image unknownImage,
+			final int text_w) {
 
 		final int widthDescription = 300;
 		final int fontHeightMiddle = fontHeight / 2;
+
+		int start_h = vertical_offset;
 
 		int y = 0;
 		for (y = 0; y < iDecisionTable.getActions().size(); y++) {
@@ -135,48 +140,38 @@ public class DTCanvasPane extends Pane {
 			gc.setTextBaseline(VPos.CENTER);
 			gc.setFill(Paint.valueOf(Color.WHITE.toString()));
 
-			gc.fillText(shortDescription, 0, y_offset_ + fontHeightMiddle, widthDescription);
-
-			gc.setTextAlign(TextAlignment.CENTER);
-			gc.setTextBaseline(VPos.CENTER);
+			gc.fillText(shortDescription, 0, start_h + fontHeightMiddle, widthDescription);
 
 			double start_w = widthDescription;
 
-			for (int i = 0; i < iDecisionTable.getRules().size(); i++) {
+			final int size = iDecisionTable.getRules().size();
+			for (int i = 0; i < size; i++) {
 
 				if (start_w < canvas_w) {
 					final IRule rule = iDecisionTable.getRule(i);
 					final BinaryActionValue actionValue = (BinaryActionValue) rule.getActionValue(iAction);
 
-					final Paint p;
-					final String text2;
-
 					switch (actionValue.getBinaryActionValue()) {
 					case DO: {
-						p = PAINT_YES;
-						text2 = "X";
+						gc.drawImage(doImage, start_w, start_h);
 						break;
 					}
 					case DONT: {
-						p = PAINT_NO;
-						text2 = "-";
+						gc.drawImage(dontImage, start_w, start_h);
 						break;
 					}
 					case UNKNOWN:
 					default: {
-						p = PAINT_RESOLVED;
-						text2 = "?";
+						gc.drawImage(unknownImage, start_w, start_h);
 						break;
 					}
 					}
-
-					gc.setFill(p);
-
-					gc.fillText(text2, start_w + widthMiddle, y_offset_ + fontHeightMiddle, width);
+				} else {
+					i = size;
 				}
-				start_w += width;
+				start_w += text_w;
 			}
-			y_offset_ += fontHeight;
+			start_h += fontHeight;
 		}
 	}
 
@@ -198,7 +193,8 @@ public class DTCanvasPane extends Pane {
 
 			double start_w = widthDescription;
 
-			for (int i = 0; i < iDecisionTable.getRules().size(); i++) {
+			final int size = iDecisionTable.getRules().size();
+			for (int i = 0; i < size; i++) {
 
 				if (start_w < canvas_w) {
 					final IRule rule = iDecisionTable.getRule(i);
@@ -219,7 +215,7 @@ public class DTCanvasPane extends Pane {
 					}
 					}
 				} else {
-					i = iDecisionTable.getRules().size();
+					i = size;
 				}
 				start_w += width;
 			}
