@@ -29,9 +29,12 @@ public class DTCanvasPane extends Pane {
 	private final Canvas canvas = new Canvas();
 	private final IDecisionTable iDecisionTable;
 	private final Font font;
+	private final DTView dtView;
 
 	public DTCanvasPane(final IDecisionTable iDecisionTable, final Font font) {
 		this.iDecisionTable = iDecisionTable;
+		this.dtView = new DTView(iDecisionTable);
+
 		this.font = font;
 		getChildren().add(canvas);
 
@@ -47,12 +50,18 @@ public class DTCanvasPane extends Pane {
 
 		canvas.setOnMousePressed(event -> {
 			if (event.isSecondaryButtonDown()) {
+				getDTContext(event.getSceneX(), event.getSceneY());
+
 				contextMenu.show(canvas, event.getScreenX(), event.getScreenY());
 			} else {
 				System.out.println(event.getSceneX());
 				System.out.println(event.getScreenX());
 			}
 		});
+	}
+
+	private DTContext getDTContext(final double sceneX, final double sceneY) {
+		return dtView.getContext(sceneX, sceneY);
 	}
 
 	@Override
@@ -69,19 +78,10 @@ public class DTCanvasPane extends Pane {
 		if (w != canvas.getWidth() || h != canvas.getHeight()) {
 			canvas.setWidth(w);
 			canvas.setHeight(h);
-			// final GraphicsContext g = canvas.getGraphicsContext2D();
-			// g.clearRect(0, 0, w, h);
-			// g.setFill(Color.gray(0, 0.2));
-			//
-			// for (int x = 0; x < w; x += SPACING_X) {
-			// for (int y = 0; y < h; y += SPACING_Y) {
-			// final double offsetY = (y % (2 * SPACING_Y)) == 0 ? SPACING_X / 2
-			// : 0;
-			// g.fillOval(x - RADIUS + offsetY, y - RADIUS, RADIUS + RADIUS,
-			// RADIUS + RADIUS);
-			// }
-			// }
-			draw(w, h, 0, 0, 0.0);
+
+			// draw(w, h, 0, 0, 0.0);
+
+			dtView.draw(canvas, w, h);
 		}
 	}
 
