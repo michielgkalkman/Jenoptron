@@ -4,6 +4,7 @@ import javafx.geometry.VPos;
 import javafx.scene.SnapshotParameters;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.image.Image;
 import javafx.scene.image.WritableImage;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
@@ -79,67 +80,43 @@ public class DTCanvasPane extends Pane {
 		// final WritableImage writableImage = new WritableImage(40, 40);
 		// writableImage.getPixelWriter().setColor(x, y, c);
 
+		final int text_w = 30;
+
+		final Image yesImage = text2image(text_w, text_w, "Y", PAINT_YES);
+		final Image noImage = text2image(text_w, text_w, "N", PAINT_NO);
+		final Image resolvedImage = text2image(text_w, text_w, "-", PAINT_RESOLVED);
+
+		final int fontHeight = text_w;
+		gc.setFont(Font.font(font.getFamily(), fontHeight));
+
+		final int y_offset = drawConditions(gc, fontHeight, canvas_w, yesImage, noImage, resolvedImage, text_w);
+		drawActions(gc, fontHeight, y_offset, canvas_w);
+	}
+
+	private WritableImage text2image(final int text_w, final int text_h, final String text, final Paint paintYes) {
 		final Canvas canvas2 = new Canvas();
-		canvas2.setWidth(40);
-		canvas2.setHeight(40);
+		canvas2.setWidth(text_w);
+		canvas2.setHeight(text_h);
 
 		{
 			final GraphicsContext graphicsContext2D = canvas2.getGraphicsContext2D();
-			graphicsContext2D.setFont(Font.font(font.getFamily(), 40));
+			graphicsContext2D.setFont(Font.font(font.getFamily(), text_w));
 
 			graphicsContext2D.setTextAlign(TextAlignment.CENTER);
 			graphicsContext2D.setTextBaseline(VPos.CENTER);
 
-			graphicsContext2D.clearRect(0, 0, 40, 40);
+			graphicsContext2D.clearRect(0, 0, text_w, text_h);
 
-			graphicsContext2D.fillText("Q", 20, 20, 40);
+			graphicsContext2D.setFill(paintYes);
+
+			graphicsContext2D.fillText(text, text_w / 2, text_h / 2, text_w);
 		}
 
 		final SnapshotParameters parameters = new SnapshotParameters();
 		parameters.setFill(Color.TRANSPARENT);
-		final WritableImage writableImage = new WritableImage(40, 40);
+		final WritableImage writableImage = new WritableImage(text_w, text_w);
 		final WritableImage snapshot = canvas2.snapshot(parameters, writableImage);
-
-		gc.drawImage(snapshot, 0, 0);
-
-		// StackPane stackPane = new StackPane();
-		// stackPane.getChildren().addAll(canvas2);
-		// stackPane.snapshot(params, image)
-
-		// http://stackoverflow.com/questions/27912628/how-to-overlap-buttons-text-over-an-image-with-javafx-8
-		// http://docs.oracle.com/javafx/2/image_ops/jfxpub-image_ops.htm
-
-		// http://stackoverflow.com/questions/12991397/placing-javafx-text-over-an-image
-
-		// Place your ImageView in a Stackpane, and on top of the view a Group
-		// containing your Text with the according X/Y coordinates set.
-		// shareimprove this answer
-		//
-		// answered Oct 20 '12 at 19:09
-		// sarcan
-		// 2,014817
-		//
-		//
-		//
-		// If I want to save that image to .png after, what would I have to do?
-		// – julbaril Oct 20 '12 at 21:07
-		//
-		//
-		// Well, you could take a snapshot of the stackpane using
-		// ´Node#snapshot(...).
-		// This will give you a WritableImage, which you can convert to a
-		// BufferedImage instance
-		// using SwingFXUtils.fromFXImage(...), and then write that to disk via
-		// ImageIO`. – sarcan Oct 20 '12 at 21:22
-
-		// gc.setFill(Paint.valueOf(Color.RED.toString()));
-		// gc.fillText("X", canvas_w / 2, (getHeight()) / 2, canvas_w);
-
-		final int fontHeight = 40;
-		gc.setFont(Font.font(font.getFamily(), fontHeight));
-
-		final int y_offset = drawConditions(gc, fontHeight, canvas_w);
-		drawActions(gc, fontHeight, y_offset, canvas_w);
+		return snapshot;
 	}
 
 	private void drawActions(final GraphicsContext gc, final int fontHeight, int y_offset_, final int canvas_w) {
@@ -203,11 +180,10 @@ public class DTCanvasPane extends Pane {
 		}
 	}
 
-	private int drawConditions(final GraphicsContext gc, final int fontHeight, final int canvas_w) {
+	private int drawConditions(final GraphicsContext gc, final int fontHeight, final int canvas_w, final Image yesImage,
+			final Image noImage, final Image resolvedImage, final int width) {
 		int start_h = 0;
 		int y = 0;
-		final double width = 30; // text.getBoundsInLocal().getWidth();
-		final double widthMiddle = width / 2;
 		final int fontHeightMiddle = fontHeight / 2;
 		for (y = 0; y < iDecisionTable.getConditions().size(); y++) {
 			final int widthDescription = 300;
@@ -222,39 +198,28 @@ public class DTCanvasPane extends Pane {
 
 			double start_w = widthDescription;
 
-			gc.setTextAlign(TextAlignment.CENTER);
-			gc.setTextBaseline(VPos.CENTER);
-
 			for (int i = 0; i < iDecisionTable.getRules().size(); i++) {
 
 				if (start_w < canvas_w) {
 					final IRule rule = iDecisionTable.getRule(i);
 					final BinaryConditionValue conditionValue = (BinaryConditionValue) rule
 							.getConditionValue(iCondition);
-					final Paint p;
-					final String text2;
-
 					switch (conditionValue.getBinaryConditionValue()) {
 					case YES: {
-						p = PAINT_YES;
-						text2 = "Y";
+						gc.drawImage(yesImage, start_w, start_h);
 						break;
 					}
 					case NO: {
-						p = PAINT_NO;
-						text2 = "N";
+						gc.drawImage(noImage, start_w, start_h);
 						break;
 					}
 					default: {
-						p = PAINT_RESOLVED;
-						text2 = "-";
+						gc.drawImage(resolvedImage, start_w, start_h);
 						break;
 					}
 					}
-
-					gc.setFill(p);
-
-					gc.fillText(text2, start_w + widthMiddle, start_h + fontHeightMiddle, width);
+				} else {
+					i = iDecisionTable.getRules().size();
 				}
 				start_w += width;
 			}
