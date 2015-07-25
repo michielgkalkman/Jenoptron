@@ -4,6 +4,8 @@ import javafx.geometry.VPos;
 import javafx.scene.SnapshotParameters;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.ContextMenu;
+import javafx.scene.control.MenuItem;
 import javafx.scene.image.Image;
 import javafx.scene.image.WritableImage;
 import javafx.scene.layout.Background;
@@ -37,9 +39,19 @@ public class DTCanvasPane extends Pane {
 		final Background background = new Background(fills);
 		this.setBackground(background);
 
-		canvas.setOnMouseClicked(event -> {
-			System.out.println(event.getSceneX());
-			System.out.println(event.getScreenX());
+		final ContextMenu contextMenu = new ContextMenu();
+		final MenuItem cut = new MenuItem("Cut");
+		final MenuItem copy = new MenuItem("Copy");
+		final MenuItem paste = new MenuItem("Paste");
+		contextMenu.getItems().addAll(cut, copy, paste);
+
+		canvas.setOnMousePressed(event -> {
+			if (event.isSecondaryButtonDown()) {
+				contextMenu.show(canvas, event.getScreenX(), event.getScreenY());
+			} else {
+				System.out.println(event.getSceneX());
+				System.out.println(event.getScreenX());
+			}
 		});
 	}
 
@@ -178,9 +190,8 @@ public class DTCanvasPane extends Pane {
 	private int drawConditions(final GraphicsContext gc, final int fontHeight, final int canvas_w, final Image yesImage,
 			final Image noImage, final Image resolvedImage, final int width) {
 		int start_h = 0;
-		int y = 0;
 		final int fontHeightMiddle = fontHeight / 2;
-		for (y = 0; y < iDecisionTable.getConditions().size(); y++) {
+		for (int y = 0; y < iDecisionTable.getConditions().size(); y++) {
 			final int widthDescription = 300;
 			final ICondition iCondition = iDecisionTable.getConditions().get(y);
 			final String shortDescription = iCondition.getShortDescription();
