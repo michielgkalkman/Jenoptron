@@ -17,15 +17,13 @@ import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
 import jdt.core.binary.BinaryActionValue;
+import jdt.core.binary.BinaryConditionValue;
 import jdt.icore.IDecisionTable;
 
 public class DTView {
-	// private static final Paint PAINT_RESOLVED =
-	// Paint.valueOf(Color.KHAKI.toString());
-	// private static final Paint PAINT_NO =
-	// Paint.valueOf(Color.INDIANRED.toString());
-	// private static final Paint PAINT_YES =
-	// Paint.valueOf(Color.DARKOLIVEGREEN.toString());
+	private static final Paint PAINT_RESOLVED = Paint.valueOf(Color.KHAKI.toString());
+	private static final Paint PAINT_NO = Paint.valueOf(Color.INDIANRED.toString());
+	private static final Paint PAINT_YES = Paint.valueOf(Color.DARKOLIVEGREEN.toString());
 
 	private static final int row_height = 40;
 	private static final int column_width = 40;
@@ -43,10 +41,11 @@ public class DTView {
 		iDecisionTable.getAllRules().stream().forEach(irule -> {
 			final Column column = new Column(column_width);
 
-			column.addCell(new Cell(column_width, row_height, null, null, this));
+			column.addCell(new Cell(column_width, row_height, this));
 
 			iDecisionTable.getConditions().stream().forEach(condition -> {
-				column.addCell(new Cell(column_width, row_height, null, null, this));
+				column.addCell(new Cell(column_width, row_height, condition,
+						(BinaryConditionValue) irule.getConditionValue(condition), this));
 			});
 
 			iDecisionTable.getActions().stream().forEach(action -> {
@@ -134,6 +133,27 @@ public class DTView {
 			values2Image.put(rect, map);
 		}
 		return map.get(binaryActionValue);
+	}
+
+	private final Map<Rect, Map<BinaryConditionValue, Image>> binaryCondition2Image = new WeakHashMap<>();
+
+	public Image getImage(final BinaryConditionValue binaryConditionValue, final double width, final double height) {
+		final Rect rect = new Rect(width, height);
+		Map<BinaryConditionValue, Image> map = binaryCondition2Image.get(rect);
+		if (map == null) {
+			map = new HashMap<>();
+
+			final Image yesImage = text2image(width, height, "Y", PAINT_YES);
+			final Image noImage = text2image(width, height, "N", PAINT_NO);
+			final Image resolvedImage = text2image(width, height, "*", PAINT_RESOLVED);
+
+			map.put(BinaryConditionValue.YES, yesImage);
+			map.put(BinaryConditionValue.NO, noImage);
+			map.put(BinaryConditionValue.IRRELEVANT, resolvedImage);
+
+			binaryCondition2Image.put(rect, map);
+		}
+		return map.get(binaryConditionValue);
 	}
 
 	private WritableImage text2image(final double text_w, final double text_h, final String text,
