@@ -183,4 +183,8 @@ public class DTView {
 		return snapshot;
 	}
 
+	public double getWidth() {
+		return 100 + iDecisionTable.getRules().size() * 40;
+	}
+
 }
