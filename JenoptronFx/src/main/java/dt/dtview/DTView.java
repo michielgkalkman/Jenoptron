@@ -7,6 +7,7 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
+import jdt.core.binary.BinaryActionValue;
 import jdt.icore.IDecisionTable;
 
 public class DTView {
@@ -21,12 +22,17 @@ public class DTView {
 		columns.add(new Column(100));
 
 		iDecisionTable.getAllRules().stream().forEach(irule -> {
-			final Column column = new Column(10);
+			final int column_width = 10;
+			final Column column = new Column(column_width);
 
-			column.addCell(new Cell(20));
+			column.addCell(new Cell(column_width, 20, null, null));
 
 			iDecisionTable.getConditions().stream().forEach(condition -> {
-				column.addCell(new Cell(20));
+				column.addCell(new Cell(column_width, 20, null, null));
+			});
+
+			iDecisionTable.getActions().stream().forEach(action -> {
+				column.addCell(new Cell(column_width, 20, action, (BinaryActionValue) irule.getActionValue(action)));
 			});
 
 			columns.add(column);
@@ -38,8 +44,8 @@ public class DTView {
 		return null;
 	}
 
-	public void draw(final Canvas canvas, final double w, final double h, final double start_dt_w,
-			final double start_dt_h) {
+	public void draw(final Canvas canvas, final double start_canvas_w, final double start_canvas_h,
+			final double start_dt_w, final double start_dt_h) {
 		final GraphicsContext graphicsContext = canvas.getGraphicsContext2D();
 
 		graphicsContext.setFill(Paint.valueOf(Color.WHITE.toString()));
@@ -56,22 +62,25 @@ public class DTView {
 				for (final Cell cell : column.getCells()) {
 					final double height = cell.getHeight();
 
-					if (start_h + height > 0.0) {
+					if (start_h < start_canvas_h && start_h + height > 0.0) {
 
-						if (fOddColumn) {
-							if (fOddRow) {
-								graphicsContext.setFill(Paint.valueOf(Color.WHITE.toString()));
-							} else {
-								graphicsContext.setFill(Paint.valueOf(Color.PINK.toString()));
-							}
-						} else {
-							if (fOddRow) {
-								graphicsContext.setFill(Paint.valueOf(Color.LIGHTGREEN.toString()));
-							} else {
-								graphicsContext.setFill(Paint.valueOf(Color.LIGHTBLUE.toString()));
-							}
-						}
-						graphicsContext.fillRect(start_w, start_h, width, height);
+						cell.draw(graphicsContext, start_w, start_h);
+
+						// if (fOddColumn) {
+						// if (fOddRow) {
+						// graphicsContext.setFill(Paint.valueOf(Color.WHITE.toString()));
+						// } else {
+						// graphicsContext.setFill(Paint.valueOf(Color.PINK.toString()));
+						// }
+						// } else {
+						// if (fOddRow) {
+						// graphicsContext.setFill(Paint.valueOf(Color.LIGHTGREEN.toString()));
+						// } else {
+						// graphicsContext.setFill(Paint.valueOf(Color.LIGHTBLUE.toString()));
+						// }
+						// }
+						// graphicsContext.fillRect(start_w, start_h, width,
+						// height);
 					}
 					fOddRow ^= true;
 					start_h += height;
