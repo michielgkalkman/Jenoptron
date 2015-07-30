@@ -2,6 +2,7 @@ package dt.fx.dtcanvas;
 
 import java.util.List;
 
+import dt.dtview.Column;
 import javafx.scene.canvas.Canvas;
 import jdt.icore.IDecisionTable;
 
