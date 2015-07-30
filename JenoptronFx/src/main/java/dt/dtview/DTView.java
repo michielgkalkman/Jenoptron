@@ -1,38 +1,57 @@
 package dt.dtview;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.WeakHashMap;
 
+import javafx.geometry.VPos;
+import javafx.scene.SnapshotParameters;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.image.Image;
+import javafx.scene.image.WritableImage;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
+import javafx.scene.text.Font;
+import javafx.scene.text.TextAlignment;
 import jdt.core.binary.BinaryActionValue;
 import jdt.icore.IDecisionTable;
 
 public class DTView {
+	// private static final Paint PAINT_RESOLVED =
+	// Paint.valueOf(Color.KHAKI.toString());
+	// private static final Paint PAINT_NO =
+	// Paint.valueOf(Color.INDIANRED.toString());
+	// private static final Paint PAINT_YES =
+	// Paint.valueOf(Color.DARKOLIVEGREEN.toString());
 
+	private static final int row_height = 40;
+	private static final int column_width = 40;
 	private final IDecisionTable iDecisionTable;
 	private final List<Column> columns = new ArrayList<>();
+	private final Font font;
 
-	public DTView(final IDecisionTable iDecisionTable) {
+	public DTView(final IDecisionTable iDecisionTable, final Font font) {
 		this.iDecisionTable = iDecisionTable;
+		this.font = font;
 
 		// Column for condition/action texts:
 		columns.add(new Column(100));
 
 		iDecisionTable.getAllRules().stream().forEach(irule -> {
-			final int column_width = 10;
 			final Column column = new Column(column_width);
 
-			column.addCell(new Cell(column_width, 20, null, null));
+			column.addCell(new Cell(column_width, row_height, null, null, this));
 
 			iDecisionTable.getConditions().stream().forEach(condition -> {
-				column.addCell(new Cell(column_width, 20, null, null));
+				column.addCell(new Cell(column_width, row_height, null, null, this));
 			});
 
 			iDecisionTable.getActions().stream().forEach(action -> {
-				column.addCell(new Cell(column_width, 20, action, (BinaryActionValue) irule.getActionValue(action)));
+				column.addCell(new Cell(column_width, row_height, action,
+						(BinaryActionValue) irule.getActionValue(action), this));
 			});
 
 			columns.add(column);
@@ -90,6 +109,58 @@ public class DTView {
 
 			start_w += width;
 		}
+	}
+
+	private final Map<Rect, Map<BinaryActionValue, Image>> values2Image = new WeakHashMap<>();
+
+	public Image getImage(final BinaryActionValue binaryActionValue, final double width, final double height) {
+		final Rect rect = new Rect(width, height);
+		Map<BinaryActionValue, Image> map = values2Image.get(rect);
+		if (map == null) {
+			map = new HashMap<>();
+
+			// final Image yesImage = text2image(width, height, "Y", PAINT_YES);
+			// final Image noImage = text2image(width, height, "N", PAINT_NO);
+			// final Image resolvedImage = text2image(width, height, "*",
+			// PAINT_RESOLVED);
+			final Image doImage = text2image(width, height, "X", Color.WHITE);
+			final Image dontImage = text2image(width, height, "-", Color.WHITE);
+			final Image unknownImage = text2image(width, height, "?", Color.WHITE);
+
+			map.put(BinaryActionValue.DO, doImage);
+			map.put(BinaryActionValue.DONT, dontImage);
+			map.put(BinaryActionValue.UNKNOWN, unknownImage);
+
+			values2Image.put(rect, map);
+		}
+		return map.get(binaryActionValue);
+	}
+
+	private WritableImage text2image(final double text_w, final double text_h, final String text,
+			final Paint paintYes) {
+		final Canvas canvas2 = new Canvas();
+		canvas2.setWidth(text_w);
+		canvas2.setHeight(text_h);
+
+		{
+			final GraphicsContext graphicsContext2D = canvas2.getGraphicsContext2D();
+			graphicsContext2D.setFont(Font.font(font.getFamily(), text_w));
+
+			graphicsContext2D.setTextAlign(TextAlignment.CENTER);
+			graphicsContext2D.setTextBaseline(VPos.CENTER);
+
+			graphicsContext2D.clearRect(0, 0, text_w, text_h);
+
+			graphicsContext2D.setFill(paintYes);
+
+			graphicsContext2D.fillText(text, text_w / 2, text_h / 2, text_w);
+		}
+
+		final SnapshotParameters parameters = new SnapshotParameters();
+		parameters.setFill(Color.TRANSPARENT);
+		final WritableImage writableImage = new WritableImage((int) text_w, (int) text_w);
+		final WritableImage snapshot = canvas2.snapshot(parameters, writableImage);
+		return snapshot;
 	}
 
 }

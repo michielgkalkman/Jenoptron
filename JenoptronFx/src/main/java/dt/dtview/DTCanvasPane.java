@@ -33,7 +33,7 @@ public class DTCanvasPane extends Pane {
 
 	public DTCanvasPane(final IDecisionTable iDecisionTable, final Font font) {
 		this.iDecisionTable = iDecisionTable;
-		this.dtView = new DTView(iDecisionTable);
+		this.dtView = new DTView(iDecisionTable, font);
 
 		this.font = font;
 		getChildren().add(canvas);
