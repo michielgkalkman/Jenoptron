@@ -79,9 +79,9 @@ public class DTCanvasPane extends Pane {
 			canvas.setWidth(w);
 			canvas.setHeight(h);
 
-			// draw(w, h, 0, 0, 0.0);
+			draw(w, h, 0, 0, 0.0);
 
-			dtView.draw(canvas, w, h);
+			// dtView.draw(canvas, w, h);
 		}
 	}
 

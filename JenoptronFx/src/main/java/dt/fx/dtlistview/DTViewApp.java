@@ -1,4 +1,4 @@
-package dt.fx.dtview;
+package dt.fx.dtlistview;
 
 import javafx.application.Application;
 import javafx.collections.FXCollections;
@@ -24,14 +24,6 @@ public class DTViewApp extends Application {
 		 */
 		final ObservableList<DTEntry> data = FXCollections.observableArrayList();
 		iDecisionTable.getConditions().stream().forEach(c -> data.add(new DTEntry(iDecisionTable, c)));
-
-		// for (int year = 1969; year < 2015; year++) {
-		// final YearEntry entry = new YearEntry(year);
-		// for (int day = 0; day < 365; day++) {
-		// entry.getValues().add(Math.random() * 100);
-		// }
-		// data.add(entry);
-		// }
 
 		final ListView<DTEntry> listView = new ListView<>(data);
 		listView.setCellFactory(param -> new CanvasCell());

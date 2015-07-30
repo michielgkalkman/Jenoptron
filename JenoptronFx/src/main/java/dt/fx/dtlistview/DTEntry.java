@@ -1,4 +1,4 @@
-package dt.fx.dtview;
+package dt.fx.dtlistview;
 
 import jdt.icore.ICondition;
 import jdt.icore.IDecisionTable;

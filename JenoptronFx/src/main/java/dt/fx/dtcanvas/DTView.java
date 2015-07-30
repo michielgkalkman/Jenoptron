@@ -1,5 +1,7 @@
 package dt.fx.dtcanvas;
 
+import java.util.List;
+
 import javafx.scene.canvas.Canvas;
 import jdt.icore.IDecisionTable;
 
@@ -17,8 +19,13 @@ public class DTView {
 	}
 
 	public void draw(final Canvas canvas, final int w, final int h) {
-		// TODO Auto-generated method stub
+		for (final Column column : getColumns()) {
 
+		}
+	}
+
+	private List<Column> getColumns() {
+		return null;
 	}
 
 }
