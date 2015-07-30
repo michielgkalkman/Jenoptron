@@ -30,23 +30,26 @@ public class DTView {
 		return null;
 	}
 
-	public void draw(final Canvas canvas, final double w, final double h) {
+	public void draw(final Canvas canvas, final double w, final double h, final double start_dt_w,
+			final double start_dt_h) {
 		final GraphicsContext graphicsContext = canvas.getGraphicsContext2D();
 
 		graphicsContext.setFill(Paint.valueOf(Color.WHITE.toString()));
 
 		boolean fDraw = true;
 
-		double start_w = 0;
+		double start_w = -start_dt_w;
 		for (final Column column : columns) {
 			final int width = column.getWidth();
 
-			if (fDraw) {
-				graphicsContext.fillRect(start_w, 0.0, width, 20.0);
+			if (start_w + width > 0) {
+				if (fDraw) {
+					graphicsContext.fillRect(start_w, 0.0, width, 20.0);
+
+					System.out.println(start_w);
+				}
 			}
 			fDraw ^= true;
-
-			System.out.println(fDraw);
 
 			start_w += width;
 		}
