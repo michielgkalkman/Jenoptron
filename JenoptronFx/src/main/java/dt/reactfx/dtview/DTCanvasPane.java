@@ -33,6 +33,10 @@ public class DTCanvasPane extends Pane {
 		final MenuItem paste = new MenuItem("Paste");
 		contextMenu.getItems().addAll(cut, copy, paste);
 
+		addMouseEvents();
+	}
+
+	private void addMouseEvents() {
 		// canvas.setOnMouseDragged(event -> {
 		// canvas.getGraphicsContext2D().fillOval(event.getSceneX(),
 		// event.getSceneY(), 10, 10);
