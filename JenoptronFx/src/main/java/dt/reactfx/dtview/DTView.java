@@ -58,6 +58,16 @@ public class DTView {
 
 	}
 
+	public DTView(final IDecisionTable iDecisionTable, final Font font, final List<Column> newColumns) {
+		this.iDecisionTable = iDecisionTable;
+		this.font = font;
+
+		// Column for condition/action texts:
+		columns.add(new Column(100));
+
+		columns.addAll(newColumns);
+	}
+
 	public DTContext getContext(final double sceneX, final double sceneY) {
 		return null;
 	}
@@ -68,43 +78,22 @@ public class DTView {
 
 		graphicsContext.setFill(Paint.valueOf(Color.WHITE.toString()));
 
-		boolean fOddColumn = true;
-
 		double start_w = -start_dt_w;
 		for (final Column column : columns) {
 			final double width = column.getWidth();
 
 			if (start_w + width > 0) {
 				double start_h = -start_dt_h;
-				boolean fOddRow = true;
 				for (final Cell cell : column.getCells()) {
 					final double height = cell.getHeight();
 
 					if (start_h < start_canvas_h && start_h + height > 0.0) {
 
 						cell.draw(graphicsContext, start_w, start_h);
-
-						// if (fOddColumn) {
-						// if (fOddRow) {
-						// graphicsContext.setFill(Paint.valueOf(Color.WHITE.toString()));
-						// } else {
-						// graphicsContext.setFill(Paint.valueOf(Color.PINK.toString()));
-						// }
-						// } else {
-						// if (fOddRow) {
-						// graphicsContext.setFill(Paint.valueOf(Color.LIGHTGREEN.toString()));
-						// } else {
-						// graphicsContext.setFill(Paint.valueOf(Color.LIGHTBLUE.toString()));
-						// }
-						// }
-						// graphicsContext.fillRect(start_w, start_h, width,
-						// height);
 					}
-					fOddRow ^= true;
 					start_h += height;
 				}
 			}
-			fOddColumn ^= true;
 
 			start_w += width;
 		}
@@ -185,6 +174,16 @@ public class DTView {
 
 	public double getWidth() {
 		return 100 + iDecisionTable.getRules().size() * 40;
+	}
+
+	public DTView enlarge(final double factor) {
+		final List<Column> newColumns = new ArrayList<>();
+
+		columns.stream().forEach(column -> {
+			newColumns.add(column.enlarge(factor));
+		});
+
+		return new DTView(iDecisionTable, font, newColumns);
 	}
 
 }

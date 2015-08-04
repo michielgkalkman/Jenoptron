@@ -48,6 +48,18 @@ public class Cell {
 		this.binaryConditionValue = null;
 	}
 
+	private Cell(final double width, final double height, final IAction action,
+			final BinaryActionValue binaryActionValue, final ICondition condition,
+			final BinaryConditionValue binaryConditionValue, final DTView dtView) {
+		this.width = width;
+		this.height = height;
+		this.action = action;
+		this.binaryActionValue = binaryActionValue;
+		this.condition = condition;
+		this.binaryConditionValue = binaryConditionValue;
+		this.dtView = dtView;
+	}
+
 	public double getHeight() {
 		return height;
 	}
@@ -60,6 +72,11 @@ public class Cell {
 		} else if (condition != null) {
 			graphicsContext.drawImage(dtView.getImage(binaryConditionValue, width, height), start_w, start_h);
 		}
+	}
+
+	public Cell enlarge(final double factor) {
+		return new Cell(width * factor, height * factor, action, binaryActionValue, condition, binaryConditionValue,
+				dtView);
 	}
 
 }

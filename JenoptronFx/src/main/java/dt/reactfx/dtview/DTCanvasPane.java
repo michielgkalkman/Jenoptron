@@ -1,9 +1,18 @@
 package dt.reactfx.dtview;
 
+import java.time.Duration;
+import java.util.function.BinaryOperator;
+
+import org.reactfx.EventStream;
+import org.reactfx.EventStreams;
+import org.reactfx.util.Either;
+
+import javafx.geometry.Point2D;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.Pane;
@@ -19,7 +28,7 @@ public class DTCanvasPane extends Pane {
 	private final double start_h = 0.0;
 
 	public DTCanvasPane(final IDecisionTable iDecisionTable, final Font font) {
-		this.dtView = new DTView(iDecisionTable, font);
+		this.dtView = new DTView(iDecisionTable, font).enlarge(0.5);
 
 		getChildren().add(canvas);
 
@@ -33,7 +42,52 @@ public class DTCanvasPane extends Pane {
 		final MenuItem paste = new MenuItem("Paste");
 		contextMenu.getItems().addAll(cut, copy, paste);
 
-		addMouseEvents();
+		// addMouseEvents();
+
+		// addMouseStreams();
+
+	}
+
+	private void addMouseStreams() {
+		final EventStream<MouseEvent> mouseEvents = EventStreams.eventsOf(canvas, MouseEvent.ANY);
+
+		final EventStream<Void> tickStream = EventStreams.ticks(Duration.ofSeconds(3)).supply((Void) null);
+
+		//
+		// mouseEvents.subscribe(mouseEvent -> {
+		// System.out.println(mouseEvent.getSceneX() + "," +
+		// mouseEvent.getSceneY());e
+		// });
+
+		final BinaryOperator<MouseEvent> reduction = (x, y) -> {
+			return y;
+		};
+		final EventStream<Point2D> stationaryPositions = mouseEvents.successionEnds(Duration.ofSeconds(1))
+				.filter(e -> e.getEventType() == MouseEvent.MOUSE_MOVED).map(e -> new Point2D(e.getX(), e.getY()));
+		// final EventStream<Point2D> stationaryPositions =
+		// mouseEvents.reduceSuccessions(reduction, Duration.ofSeconds(1))
+		// .filter(e -> e.getEventType() == MouseEvent.MOUSE_MOVED).map(e -> new
+		// Point2D(e.getX(), e.getY()));
+
+		final EventStream<Void> stoppers = mouseEvents.supply((Void) null);
+
+		// final EventStream<Either<Point2D, Void>> stationaryEvents =
+		// stationaryPositions.or(stoppers).distinct();
+		final EventStream<Either<Point2D, Void>> stationaryEvents = stationaryPositions.or(tickStream);
+
+		// stationaryEvents.subscribe(either -> either.exec(pos -> {
+		// x(pos);
+		// } , r -> {
+		// System.out.println("right");
+		// }));
+
+		stationaryEvents.subscribe(s -> {
+			System.out.println(s.isLeft());
+		});
+	}
+
+	private void x(final Point2D pos) {
+		System.out.println("Start: " + pos);
 	}
 
 	private void addMouseEvents() {

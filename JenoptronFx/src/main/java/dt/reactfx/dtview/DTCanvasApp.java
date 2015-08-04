@@ -26,7 +26,8 @@ public class DTCanvasApp extends Application {
 		final Label label = new Label("x");
 		final Font font = label.getFont();
 
-		final Scene scene = new Scene(new DTCanvasPane(iDecisionTable, font), Color.YELLOW);
+		final DTCanvasPane root = new DTCanvasPane(iDecisionTable, font);
+		final Scene scene = new Scene(root, Color.YELLOW);
 
 		stage.setTitle("Canvas Cell");
 		stage.setScene(scene);
