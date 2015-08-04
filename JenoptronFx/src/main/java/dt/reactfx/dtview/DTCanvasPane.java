@@ -9,9 +9,9 @@ import org.reactfx.util.Either;
 
 import javafx.geometry.Point2D;
 import javafx.scene.canvas.Canvas;
-import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
@@ -23,9 +23,7 @@ import jdt.icore.IDecisionTable;
 
 public class DTCanvasPane extends Pane {
 	private final Canvas canvas = new Canvas();
-	private final DTView dtView;
-	private double start_w = 160.0;
-	private final double start_h = 0.0;
+	private DTView dtView;
 
 	public DTCanvasPane(final IDecisionTable iDecisionTable, final Font font) {
 		this.dtView = new DTView(iDecisionTable, font).enlarge(0.5);
@@ -41,6 +39,33 @@ public class DTCanvasPane extends Pane {
 		final MenuItem copy = new MenuItem("Copy");
 		final MenuItem paste = new MenuItem("Paste");
 		contextMenu.getItems().addAll(cut, copy, paste);
+
+		// canvas.setOnMouseClicked(event -> {
+		// // Platform.runLater(() -> {
+		// System.out.println(">");
+		// dtView = dtView.enlarge(2);
+		// this.dtViewCanvasRedrawTask.redraw(canvas.getGraphicsContext2D(),
+		// dtView);
+		// // });
+		// });
+
+		canvas.setFocusTraversable(true);
+
+		canvas.setOnKeyPressed(event -> {
+
+			// Platform.runLater(() -> {
+			final KeyCode code = event.getCode();
+			if (code.equals(KeyCode.A)) {
+				System.out.println("+");
+				dtView = dtView.enlarge(2);
+				this.dtViewCanvasRedrawTask.redraw(canvas.getGraphicsContext2D(), dtView);
+			} else if (KeyCode.B.equals(code)) {
+				System.out.println("-");
+				dtView = dtView.enlarge(0.5);
+				this.dtViewCanvasRedrawTask.redraw(canvas.getGraphicsContext2D(), dtView);
+			}
+			// });
+		});
 
 		// addMouseEvents();
 
@@ -101,38 +126,39 @@ public class DTCanvasPane extends Pane {
 		// event.getSceneY(), 10, 10);
 		// });
 
-		canvas.setOnMouseDragged(event -> {
-			final GraphicsContext graphicsContext2D = canvas.getGraphicsContext2D();
-			graphicsContext2D.setFill(Color.ALICEBLUE);
-			final double sceneX = event.getSceneX();
-
-			final int top = (int) snappedTopInset();
-			final int right = (int) snappedRightInset();
-			final int bottom = (int) snappedBottomInset();
-			final int left = (int) snappedLeftInset();
-			final int w = (int) getWidth() - left - right;
-			final int h = (int) getHeight() - top - bottom;
-
-			if (sceneX < 0) {
-				start_w -= 10.0;
-				if (start_w < 0) {
-					start_w = 0.0;
-				}
-
-				canvas.getGraphicsContext2D().clearRect(0.0, 0.0, w, h);
-				dtView.draw(canvas, w, h, start_w, start_h);
-			} else if (sceneX > w) {
-				start_w += 10.0;
-				if (start_w + w > dtView.getWidth()) {
-					start_w = dtView.getWidth();
-				}
-
-				canvas.getGraphicsContext2D().clearRect(0.0, 0.0, w, h);
-				dtView.draw(canvas, w, h, start_w, start_h);
-			}
-
-			graphicsContext2D.fillOval(sceneX, event.getSceneY(), 10, 10);
-		});
+		// canvas.setOnMouseDragged(event -> {
+		// final GraphicsContext graphicsContext2D =
+		// canvas.getGraphicsContext2D();
+		// graphicsContext2D.setFill(Color.ALICEBLUE);
+		// final double sceneX = event.getSceneX();
+		//
+		// final int top = (int) snappedTopInset();
+		// final int right = (int) snappedRightInset();
+		// final int bottom = (int) snappedBottomInset();
+		// final int left = (int) snappedLeftInset();
+		// final int w = (int) getWidth() - left - right;
+		// final int h = (int) getHeight() - top - bottom;
+		//
+		// if (sceneX < 0) {
+		// setStart_w(getStart_w() - 10.0);
+		// if (getStart_w() < 0) {
+		// setStart_w(0.0);
+		// }
+		//
+		// canvas.getGraphicsContext2D().clearRect(0.0, 0.0, w, h);
+		// dtView.draw(canvas, w, h, getStart_w(), start_h);
+		// } else if (sceneX > w) {
+		// setStart_w(getStart_w() + 10.0);
+		// if (getStart_w() + w > dtView.getWidth()) {
+		// setStart_w(dtView.getWidth());
+		// }
+		//
+		// canvas.getGraphicsContext2D().clearRect(0.0, 0.0, w, h);
+		// dtView.draw(canvas, w, h, getStart_w(), start_h);
+		// }
+		//
+		// graphicsContext2D.fillOval(sceneX, event.getSceneY(), 10, 10);
+		// });
 		// canvas.setOnMouseDragExited(event -> {
 		// final GraphicsContext graphicsContext2D =
 		// canvas.getGraphicsContext2D();
@@ -167,9 +193,7 @@ public class DTCanvasPane extends Pane {
 		// });
 	}
 
-	private DTContext getDTContext(final double sceneX, final double sceneY) {
-		return dtView.getContext(sceneX, sceneY);
-	}
+	private final DTViewCanvasRedrawTask dtViewCanvasRedrawTask = new DTViewCanvasRedrawTask(canvas);
 
 	@Override
 	protected void layoutChildren() {
@@ -186,7 +210,9 @@ public class DTCanvasPane extends Pane {
 			canvas.setWidth(w);
 			canvas.setHeight(h);
 
-			dtView.draw(canvas, w, h, start_w, start_h);
+			// dtView.draw(canvas, w, h);
+
+			dtViewCanvasRedrawTask.redraw(canvas.getGraphicsContext2D(), dtView);
 		}
 	}
 }

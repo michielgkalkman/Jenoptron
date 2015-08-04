@@ -30,13 +30,15 @@ public class DTView {
 	private final IDecisionTable iDecisionTable;
 	private final List<Column> columns = new ArrayList<>();
 	private final Font font;
+	private final double start_dt_w = 160.0;
+	private final double start_dt_h = 0.0;
 
 	public DTView(final IDecisionTable iDecisionTable, final Font font) {
 		this.iDecisionTable = iDecisionTable;
 		this.font = font;
 
 		// Column for condition/action texts:
-		columns.add(new Column(100));
+		getColumns().add(new Column(100));
 
 		iDecisionTable.getAllRules().stream().forEach(irule -> {
 			final Column column = new Column(column_width);
@@ -53,7 +55,7 @@ public class DTView {
 						(BinaryActionValue) irule.getActionValue(action), this));
 			});
 
-			columns.add(column);
+			getColumns().add(column);
 		});
 
 	}
@@ -63,23 +65,22 @@ public class DTView {
 		this.font = font;
 
 		// Column for condition/action texts:
-		columns.add(new Column(100));
+		getColumns().add(new Column(100));
 
-		columns.addAll(newColumns);
+		getColumns().addAll(newColumns);
 	}
 
 	public DTContext getContext(final double sceneX, final double sceneY) {
 		return null;
 	}
 
-	public void draw(final Canvas canvas, final double start_canvas_w, final double start_canvas_h,
-			final double start_dt_w, final double start_dt_h) {
+	public void draw(final Canvas canvas, final double start_canvas_w, final double start_canvas_h) {
 		final GraphicsContext graphicsContext = canvas.getGraphicsContext2D();
 
 		graphicsContext.setFill(Paint.valueOf(Color.WHITE.toString()));
 
 		double start_w = -start_dt_w;
-		for (final Column column : columns) {
+		for (final Column column : getColumns()) {
 			final double width = column.getWidth();
 
 			if (start_w + width > 0) {
@@ -179,11 +180,23 @@ public class DTView {
 	public DTView enlarge(final double factor) {
 		final List<Column> newColumns = new ArrayList<>();
 
-		columns.stream().forEach(column -> {
+		getColumns().stream().forEach(column -> {
 			newColumns.add(column.enlarge(factor));
 		});
 
 		return new DTView(iDecisionTable, font, newColumns);
+	}
+
+	public List<Column> getColumns() {
+		return columns;
+	}
+
+	public double getStart_dt_w() {
+		return start_dt_w;
+	}
+
+	public double getStart_dt_h() {
+		return start_dt_h;
 	}
 
 }
