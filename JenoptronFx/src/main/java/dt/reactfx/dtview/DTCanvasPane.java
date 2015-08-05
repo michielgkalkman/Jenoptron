@@ -113,10 +113,6 @@ public class DTCanvasPane extends Pane {
 		});
 	}
 
-	private void x(final Point2D pos) {
-		System.out.println("Start: " + pos);
-	}
-
 	private void addMouseEvents() {
 		// canvas.setOnMouseDragged(event -> {
 		// canvas.getGraphicsContext2D().fillOval(event.getSceneX(),

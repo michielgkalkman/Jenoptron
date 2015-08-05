@@ -28,13 +28,32 @@ public class DTViewCanvasRedrawTask extends CanvasRedrawTask<DTView> {
 					final double height = cell.getHeight();
 
 					if (start_h + height > 0.0 && start_h < canvas_height) {
-						cell.draw(graphicsContext, start_w, start_h);
+						drawCell(graphicsContext, dtView, cell, start_w, start_h);
 					}
 					start_h += height;
 				}
 			}
 
 			start_w += width;
+		}
+	}
+
+	private void drawCell(final GraphicsContext graphicsContext, final DTView dtView, final Cell cell,
+			final double start_w, final double start_h) {
+		if (cell.getShortDescription() == null) {
+			if (cell.getAction() != null) {
+				// graphicsContext.setFill(Paint.valueOf(Color.WHITE.toString()));
+				// graphicsContext.fillRect(start_w, start_h, width, height);
+				graphicsContext.drawImage(
+						dtView.getImage(cell.getBinaryActionValue(), cell.getWidth(), cell.getHeight()), start_w,
+						start_h);
+			} else if (cell.getCondition() != null) {
+				graphicsContext.drawImage(
+						dtView.getImage(cell.getBinaryConditionValue(), cell.getWidth(), cell.getHeight()), start_w,
+						start_h);
+			}
+		} else {
+			graphicsContext.fillText(cell.getShortDescription(), start_w, start_h);
 		}
 	}
 

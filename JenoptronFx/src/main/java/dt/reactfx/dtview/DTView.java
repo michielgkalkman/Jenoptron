@@ -87,32 +87,6 @@ public class DTView {
 		return null;
 	}
 
-	public void draw(final Canvas canvas, final double start_canvas_w, final double start_canvas_h) {
-		final GraphicsContext graphicsContext = canvas.getGraphicsContext2D();
-
-		graphicsContext.setFill(Paint.valueOf(Color.WHITE.toString()));
-
-		double start_w = -start_dt_w;
-		for (final Column column : getColumns()) {
-			final double width = column.getWidth();
-
-			if (start_w + width > 0) {
-				double start_h = -start_dt_h;
-				for (final Cell cell : column.getCells()) {
-					final double height = cell.getHeight();
-
-					if (start_h < start_canvas_h && start_h + height > 0.0) {
-
-						cell.draw(graphicsContext, start_w, start_h);
-					}
-					start_h += height;
-				}
-			}
-
-			start_w += width;
-		}
-	}
-
 	private final Map<Rect, Map<BinaryActionValue, Image>> values2Image = new WeakHashMap<>();
 
 	public Image getImage(final BinaryActionValue binaryActionValue, final double width, final double height) {

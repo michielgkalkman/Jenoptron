@@ -1,6 +1,5 @@
 package dt.reactfx.dtview;
 
-import javafx.scene.canvas.GraphicsContext;
 import jdt.core.binary.BinaryActionValue;
 import jdt.core.binary.BinaryConditionValue;
 import jdt.icore.IAction;
@@ -93,23 +92,32 @@ public class Cell {
 		return height;
 	}
 
-	public void draw(final GraphicsContext graphicsContext, final double start_w, final double start_h) {
-		if (shortDescription == null) {
-			if (action != null) {
-				// graphicsContext.setFill(Paint.valueOf(Color.WHITE.toString()));
-				// graphicsContext.fillRect(start_w, start_h, width, height);
-				graphicsContext.drawImage(dtView.getImage(binaryActionValue, width, height), start_w, start_h);
-			} else if (condition != null) {
-				graphicsContext.drawImage(dtView.getImage(binaryConditionValue, width, height), start_w, start_h);
-			}
-		} else {
-			graphicsContext.fillText(shortDescription, start_w, start_h);
-		}
-	}
-
 	public Cell enlarge(final double factor) {
-		return new Cell(width * factor, height * factor, action, binaryActionValue, condition, binaryConditionValue,
-				shortDescription, dtView);
+		return new Cell(width * factor, height * factor, getAction(), binaryActionValue, condition,
+				binaryConditionValue, shortDescription, dtView);
 	}
 
+	public IAction getAction() {
+		return action;
+	}
+
+	public BinaryActionValue getBinaryActionValue() {
+		return binaryActionValue;
+	}
+
+	public ICondition getCondition() {
+		return condition;
+	}
+
+	public BinaryConditionValue getBinaryConditionValue() {
+		return binaryConditionValue;
+	}
+
+	public double getWidth() {
+		return width;
+	}
+
+	public String getShortDescription() {
+		return shortDescription;
+	}
 }
