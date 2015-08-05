@@ -1,9 +1,12 @@
 package dt.reactfx.dtview;
 
+import javafx.geometry.Bounds;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
+import javafx.scene.text.Font;
+import javafx.scene.text.Text;
 
 public class DTViewCanvasRedrawTask extends CanvasRedrawTask<DTView> {
 
@@ -53,8 +56,31 @@ public class DTViewCanvasRedrawTask extends CanvasRedrawTask<DTView> {
 						start_h);
 			}
 		} else {
-			graphicsContext.fillText(cell.getShortDescription(), start_w, start_h);
+			final Bounds layoutBounds = determineTextSize(dtView, cell);
+
+			graphicsContext.drawImage(
+					dtView.getImage(cell.getShortDescription(), cell.getWidth(), cell.getHeight(), layoutBounds),
+					start_w, start_h);
+
 		}
 	}
 
+	private Bounds determineTextSize(final DTView dtView, final Cell cell) {
+		// From:
+		// http://stackoverflow.com/questions/13015698/how-to-calculate-the-pixel-width-of-a-string-in-javafx
+		final Text text = new Text(cell.getShortDescription());
+		final Font font = dtView.getFont();
+
+		final Font font2 = Font.font(font.getFamily(), cell.getHeight());
+
+		System.out.println("Determine text size from " + font2.getName() + " x " + font2.getSize());
+
+		text.setFont(font2);
+
+		final Bounds layoutBounds = text.getLayoutBounds();
+
+		System.out.println("Determined text size = " + layoutBounds.getWidth() + " x " + layoutBounds.getHeight());
+
+		return layoutBounds;
+	}
 }

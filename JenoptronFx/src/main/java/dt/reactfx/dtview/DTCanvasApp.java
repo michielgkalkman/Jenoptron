@@ -45,7 +45,7 @@ public class DTCanvasApp extends Application {
 
 		for (int i = 0; i < 10; i++) {
 			// Add condition
-			final ICondition condition = new BinaryCondition("condition " + i);
+			final ICondition condition = new BinaryCondition("very very very long condition " + i);
 			decisionTable.add(condition);
 		}
 

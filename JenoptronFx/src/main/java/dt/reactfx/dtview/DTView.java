@@ -6,12 +6,16 @@ import java.util.List;
 import java.util.Map;
 import java.util.WeakHashMap;
 
+import javafx.geometry.Bounds;
 import javafx.geometry.VPos;
+import javafx.scene.Scene;
 import javafx.scene.SnapshotParameters;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.image.WritableImage;
+import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
@@ -30,6 +34,11 @@ public class DTView {
 	private final IDecisionTable iDecisionTable;
 	private final List<Column> columns = new ArrayList<>();
 	private final Font font;
+
+	public Font getFont() {
+		return font;
+	}
+
 	private final double start_dt_w;
 	private final double start_dt_h;
 
@@ -68,7 +77,7 @@ public class DTView {
 			getColumns().add(column);
 		});
 
-		this.start_dt_w = 160.0;
+		this.start_dt_w = 0.0;
 		this.start_dt_h = 0.0;
 	}
 
@@ -133,6 +142,65 @@ public class DTView {
 		return map.get(binaryConditionValue);
 	}
 
+	private final Map<Rect, Map<String, Image>> text2Image = new WeakHashMap<>();
+
+	public Image getImage(final String string, final double width, final double height, final Bounds layoutBounds) {
+		final Rect rect = new Rect(width, height);
+		Map<String, Image> map = text2Image.get(rect);
+		if (map == null) {
+			map = new HashMap<>();
+
+			final Canvas canvas2 = new Canvas();
+			canvas2.setWidth(layoutBounds.getWidth());
+			canvas2.setHeight(layoutBounds.getHeight());
+
+			System.out.println("Image wordt " + width + " x " + height);
+
+			{
+				final GraphicsContext graphicsContext2D = canvas2.getGraphicsContext2D();
+				final Font font2 = Font.font(font.getFamily(), height);
+
+				System.out.println("Font wordt " + font2.getName() + " x " + font2.getSize());
+
+				graphicsContext2D.setFont(font2);
+
+				graphicsContext2D.setTextAlign(TextAlignment.LEFT);
+				graphicsContext2D.setTextBaseline(VPos.CENTER);
+
+				graphicsContext2D.clearRect(0, 0, layoutBounds.getWidth(), layoutBounds.getHeight());
+
+				graphicsContext2D.setFill(Color.YELLOW);
+
+				graphicsContext2D.fillText(string, 0, layoutBounds.getHeight() / 2, layoutBounds.getWidth());
+			}
+
+			final SnapshotParameters parameters = new SnapshotParameters();
+			parameters.setFill(Color.TRANSPARENT);
+			final WritableImage writableImage = new WritableImage((int) layoutBounds.getWidth(),
+					(int) layoutBounds.getHeight());
+			final WritableImage snapshot = canvas2.snapshot(parameters, writableImage);
+
+			// final WritableImage text2image2 = snapshot;
+			//
+
+			final ImageView imageView = new ImageView(snapshot);
+			imageView.setFitHeight(height);
+			imageView.setSmooth(true);
+
+			final Pane pane = new Pane(imageView);
+			final Scene offScreenScene = new Scene(pane);
+			final WritableImage snapshot2 = imageView.snapshot(parameters, null);
+
+			final double minWidth = Math.min(width, layoutBounds.getWidth());
+
+			final WritableImage croppedImage = new WritableImage(snapshot2.getPixelReader(), 0, 0, (int) minWidth,
+					(int) height);
+
+			map.put(string, croppedImage);
+		}
+		return map.get(string);
+	}
+
 	private WritableImage text2image(final double text_w, final double text_h, final String text,
 			final Paint paintYes) {
 		final Canvas canvas2 = new Canvas();
@@ -141,7 +209,9 @@ public class DTView {
 
 		{
 			final GraphicsContext graphicsContext2D = canvas2.getGraphicsContext2D();
-			graphicsContext2D.setFont(Font.font(font.getFamily(), text_w));
+			final Font font2 = Font.font(font.getFamily(), text_h);
+			graphicsContext2D.setFont(font2);
+			System.out.println("Y Font wordt " + font.getName() + " x " + font2.getSize());
 
 			graphicsContext2D.setTextAlign(TextAlignment.CENTER);
 			graphicsContext2D.setTextBaseline(VPos.CENTER);
