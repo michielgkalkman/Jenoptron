@@ -30,15 +30,25 @@ public class DTView {
 	private final IDecisionTable iDecisionTable;
 	private final List<Column> columns = new ArrayList<>();
 	private final Font font;
-	private final double start_dt_w = 160.0;
-	private final double start_dt_h = 0.0;
+	private final double start_dt_w;
+	private final double start_dt_h;
 
 	public DTView(final IDecisionTable iDecisionTable, final Font font) {
 		this.iDecisionTable = iDecisionTable;
 		this.font = font;
 
 		// Column for condition/action texts:
-		getColumns().add(new Column(100));
+		final int textWidth = 100;
+		final Column textColumn = new Column(textWidth);
+		textColumn.addCell(new Cell(textWidth, row_height, this));
+		iDecisionTable.getConditions().stream().forEach(condition -> {
+			textColumn.addCell(new Cell(textWidth, row_height, condition, condition.getShortDescription(), this));
+		});
+
+		iDecisionTable.getActions().stream().forEach(action -> {
+			textColumn.addCell(new Cell(textWidth, row_height, action, action.getShortDescription(), this));
+		});
+		getColumns().add(textColumn);
 
 		iDecisionTable.getAllRules().stream().forEach(irule -> {
 			final Column column = new Column(column_width);
@@ -58,16 +68,19 @@ public class DTView {
 			getColumns().add(column);
 		});
 
+		this.start_dt_w = 160.0;
+		this.start_dt_h = 0.0;
 	}
 
-	public DTView(final IDecisionTable iDecisionTable, final Font font, final List<Column> newColumns) {
+	private DTView(final IDecisionTable iDecisionTable, final Font font, final List<Column> newColumns,
+			final double start_dt_w, final double start_dt_h) {
 		this.iDecisionTable = iDecisionTable;
 		this.font = font;
 
-		// Column for condition/action texts:
-		getColumns().add(new Column(100));
-
 		getColumns().addAll(newColumns);
+
+		this.start_dt_w = start_dt_w;
+		this.start_dt_h = start_dt_h;
 	}
 
 	public DTContext getContext(final double sceneX, final double sceneY) {
@@ -180,11 +193,12 @@ public class DTView {
 	public DTView enlarge(final double factor) {
 		final List<Column> newColumns = new ArrayList<>();
 
-		getColumns().stream().forEach(column -> {
+		columns.stream().forEach(column -> {
 			newColumns.add(column.enlarge(factor));
 		});
 
-		return new DTView(iDecisionTable, font, newColumns);
+		final DTView dtView = new DTView(iDecisionTable, font, newColumns, start_dt_w * factor, start_dt_h * factor);
+		return dtView;
 	}
 
 	public List<Column> getColumns() {

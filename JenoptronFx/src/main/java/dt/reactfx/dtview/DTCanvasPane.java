@@ -26,7 +26,8 @@ public class DTCanvasPane extends Pane {
 	private DTView dtView;
 
 	public DTCanvasPane(final IDecisionTable iDecisionTable, final Font font) {
-		this.dtView = new DTView(iDecisionTable, font).enlarge(0.5);
+		final DTView dtView2 = new DTView(iDecisionTable, font);
+		this.dtView = dtView2.enlarge(0.5);
 
 		getChildren().add(canvas);
 
@@ -59,7 +60,7 @@ public class DTCanvasPane extends Pane {
 				System.out.println("+");
 				dtView = dtView.enlarge(2);
 				this.dtViewCanvasRedrawTask.redraw(canvas.getGraphicsContext2D(), dtView);
-			} else if (KeyCode.B.equals(code)) {
+			} else if (KeyCode.Z.equals(code)) {
 				System.out.println("-");
 				dtView = dtView.enlarge(0.5);
 				this.dtViewCanvasRedrawTask.redraw(canvas.getGraphicsContext2D(), dtView);
