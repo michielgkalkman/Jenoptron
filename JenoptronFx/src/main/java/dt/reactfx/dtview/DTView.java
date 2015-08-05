@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.WeakHashMap;
 
+import javafx.geometry.Bounds;
 import javafx.geometry.VPos;
 import javafx.scene.SnapshotParameters;
 import javafx.scene.canvas.Canvas;
@@ -30,6 +31,11 @@ public class DTView {
 	private final IDecisionTable iDecisionTable;
 	private final List<Column> columns = new ArrayList<>();
 	private final Font font;
+
+	public Font getFont() {
+		return font;
+	}
+
 	private final double start_dt_w;
 	private final double start_dt_h;
 
@@ -68,7 +74,7 @@ public class DTView {
 			getColumns().add(column);
 		});
 
-		this.start_dt_w = 160.0;
+		this.start_dt_w = 0.0;
 		this.start_dt_h = 0.0;
 	}
 
@@ -131,6 +137,56 @@ public class DTView {
 			binaryCondition2Image.put(rect, map);
 		}
 		return map.get(binaryConditionValue);
+	}
+
+	private final Map<Rect, Map<String, Image>> text2Image = new WeakHashMap<>();
+
+	public Image getImage(final String string, final double width, final double height, final Bounds layoutBounds) {
+		final Rect rect = new Rect(width, height);
+		Map<String, Image> map = text2Image.get(rect);
+		if (map == null) {
+			map = new HashMap<>();
+
+			final Canvas canvas2 = new Canvas();
+			canvas2.setWidth(width);
+			canvas2.setHeight(height);
+
+			System.out.println("Image wordt " + width + " x " + height);
+
+			{
+				final GraphicsContext graphicsContext2D = canvas2.getGraphicsContext2D();
+				final Font font2 = Font.font(font.getFamily(), height);
+
+				System.out.println("Font wordt " + font2.getName() + " x " + font.getSize());
+
+				graphicsContext2D.setFont(font2);
+
+				graphicsContext2D.setTextAlign(TextAlignment.CENTER);
+				graphicsContext2D.setTextBaseline(VPos.CENTER);
+
+				graphicsContext2D.clearRect(0, 0, width, height);
+
+				graphicsContext2D.setFill(Color.YELLOW);
+
+				graphicsContext2D.fillText(string, width / 2, height / 2, width);
+			}
+
+			final SnapshotParameters parameters = new SnapshotParameters();
+			parameters.setFill(Color.TRANSPARENT);
+			final WritableImage writableImage = new WritableImage((int) width, (int) height);
+			final WritableImage snapshot = canvas2.snapshot(parameters, writableImage);
+
+			final WritableImage text2image2 = snapshot;
+
+			final double minWidth = Math.min(width, layoutBounds.getWidth());
+			final double minHeight = Math.min(height, layoutBounds.getHeight());
+
+			final WritableImage croppedImage = new WritableImage(text2image2.getPixelReader(), 0, 0, (int) minWidth,
+					(int) minHeight);
+
+			map.put(string, snapshot);
+		}
+		return map.get(string);
 	}
 
 	private WritableImage text2image(final double text_w, final double text_h, final String text,

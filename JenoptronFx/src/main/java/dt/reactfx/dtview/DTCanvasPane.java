@@ -42,15 +42,6 @@ public class DTCanvasPane extends Pane {
 		final MenuItem paste = new MenuItem("Paste");
 		contextMenu.getItems().addAll(cut, copy, paste);
 
-		// canvas.setOnMouseClicked(event -> {
-		// // Platform.runLater(() -> {
-		// System.out.println(">");
-		// dtView = dtView.enlarge(2);
-		// this.dtViewCanvasRedrawTask.redraw(canvas.getGraphicsContext2D(),
-		// dtView);
-		// // });
-		// });
-
 		canvas.setFocusTraversable(true);
 
 		canvas.setOnKeyPressed(event -> {
