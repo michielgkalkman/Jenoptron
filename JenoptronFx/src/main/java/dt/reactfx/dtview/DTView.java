@@ -187,7 +187,13 @@ public class DTView {
 	}
 
 	public double getWidth() {
-		return 100 + iDecisionTable.getRules().size() * 40;
+		double width = 0.0;
+
+		for (final Column column : columns) {
+			width += column.getWidth();
+		}
+
+		return width;
 	}
 
 	public DTView enlarge(final double factor) {
@@ -197,8 +203,7 @@ public class DTView {
 			newColumns.add(column.enlarge(factor));
 		});
 
-		final DTView dtView = new DTView(iDecisionTable, font, newColumns, start_dt_w * factor, start_dt_h * factor);
-		return dtView;
+		return new DTView(iDecisionTable, font, newColumns, start_dt_w * factor, start_dt_h * factor);
 	}
 
 	public List<Column> getColumns() {
@@ -211,6 +216,25 @@ public class DTView {
 
 	public double getStart_dt_h() {
 		return start_dt_h;
+	}
+
+	public DTView moveWidth(final double d) {
+		double new_start_dt_w;
+		if (start_dt_w + d < 0.0) {
+			new_start_dt_w = 0.0;
+		} else if (start_dt_w + d > getWidth()) {
+			new_start_dt_w = getWidth();
+		} else {
+			new_start_dt_w = start_dt_w + d;
+		}
+		return new DTView(iDecisionTable, font, columns, new_start_dt_w, start_dt_h);
+	}
+
+	public DTView moveWidthPercentage(final double percentage) {
+		System.out.println("percentage = " + percentage);
+		final double d = getWidth() * percentage;
+
+		return moveWidth(d);
 	}
 
 }

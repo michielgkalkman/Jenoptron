@@ -9,6 +9,7 @@ import org.reactfx.util.Either;
 
 import javafx.geometry.Point2D;
 import javafx.scene.canvas.Canvas;
+import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.input.KeyCode;
@@ -68,7 +69,7 @@ public class DTCanvasPane extends Pane {
 			// });
 		});
 
-		// addMouseEvents();
+		addMouseEvents();
 
 		// addMouseStreams();
 
@@ -127,39 +128,33 @@ public class DTCanvasPane extends Pane {
 		// event.getSceneY(), 10, 10);
 		// });
 
-		// canvas.setOnMouseDragged(event -> {
-		// final GraphicsContext graphicsContext2D =
-		// canvas.getGraphicsContext2D();
-		// graphicsContext2D.setFill(Color.ALICEBLUE);
-		// final double sceneX = event.getSceneX();
-		//
-		// final int top = (int) snappedTopInset();
-		// final int right = (int) snappedRightInset();
-		// final int bottom = (int) snappedBottomInset();
-		// final int left = (int) snappedLeftInset();
-		// final int w = (int) getWidth() - left - right;
-		// final int h = (int) getHeight() - top - bottom;
-		//
-		// if (sceneX < 0) {
-		// setStart_w(getStart_w() - 10.0);
-		// if (getStart_w() < 0) {
-		// setStart_w(0.0);
-		// }
-		//
-		// canvas.getGraphicsContext2D().clearRect(0.0, 0.0, w, h);
-		// dtView.draw(canvas, w, h, getStart_w(), start_h);
-		// } else if (sceneX > w) {
-		// setStart_w(getStart_w() + 10.0);
-		// if (getStart_w() + w > dtView.getWidth()) {
-		// setStart_w(dtView.getWidth());
-		// }
-		//
-		// canvas.getGraphicsContext2D().clearRect(0.0, 0.0, w, h);
-		// dtView.draw(canvas, w, h, getStart_w(), start_h);
-		// }
-		//
-		// graphicsContext2D.fillOval(sceneX, event.getSceneY(), 10, 10);
-		// });
+		canvas.setOnMouseDragged(event -> {
+			final GraphicsContext graphicsContext2D = canvas.getGraphicsContext2D();
+			graphicsContext2D.setFill(Color.ALICEBLUE);
+			final double sceneX = event.getSceneX();
+
+			final int top = (int) snappedTopInset();
+			final int right = (int) snappedRightInset();
+			final int bottom = (int) snappedBottomInset();
+			final int left = (int) snappedLeftInset();
+			final int w = (int) getWidth() - left - right;
+			final int h = (int) getHeight() - top - bottom;
+
+			if (sceneX < canvas.getWidth() / 2) {
+				final double percentage = ((canvas.getWidth() / 2) - sceneX) / ((canvas.getWidth() / 2));
+
+				// dtView = dtView.moveWidthPercentage(percentage);
+				dtView = dtView.moveWidth(-10.0);
+				dtViewCanvasRedrawTask.redraw(canvas.getGraphicsContext2D(), dtView);
+			} else if (sceneX > canvas.getWidth() / 2) {
+
+				final double percentage = (sceneX - (canvas.getWidth() / 2)) / (canvas.getWidth());
+
+				// dtView = dtView.moveWidthPercentage(percentage);
+				dtView = dtView.moveWidth(+10.0);
+				dtViewCanvasRedrawTask.redraw(canvas.getGraphicsContext2D(), dtView);
+			}
+		});
 		// canvas.setOnMouseDragExited(event -> {
 		// final GraphicsContext graphicsContext2D =
 		// canvas.getGraphicsContext2D();
