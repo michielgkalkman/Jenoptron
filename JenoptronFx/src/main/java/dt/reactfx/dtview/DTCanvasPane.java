@@ -13,6 +13,8 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyCodeCombination;
+import javafx.scene.input.KeyCombination;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
@@ -42,28 +44,57 @@ public class DTCanvasPane extends Pane {
 		final MenuItem paste = new MenuItem("Paste");
 		contextMenu.getItems().addAll(cut, copy, paste);
 
-		canvas.setFocusTraversable(true);
+		canvas.setOnMousePressed(event -> {
+			if (event.isSecondaryButtonDown()) {
+				// getDTContext(event.getSceneX(), event.getSceneY());
 
-		canvas.setOnKeyPressed(event -> {
-
-			// Platform.runLater(() -> {
-			final KeyCode code = event.getCode();
-			if (code.equals(KeyCode.A)) {
-				System.out.println("+");
-				dtView = dtView.enlarge(2);
-				this.dtViewCanvasRedrawTask.redraw(canvas.getGraphicsContext2D(), dtView);
-			} else if (KeyCode.Z.equals(code)) {
-				System.out.println("-");
-				dtView = dtView.enlarge(0.5);
-				this.dtViewCanvasRedrawTask.redraw(canvas.getGraphicsContext2D(), dtView);
+				contextMenu.show(canvas, event.getScreenX(), event.getScreenY());
+			} else {
+				System.out.println(event.getSceneX());
+				System.out.println(event.getScreenX());
 			}
-			// });
 		});
+
+		addKeyEvents();
 
 		addMouseEvents();
 
 		// addMouseStreams();
 
+	}
+
+	private void addKeyEvents() {
+		canvas.setFocusTraversable(true);
+
+		// canvas.addEventHandler(eventType,
+		// eventHandler);(KeyEvent.KEY_RELEASED, new EventHandler<KeyEvent>() {
+		//
+		// @Override
+		// public void handle(final KeyEvent event) {
+		// // TODO Auto-generated method stub
+		//
+		// }
+		// });
+
+		canvas.setOnKeyPressed(event -> {
+
+			final KeyCode code = event.getCode();
+			if (code.equals(KeyCode.ADD)) {
+				dtView = dtView.enlarge(2);
+				this.dtViewCanvasRedrawTask.redraw(canvas.getGraphicsContext2D(), dtView);
+			} else if (KeyCode.SUBTRACT.equals(code)) {
+				dtView = dtView.enlarge(0.5);
+				this.dtViewCanvasRedrawTask.redraw(canvas.getGraphicsContext2D(), dtView);
+				// } else if (event.toString().equals(new
+				// KeyCodeCombination(KeyCode.S, KeyCombination.CONTROL_DOWN)))
+				// {
+				// System.out.println("CTRL-S");
+			} else if (new KeyCodeCombination(KeyCode.S, KeyCombination.CONTROL_DOWN).match(event)) {
+				System.out.println("CTRL-S");
+			} else {
+				System.out.println(code.getName());
+			}
+		});
 	}
 
 	private void addMouseStreams() {
@@ -164,16 +195,6 @@ public class DTCanvasPane extends Pane {
 		// 20);
 		// });
 		//
-		// canvas.setOnMousePressed(event -> {
-		// if (event.isSecondaryButtonDown()) {
-		// getDTContext(event.getSceneX(), event.getSceneY());
-		//
-		// contextMenu.show(canvas, event.getScreenX(), event.getScreenY());
-		// } else {
-		// System.out.println(event.getSceneX());
-		// System.out.println(event.getScreenX());
-		// }
-		// });
 	}
 
 	private final DTViewCanvasRedrawTask dtViewCanvasRedrawTask = new DTViewCanvasRedrawTask(canvas);
