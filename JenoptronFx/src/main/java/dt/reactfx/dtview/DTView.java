@@ -285,4 +285,9 @@ public class DTView {
 		final IDecisionTable reduce = this.iDecisionTable.reduce();
 		return new DTView(reduce, font);
 	}
+
+	public DTView split() {
+		final IDecisionTable reduce = this.iDecisionTable.split();
+		return new DTView(reduce, font);
+	}
 }

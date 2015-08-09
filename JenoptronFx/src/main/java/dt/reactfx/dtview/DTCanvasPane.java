@@ -71,7 +71,6 @@ public class DTCanvasPane extends Pane {
 			final KeyCode code = event.getCode();
 			if (code.equals(KeyCode.ADD)) {
 				dtView = dtView.enlarge(2);
-				this.dtViewCanvasRedrawTask.redraw(canvas.getGraphicsContext2D(), dtView);
 			} else if (KeyCode.SUBTRACT.equals(code)) {
 				dtView = dtView.enlarge(0.5);
 			} else if (new KeyCodeCombination(KeyCode.S, KeyCombination.CONTROL_DOWN).match(event)) {
@@ -79,10 +78,13 @@ public class DTCanvasPane extends Pane {
 			} else if (new KeyCodeCombination(KeyCode.R, KeyCombination.CONTROL_DOWN).match(event)) {
 				System.out.println("CTRL-R");
 				dtView = dtView.reduce();
-				this.dtViewCanvasRedrawTask.redraw(canvas.getGraphicsContext2D(), dtView);
+			} else if (new KeyCodeCombination(KeyCode.S, KeyCombination.ALT_DOWN).match(event)) {
+				System.out.println("ALT-S");
+				dtView = dtView.split();
 			} else {
 				System.out.println(code.getName());
 			}
+			this.dtViewCanvasRedrawTask.redraw(canvas.getGraphicsContext2D(), dtView);
 		});
 	}
 
