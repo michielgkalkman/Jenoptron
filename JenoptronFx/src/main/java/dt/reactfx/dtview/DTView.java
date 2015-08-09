@@ -183,6 +183,8 @@ public class DTView {
 			// final WritableImage text2image2 = snapshot;
 			//
 
+			final double minWidth = Math.min(width, layoutBounds.getWidth());
+
 			final ImageView imageView = new ImageView(snapshot);
 			imageView.setFitHeight(height);
 			imageView.setSmooth(true);
@@ -190,8 +192,6 @@ public class DTView {
 			final Pane pane = new Pane(imageView);
 			final Scene offScreenScene = new Scene(pane);
 			final WritableImage snapshot2 = imageView.snapshot(parameters, null);
-
-			final double minWidth = Math.min(width, layoutBounds.getWidth());
 
 			final WritableImage croppedImage = new WritableImage(snapshot2.getPixelReader(), 0, 0, (int) minWidth,
 					(int) height);
@@ -281,4 +281,8 @@ public class DTView {
 		return moveWidth(d);
 	}
 
+	public DTView reduce() {
+		final IDecisionTable reduce = this.iDecisionTable.reduce();
+		return new DTView(reduce, font);
+	}
 }

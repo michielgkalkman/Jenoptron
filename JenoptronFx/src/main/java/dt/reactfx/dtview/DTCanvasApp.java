@@ -9,6 +9,7 @@ import javafx.stage.Stage;
 import javafx.stage.Stage;
 import jdt.core.DecisionTable;
 import jdt.core.binary.BinaryAction;
+import jdt.core.binary.BinaryActionValue;
 import jdt.core.binary.BinaryCondition;
 import jdt.icore.IAction;
 import jdt.icore.ICondition;
@@ -53,6 +54,7 @@ public class DTCanvasApp extends Application {
 		{
 			final IAction action = new BinaryAction();
 			decisionTable.add(action);
+			decisionTable.setActionValues(BinaryActionValue.DO);
 		}
 
 		decisionTable.split();

@@ -66,16 +66,6 @@ public class DTCanvasPane extends Pane {
 	private void addKeyEvents() {
 		canvas.setFocusTraversable(true);
 
-		// canvas.addEventHandler(eventType,
-		// eventHandler);(KeyEvent.KEY_RELEASED, new EventHandler<KeyEvent>() {
-		//
-		// @Override
-		// public void handle(final KeyEvent event) {
-		// // TODO Auto-generated method stub
-		//
-		// }
-		// });
-
 		canvas.setOnKeyPressed(event -> {
 
 			final KeyCode code = event.getCode();
@@ -84,13 +74,12 @@ public class DTCanvasPane extends Pane {
 				this.dtViewCanvasRedrawTask.redraw(canvas.getGraphicsContext2D(), dtView);
 			} else if (KeyCode.SUBTRACT.equals(code)) {
 				dtView = dtView.enlarge(0.5);
-				this.dtViewCanvasRedrawTask.redraw(canvas.getGraphicsContext2D(), dtView);
-				// } else if (event.toString().equals(new
-				// KeyCodeCombination(KeyCode.S, KeyCombination.CONTROL_DOWN)))
-				// {
-				// System.out.println("CTRL-S");
 			} else if (new KeyCodeCombination(KeyCode.S, KeyCombination.CONTROL_DOWN).match(event)) {
 				System.out.println("CTRL-S");
+			} else if (new KeyCodeCombination(KeyCode.R, KeyCombination.CONTROL_DOWN).match(event)) {
+				System.out.println("CTRL-R");
+				dtView = dtView.reduce();
+				this.dtViewCanvasRedrawTask.redraw(canvas.getGraphicsContext2D(), dtView);
 			} else {
 				System.out.println(code.getName());
 			}
