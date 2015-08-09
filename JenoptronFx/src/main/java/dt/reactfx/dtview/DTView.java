@@ -1,6 +1,7 @@
 package dt.reactfx.dtview;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -32,7 +33,7 @@ public class DTView {
 	private static final int row_height = 40;
 	private static final int column_width = 40;
 	private final IDecisionTable iDecisionTable;
-	private final List<Column> columns = new ArrayList<>();
+	private final List<Column> columns;
 	private final Font font;
 
 	public Font getFont() {
@@ -47,6 +48,8 @@ public class DTView {
 		this.font = font;
 
 		// Column for condition/action texts:
+		final List<Column> tmpColumns = new ArrayList<>();
+
 		final int textWidth = 100;
 		final Column textColumn = new Column(textWidth);
 		textColumn.addCell(new Cell(textWidth, row_height, this));
@@ -57,7 +60,7 @@ public class DTView {
 		iDecisionTable.getActions().stream().forEach(action -> {
 			textColumn.addCell(new Cell(textWidth, row_height, action, action.getShortDescription(), this));
 		});
-		getColumns().add(textColumn);
+		tmpColumns.add(textColumn);
 
 		iDecisionTable.getAllRules().stream().forEach(irule -> {
 			final Column column = new Column(column_width);
@@ -74,8 +77,10 @@ public class DTView {
 						(BinaryActionValue) irule.getActionValue(action), this));
 			});
 
-			getColumns().add(column);
+			tmpColumns.add(column);
 		});
+
+		columns = Collections.unmodifiableList(tmpColumns);
 
 		this.start_dt_w = 0.0;
 		this.start_dt_h = 0.0;
@@ -86,7 +91,7 @@ public class DTView {
 		this.iDecisionTable = iDecisionTable;
 		this.font = font;
 
-		getColumns().addAll(newColumns);
+		columns = Collections.unmodifiableList(newColumns);
 
 		this.start_dt_w = start_dt_w;
 		this.start_dt_h = start_dt_h;
@@ -250,10 +255,6 @@ public class DTView {
 		return new DTView(iDecisionTable, font, newColumns, start_dt_w * factor, start_dt_h * factor);
 	}
 
-	public List<Column> getColumns() {
-		return columns;
-	}
-
 	public double getStart_dt_w() {
 		return start_dt_w;
 	}
@@ -289,5 +290,9 @@ public class DTView {
 	public DTView split() {
 		final IDecisionTable reduce = this.iDecisionTable.split();
 		return new DTView(reduce, font);
+	}
+
+	public List<Column> getColumns() {
+		return columns;
 	}
 }
