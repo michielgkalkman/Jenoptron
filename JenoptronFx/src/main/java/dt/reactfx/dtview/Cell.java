@@ -4,8 +4,10 @@ import jdt.core.binary.BinaryActionValue;
 import jdt.core.binary.BinaryConditionValue;
 import jdt.icore.IAction;
 import jdt.icore.ICondition;
+import jdt.icore.IRule;
 
 public class Cell {
+	private final IRule iRule;
 	private final IAction action;
 	private final BinaryActionValue binaryActionValue;
 	private final ICondition condition;
@@ -17,11 +19,12 @@ public class Cell {
 	private final DTView dtView;
 
 	public Cell(final double width, final double height, final IAction action,
-			final BinaryActionValue binaryActionValue, final DTView dtView) {
+			final BinaryActionValue binaryActionValue, final IRule iRule, final DTView dtView) {
 		this.width = width;
 		this.height = height;
 		this.action = action;
 		this.binaryActionValue = binaryActionValue;
+		this.iRule = iRule;
 		this.dtView = dtView;
 		this.condition = null;
 		this.binaryConditionValue = null;
@@ -29,9 +32,10 @@ public class Cell {
 	}
 
 	public Cell(final int width, final int height, final ICondition condition,
-			final BinaryConditionValue binaryConditionValue, final DTView dtView) {
+			final BinaryConditionValue binaryConditionValue, final IRule iRule, final DTView dtView) {
 		this.width = width;
 		this.height = height;
+		this.iRule = iRule;
 		this.action = null;
 		this.binaryActionValue = null;
 		this.dtView = dtView;
@@ -49,17 +53,20 @@ public class Cell {
 		this.condition = null;
 		this.binaryConditionValue = null;
 		this.shortDescription = null;
+		this.iRule = null;
 	}
 
 	private Cell(final double width, final double height, final IAction action,
 			final BinaryActionValue binaryActionValue, final ICondition condition,
-			final BinaryConditionValue binaryConditionValue, final String shortDescription, final DTView dtView) {
+			final BinaryConditionValue binaryConditionValue, final String shortDescription, final IRule iRule,
+			final DTView dtView) {
 		this.width = width;
 		this.height = height;
 		this.action = action;
 		this.binaryActionValue = binaryActionValue;
 		this.condition = condition;
 		this.binaryConditionValue = binaryConditionValue;
+		this.iRule = iRule;
 		this.dtView = dtView;
 		this.shortDescription = shortDescription;
 	}
@@ -74,6 +81,7 @@ public class Cell {
 		this.binaryConditionValue = null;
 		this.dtView = dtView;
 		this.shortDescription = shortDescription;
+		this.iRule = null;
 	}
 
 	public Cell(final int width, final int height, final IAction action, final String shortDescription,
@@ -86,6 +94,7 @@ public class Cell {
 		this.binaryConditionValue = null;
 		this.dtView = dtView;
 		this.shortDescription = shortDescription;
+		this.iRule = null;
 	}
 
 	public double getHeight() {
@@ -94,7 +103,7 @@ public class Cell {
 
 	public Cell enlarge(final double factor) {
 		return new Cell(width * factor, height * factor, getAction(), binaryActionValue, condition,
-				binaryConditionValue, shortDescription, dtView);
+				binaryConditionValue, shortDescription, iRule, dtView);
 	}
 
 	public IAction getAction() {
@@ -119,5 +128,9 @@ public class Cell {
 
 	public String getShortDescription() {
 		return shortDescription;
+	}
+
+	public IRule getiRule() {
+		return iRule;
 	}
 }

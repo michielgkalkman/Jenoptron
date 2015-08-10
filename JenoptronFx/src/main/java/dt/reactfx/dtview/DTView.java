@@ -69,12 +69,12 @@ public class DTView {
 
 			iDecisionTable.getConditions().stream().forEach(condition -> {
 				column.addCell(new Cell(column_width, row_height, condition,
-						(BinaryConditionValue) irule.getConditionValue(condition), this));
+						(BinaryConditionValue) irule.getConditionValue(condition), irule, this));
 			});
 
 			iDecisionTable.getActions().stream().forEach(action -> {
 				column.addCell(new Cell(column_width, row_height, action,
-						(BinaryActionValue) irule.getActionValue(action), this));
+						(BinaryActionValue) irule.getActionValue(action), irule, this));
 			});
 
 			tmpColumns.add(column);
@@ -294,5 +294,48 @@ public class DTView {
 
 	public List<Column> getColumns() {
 		return columns;
+	}
+
+	public DTContext getDTContext(final double sceneX, final double sceneY) {
+		final DTContext dtContext;
+		if (sceneX < 0.0) {
+			dtContext = null;
+		} else if (sceneY < 0.0) {
+			dtContext = null;
+		} else {
+			double x = start_dt_w;
+			int cell_x = 0;
+
+			DTContext tmpDTContext = null;
+
+			for (final Column column : columns) {
+				x += column.getWidth();
+
+				if (x >= sceneX) {
+					// Found column.
+					final List<Cell> cells = column.getCells();
+					double y = start_dt_h;
+					int cell_y = 0;
+
+					for (final Cell cell : cells) {
+						y += cell.getHeight();
+
+						if (y >= sceneY) {
+							// Found cell.
+							tmpDTContext = new DTContext(cell_x, cell_y, cell.getiRule(), cell.getCondition(),
+									cell.getAction());
+
+							return tmpDTContext;
+						}
+						cell_y++;
+					}
+				}
+
+				cell_x++;
+			}
+
+			dtContext = tmpDTContext;
+		}
+		return dtContext;
 	}
 }

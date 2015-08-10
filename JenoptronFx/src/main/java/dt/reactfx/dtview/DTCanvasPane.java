@@ -7,6 +7,7 @@ import org.reactfx.EventStream;
 import org.reactfx.EventStreams;
 import org.reactfx.util.Either;
 
+import javafx.collections.ObservableList;
 import javafx.geometry.Point2D;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -38,15 +39,30 @@ public class DTCanvasPane extends Pane {
 		final Background background = new Background(fills);
 		this.setBackground(background);
 
-		final ContextMenu contextMenu = new ContextMenu();
-		final MenuItem cut = new MenuItem("Cut");
-		final MenuItem copy = new MenuItem("Copy");
-		final MenuItem paste = new MenuItem("Paste");
-		contextMenu.getItems().addAll(cut, copy, paste);
-
 		canvas.setOnMousePressed(event -> {
 			if (event.isSecondaryButtonDown()) {
-				// getDTContext(event.getSceneX(), event.getSceneY());
+				final ContextMenu contextMenu = new ContextMenu();
+				final DTContext dtContext = dtView.getDTContext(event.getSceneX(), event.getSceneY());
+
+				final ObservableList<MenuItem> items = contextMenu.getItems();
+				if (dtContext == null) {
+					// Outside the DT.
+					final MenuItem outside = new MenuItem("Outside");
+					items.addAll(outside);
+				} else if (dtContext.getiRule() == null) {
+					final MenuItem outside = new MenuItem("Text");
+					items.addAll(outside);
+				} else if (dtContext.getiAction() != null) {
+					final MenuItem outside = new MenuItem("Action");
+					items.addAll(outside);
+				} else if (dtContext.getiCondition() != null) {
+					final MenuItem outside = new MenuItem("Condition");
+					items.addAll(outside);
+				} else {
+					// Outside the DT.
+					final MenuItem outside = new MenuItem("Outside");
+					items.addAll(outside);
+				}
 
 				contextMenu.show(canvas, event.getScreenX(), event.getScreenY());
 			} else {
