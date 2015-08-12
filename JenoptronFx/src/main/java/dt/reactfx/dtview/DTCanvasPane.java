@@ -29,6 +29,8 @@ public class DTCanvasPane extends Pane {
 	private final Canvas canvas = new Canvas();
 	private DTView dtView;
 
+	private ContextMenu contextMenu;
+
 	public DTCanvasPane(final IDecisionTable iDecisionTable, final Font font) {
 		final DTView dtView2 = new DTView(iDecisionTable, font);
 		this.dtView = dtView2.enlarge(0.5);
@@ -41,7 +43,11 @@ public class DTCanvasPane extends Pane {
 
 		canvas.setOnMousePressed(event -> {
 			if (event.isSecondaryButtonDown()) {
-				final ContextMenu contextMenu = new ContextMenu();
+				if (contextMenu != null) {
+					contextMenu.hide();
+				}
+
+				contextMenu = new ContextMenu();
 				final DTContext dtContext = dtView.getDTContext(event.getSceneX(), event.getSceneY());
 
 				final ObservableList<MenuItem> items = contextMenu.getItems();
@@ -62,25 +68,6 @@ public class DTCanvasPane extends Pane {
 					}
 					}
 				}
-
-				// if (dtContext == null) {
-				// // Outside the DT.
-				// final MenuItem outside = new MenuItem("Outside");
-				// items.addAll(outside);
-				// } else if (dtContext.getiRule() == null) {
-				// final MenuItem outside = new MenuItem("Text");
-				// items.addAll(outside);
-				// } else if (dtContext.getiAction() != null) {
-				// final MenuItem outside = new MenuItem("Action");
-				// items.addAll(outside);
-				// } else if (dtContext.getiCondition() != null) {
-				// final MenuItem outside = new MenuItem("Condition");
-				// items.addAll(outside);
-				// } else {
-				// // Outside the DT.
-				// final MenuItem outside = new MenuItem("Outside");
-				// items.addAll(outside);
-				// }
 
 				contextMenu.show(canvas, event.getScreenX(), event.getScreenY());
 			} else {
