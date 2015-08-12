@@ -174,8 +174,6 @@ public class DecisionTable extends JDTModel implements IDecisionTable {
 		actions.add(action);
 
 		addToAllRules(action);
-
-		action.addPropertyChangeListener(eventBus);
 	}
 
 	@Override
@@ -224,8 +222,6 @@ public class DecisionTable extends JDTModel implements IDecisionTable {
 		} else {
 			addToAllRules(condition);
 		}
-
-		condition.addPropertyChangeListener(eventBus);
 	}
 
 	public IDecisionTable addActions(final List<IAction> additionalActions) {
@@ -274,7 +270,7 @@ public class DecisionTable extends JDTModel implements IDecisionTable {
 					rule.addAction(action, defaultActionValue);
 				}
 			}
-
+			
 			// Now copy action values from the old rules.
 			for (final IRule rule : rules2) {
 				final IRule existingRule = findRule(rule);
@@ -332,7 +328,6 @@ public class DecisionTable extends JDTModel implements IDecisionTable {
 			// Create a rule.
 			// Set all its condition values to the values in the queue.
 			final IRule rule = new Rule();
-			rule.addPropertyChangeListener(eventBus);
 			rule.setConditionValues(listOrderedMap);
 			rules2.add(rule);
 		} else {
@@ -412,7 +407,6 @@ public class DecisionTable extends JDTModel implements IDecisionTable {
 	 */
 	public IRule createRule() {
 		final Rule rule = new Rule();
-		rule.addPropertyChangeListener(eventBus);
 		rules.add(rule);
 		logger.debug("END createRule()");
 		return rule;
@@ -728,7 +722,6 @@ public class DecisionTable extends JDTModel implements IDecisionTable {
 		actions.add(position, action);
 		addToAllRules(action);
 
-		action.addPropertyChangeListener(eventBus);
 		fire();
 
 		logger.debug("END insert(int position, IAction action)");
@@ -740,7 +733,6 @@ public class DecisionTable extends JDTModel implements IDecisionTable {
 		tableConditions.add(position, condition);
 		addToAllRules(condition);
 
-		condition.addPropertyChangeListener(eventBus);
 		fire();
 
 		logger.debug("END insert(int position, ICondition condition)");
@@ -1070,10 +1062,6 @@ public class DecisionTable extends JDTModel implements IDecisionTable {
 
 		split();
 
-		for (final IRule rule : rules) {
-			group.setActionValues(rule);
-		}
-
 		return this;
 	}
 
@@ -1084,6 +1072,7 @@ public class DecisionTable extends JDTModel implements IDecisionTable {
 
 	public void setGroups(final List<IGroup> groups) {
 		groups.addAll(groups);
+		
 		logger.debug("END setConditionGroups(List<IGroup> groups)");
 	}
 
@@ -1228,10 +1217,5 @@ public class DecisionTable extends JDTModel implements IDecisionTable {
 		this.defaultActionValue = binaryActionValue;
 
 		return this;
-	}
-
-	@Override
-	public void addPropertyChangeListener(final Object object) {
-		eventBus.register(object);
 	}
 }

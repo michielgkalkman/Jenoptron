@@ -13,8 +13,6 @@ import jdt.icore.IValue;
 
 import org.apache.commons.lang.StringUtils;
 
-import com.google.common.eventbus.EventBus;
-
 /**
  * 
  * @author Michiel Kalkman
@@ -29,18 +27,17 @@ public class Rule extends Model implements IRule {
 	private final Map<ICondition, IConditionValue> conditions; // Dit moet een
 																// list / map
 																// zijn !!!
-	private EventBus eventBus;
 
 	// Een Rule weet alleen maar welke waarde voor een conditie / actie van
 	// toepassing is !!!
 	// De table weet de volgorde van de elementen !!
 
 	public Rule() {
-		super();
 		actions = new HashMap<IAction, IValue>();
 		conditions = new HashMap<ICondition, IConditionValue>();
 	}
 
+	@Override
 	public IRule deepcopy() {
 		final Rule rule = new Rule();
 
@@ -55,12 +52,14 @@ public class Rule extends Model implements IRule {
 		return rule;
 	}
 
+	@Override
 	public final IRule addAction(final IAction action) {
 		actions.put(action, action.getUnknownValue());
 		fire();
 		return this;
 	}
 
+	@Override
 	public IRule addAction(final IAction action, final IValue value) {
 		actions.put(action, value);
 		fire();
@@ -72,12 +71,14 @@ public class Rule extends Model implements IRule {
 
 	}
 
+	@Override
 	public final IRule addCondition(final ICondition condition) {
 		conditions.put(condition, condition.getIrrelevantValue());
 		fire();
 		return this;
 	}
 
+	@Override
 	public IRule addCondition(final ICondition condition,
 			final IConditionValue conditionValue) {
 		conditions.put(condition, conditionValue);
@@ -85,10 +86,12 @@ public class Rule extends Model implements IRule {
 		return this;
 	}
 
+	@Override
 	public IConditionValue getConditionValue(final ICondition condition) {
 		return conditions.get(condition);
 	}
 
+	@Override
 	public IRule setConditionValue(final ICondition condition,
 			final IConditionValue conditionValue) {
 		conditions.put(condition, conditionValue);
@@ -97,18 +100,23 @@ public class Rule extends Model implements IRule {
 		return this;
 	}
 
+	@Override
 	public IValue getActionValue(final IAction action) {
 		return actions.get(action);
 	}
 
+	@Override
 	public IRule setActionValue(final IAction action, final IValue value) {
 		actions.put(action, value);
 
+		
+		
 		fire();
 
 		return this;
 	}
 
+	@Override
 	public boolean isInstanceOf(final IRule rule) {
 		boolean fIsInstanceOf = true;
 
@@ -123,6 +131,7 @@ public class Rule extends Model implements IRule {
 		return fIsInstanceOf;
 	}
 
+	@Override
 	public IRule setConditionValues(
 			final Map<ICondition, IConditionValue> values) {
 		for (final Entry<ICondition, IConditionValue> entry : values.entrySet()) {
@@ -182,7 +191,6 @@ public class Rule extends Model implements IRule {
 
 	@Override
 	public boolean equals(final Object obj) {
-		// TODO Auto-generated method stub
 		return compareTo(obj) == 0;
 	}
 
@@ -195,6 +203,7 @@ public class Rule extends Model implements IRule {
 	 * @param object
 	 * @return
 	 */
+	@Override
 	public int compareTo(final Object object) {
 		int result = -1;
 
@@ -247,10 +256,12 @@ public class Rule extends Model implements IRule {
 		return result;
 	}
 
+	@Override
 	public Map<IAction, IValue> getActions() {
 		return actions;
 	}
 
+	@Override
 	public Map<ICondition, IConditionValue> getConditions() {
 		return conditions;
 	}
@@ -265,25 +276,20 @@ public class Rule extends Model implements IRule {
 		fire();
 	}
 
+	@Override
 	public void remove(final IAction action) {
 		actions.remove(action);
 		fire();
 	}
 
+	@Override
 	public void remove(final ICondition condition) {
 		conditions.remove(condition);
 		fire();
 	}
 
 	@Override
-	public IRule setActionValue(String action, IValue value) {
+	public IRule setActionValue(final String action, final IValue value) {
 		return setActionValue(new BinaryAction(action), value);
 	}
-
-	@Override
-	public void addPropertyChangeListener(final EventBus eventBus) {
-		assert this.eventBus == null || eventBus == this.eventBus;
-		this.eventBus = eventBus;
-	}
-
 }

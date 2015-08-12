@@ -3,8 +3,6 @@ package jdt.icore;
 import java.io.Serializable;
 import java.util.List;
 
-import com.google.common.eventbus.EventBus;
-
 /**
  * Describes a kind of action.
  * 
@@ -14,7 +12,7 @@ import com.google.common.eventbus.EventBus;
  * @author Michiel Kalkman
  * 
  */
-public interface IAction extends Observable, Serializable {
+public interface IAction extends Serializable {
 	static final String CHANGE_EVENT = "CHANGE_EVENT";
 	static final String PROP_SHORT_DESCRIPTION = "shortDescription";
 
@@ -31,6 +29,4 @@ public interface IAction extends Observable, Serializable {
 	void setShortDescription(String shortDescription);
 
 	IValue parse(String string);
-
-	void addPropertyChangeListener(final EventBus eventBus);
 }

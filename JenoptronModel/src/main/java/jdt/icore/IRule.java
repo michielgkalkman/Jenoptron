@@ -2,9 +2,8 @@ package jdt.icore;
 
 import java.util.Map;
 
-import com.google.common.eventbus.EventBus;
-
-public interface IRule extends IObject, Observable, Comparable {
+public interface IRule extends IObject, Comparable {
+	@Override
 	IRule deepcopy();
 
 	IConditionValue getConditionValue(final ICondition condition);
@@ -38,6 +37,4 @@ public interface IRule extends IObject, Observable, Comparable {
 	void remove(final ICondition condition);
 
 	boolean isInstanceOf(IRule rule);
-
-	void addPropertyChangeListener(EventBus eventBus);
 }

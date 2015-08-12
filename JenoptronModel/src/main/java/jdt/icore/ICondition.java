@@ -5,8 +5,6 @@ import java.util.List;
 
 import jdt.core.category.IGroup;
 
-import com.google.common.eventbus.EventBus;
-
 /**
  * A description of a condition.
  * 
@@ -17,7 +15,7 @@ import com.google.common.eventbus.EventBus;
  * @author Michiel Kalkman
  * 
  */
-public interface ICondition extends Observable, Serializable {
+public interface ICondition extends Serializable {
 	static final String CHANGE_EVENT = "CHANGE_EVENT";
 	static final String PROP_SHORT_DESCRIPTION = "shortDescription";
 
@@ -34,6 +32,4 @@ public interface ICondition extends Observable, Serializable {
 	void setGroup(IGroup group);
 
 	void setShortDescription(String shortDescription);
-
-	void addPropertyChangeListener(EventBus eventBus);
 }

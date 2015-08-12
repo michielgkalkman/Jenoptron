@@ -20,6 +20,7 @@ public class ImplyGroup implements IImplyGroup {
 	private static final long serialVersionUID = 8033341772485771658L;
 	private String shortDescription;
 	private final Map<IAction, IValue> actions;
+	private final Map<IAction, IValue> conditionalActions;
 	private final Map<ICondition, IValue> conditions;
 	private final Map<IAction, IValue> impliedActions;
 	private final Map<ICondition, IValue> impliedConditions;
@@ -32,39 +33,48 @@ public class ImplyGroup implements IImplyGroup {
 		this.shortDescription = shortDescription;
 		
 		actions = new HashMap<IAction, IValue>();
+		conditionalActions = new HashMap<IAction, IValue>();
 		conditions = new HashMap<ICondition, IValue>();
 		impliedActions = new HashMap<IAction, IValue>();
 		impliedConditions = new HashMap<ICondition, IValue>();
 	}
 	
+	@Override
 	public void add( final IAction action) {
 		add( action, action.getDefaultValue());
 	}
 	
+	@Override
 	public void add( final IAction action, final IValue value) {
-		actions.put( action, value);
+		conditionalActions.put( action, value);
 	}
 	
+	@Override
 	public void add( final ICondition condition) {
 		add( condition, condition.getDefaultValue());
 	}
 	
+	@Override
 	public void add( final ICondition condition, final IValue value) {
 		conditions.put( condition, value);
 	}
 
+	@Override
 	public void implies( final IAction action) {
 		implies( action, action.getDefaultValue());
 	}
 
+	@Override
 	public void implies( final IAction action, final IValue value) {
 		impliedActions.put( action, value);
 	}
 
+	@Override
 	public void implies( final ICondition condition) {
 		implies( condition, condition.getDefaultValue());
 	}
 
+	@Override
 	public void implies( final ICondition condition, final IValue value) {
 		impliedConditions.put( condition, value);
 	}
@@ -80,21 +90,34 @@ public class ImplyGroup implements IImplyGroup {
 			}
 		}
 
-		boolean fActionsHold = true;
+		boolean fConditionalActionsHold = true;
 		
 		if( fConditionsHold) {
-			for( final IAction action : actions.keySet()) {
+			for( final IAction action : conditionalActions.keySet()) {
 				final IValue value = rule.getActionValue(action);
-				if( (value == null) || ! actions.get( action).equals( value)) {
+				if( (value == null) || ! conditionalActions.get( action).equals( value)) {
+					fConditionalActionsHold = false;
+					break;
+				}
+			}
+		}
+
+		boolean fActionsHold = true;
+		
+		if( fConditionsHold && fConditionalActionsHold) {
+			for( final IAction action : conditionalActions.keySet()) {
+				final IValue value = rule.getActionValue(action);
+				if( (value == null) || ! conditionalActions.get( action).equals( value)) {
 					fActionsHold = false;
 					break;
 				}
 			}
 		}
 		
-		return fConditionsHold && fActionsHold;
+		return fConditionsHold && fConditionalActionsHold && fActionsHold;
 	}
 	
+	@Override
 	public boolean isValid( final IRule rule) {
 		final boolean fImplied = implies( rule);
 		boolean fImpliedConditionsHold = true;
@@ -124,6 +147,7 @@ public class ImplyGroup implements IImplyGroup {
 		return ! ( fImplied) || ( fImpliedConditionsHold && fImpliedActionsHold);
 	}
 
+	@Override
 	public Iterable<ICondition> conditions() {
 		final List< ICondition> list = new ArrayList< ICondition>();
 		list.addAll( conditions.keySet());
@@ -132,6 +156,7 @@ public class ImplyGroup implements IImplyGroup {
 		return Collections.unmodifiableCollection( list);
 	}
 	
+	@Override
 	public Iterable<IAction> actions() {
 		final List< IAction> list = new ArrayList< IAction>();
 		list.addAll( actions.keySet());
@@ -216,14 +241,7 @@ public class ImplyGroup implements IImplyGroup {
 		return stringBuffer.toString();
 	}
 
-	public void setActionValues( final IRule rule) {
-		if( implies( rule)) {
-			for( final IAction action : impliedActions.keySet()) {
-				rule.setActionValue( action, impliedActions.get( action));
-			}
-		}
-	}
-
+	@Override
 	public String getShortDescription() {
 		return shortDescription;
 	}
@@ -232,6 +250,7 @@ public class ImplyGroup implements IImplyGroup {
 		this.shortDescription = shortDescription;
 	}
 
+	@Override
 	public String getShortDescription( final String groupMemberShortDescription) {
 		return getShortDescription() + ":" + groupMemberShortDescription;
 	}

@@ -10,7 +10,6 @@ public interface IGroup extends Serializable {
 	boolean isValid( final IRule rule);
 	Iterable< ICondition> conditions();
 	Iterable< IAction> actions();
-	void setActionValues( final IRule rule);
 	String getShortDescription();
 	String getShortDescription( final String groupMemberShortDescription);
 }

@@ -63,15 +63,15 @@
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 		</dependency>
-		<dependency>
-			<groupId>com.google.guava</groupId>
-			<artifactId>guava</artifactId>
-		</dependency>
 
-		<dependency>
+		<!-- dependency>
 			<groupId>com.netflix.rxjava</groupId>
 			<artifactId>rxjava-core</artifactId>
 			<version>0.20.7</version>
+		</dependency-->
+		<dependency>
+   			<groupId>io.reactivex</groupId>
+			<artifactId>rxjava</artifactId>
 		</dependency>
 	</dependencies>
 	<reporting>

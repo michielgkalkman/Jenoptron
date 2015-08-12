@@ -33,7 +33,7 @@ import jdt.core.category.IGroup;
  * 
  */
 public interface IDecisionTable extends CUDDecisionTable,
-		PropertyChangeListener, Observable, Serializable, Cloneable, IObject {
+		PropertyChangeListener, Serializable, Cloneable, IObject {
 	static final String PROP_SHORT_DESCRIPTION = "shortDescription";
 
 	/**
@@ -175,7 +175,4 @@ public interface IDecisionTable extends CUDDecisionTable,
 	int nrActions();
 
 	IDecisionTable setDefaultActionValue(BinaryActionValue binaryActionValue);
-
-	void addPropertyChangeListener(final Object object);
-
 }
