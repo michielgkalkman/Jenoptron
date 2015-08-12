@@ -285,16 +285,6 @@ public class DTView {
 		return moveWidth(d);
 	}
 
-	public DTView reduce() {
-		final IDecisionTable reduce = this.iDecisionTable.reduce();
-		return new DTView(reduce, font);
-	}
-
-	public DTView split() {
-		final IDecisionTable reduce = this.iDecisionTable.split();
-		return new DTView(reduce, font);
-	}
-
 	public List<Column> getColumns() {
 		return columns;
 	}
@@ -339,5 +329,30 @@ public class DTView {
 			dtContext = tmpDTContext;
 		}
 		return dtContext;
+	}
+
+	public DTView setSelectedToDo() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public DTView toggleSelected(final Cell cell) {
+		final List<Column> newColumns = new ArrayList<>();
+
+		columns.stream().forEach(column -> {
+			newColumns.add(column.toggleSelect(cell));
+		});
+
+		return new DTView(iDecisionTable, font, newColumns, start_dt_w, start_dt_h);
+	}
+
+	public DTView reduce() {
+		final IDecisionTable reduce = this.iDecisionTable.reduce();
+		return new DTView(reduce, font);
+	}
+
+	public DTView split() {
+		final IDecisionTable reduce = this.iDecisionTable.split();
+		return new DTView(reduce, font);
 	}
 }

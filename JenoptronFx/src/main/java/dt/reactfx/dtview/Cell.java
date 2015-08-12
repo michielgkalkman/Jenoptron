@@ -21,7 +21,7 @@ public class Cell {
 	private final CellType cellType;
 	private final DTView dtView;
 
-	private boolean fSelected;
+	private final boolean fSelected;
 
 	public Cell(final double width, final double height, final IAction action,
 			final BinaryActionValue binaryActionValue, final IRule iRule, final DTView dtView,
@@ -157,10 +157,6 @@ public class Cell {
 		return cellType;
 	}
 
-	public void toggleSelected() {
-		fSelected = fSelected ^ true;
-	}
-
 	public boolean isSelected() {
 		return fSelected;
 	}
@@ -168,5 +164,16 @@ public class Cell {
 	@Override
 	public String toString() {
 		return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE).toString();
+	}
+
+	public Cell toggleSelect(final Cell cell) {
+		final Cell newCell;
+		if (this.equals(cell)) {
+			newCell = new Cell(width, height, action, binaryActionValue, condition, binaryConditionValue,
+					shortDescription, iRule, dtView, cellType, fSelected ^ true);
+		} else {
+			newCell = this; // cell is intended to be immutable
+		}
+		return newCell;
 	}
 }

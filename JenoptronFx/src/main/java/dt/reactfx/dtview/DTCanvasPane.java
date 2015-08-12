@@ -74,7 +74,7 @@ public class DTCanvasPane extends Pane {
 				} else if (event.isPrimaryButtonDown()) {
 					final DTContext dtContext = dtView.getDTContext(event.getSceneX(), event.getSceneY());
 					if (dtContext != null) {
-						dtContext.getCell().toggleSelected();
+						dtView = dtView.toggleSelected(dtContext.getCell());
 					}
 					this.dtViewCanvasRedrawTask.redraw(canvas.getGraphicsContext2D(), dtView);
 				} else {
@@ -110,6 +110,8 @@ public class DTCanvasPane extends Pane {
 			} else if (new KeyCodeCombination(KeyCode.S, KeyCombination.ALT_DOWN).match(event)) {
 				System.out.println("ALT-S");
 				dtView = dtView.split();
+			} else if (KeyCode.T.equals(code)) {
+				dtView = dtView.setSelectedToDo();
 			} else {
 				System.out.println(code.getName());
 			}

@@ -38,4 +38,15 @@ public class Column {
 
 		return new Column(width * factor, newCells);
 	}
+
+	public Column toggleSelect(final Cell newCell) {
+		final List<Cell> newCells = new ArrayList<>();
+
+		cells.stream().forEach(cell -> {
+			newCells.add(cell.toggleSelect(newCell));
+		});
+
+		return new Column(width, newCells);
+	}
+
 }
