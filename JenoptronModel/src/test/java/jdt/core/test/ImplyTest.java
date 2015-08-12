@@ -15,6 +15,7 @@ import jdt.icore.IAction;
 import jdt.icore.ICondition;
 import jdt.icore.IDecisionTable;
 
+@Ignore
 public class ImplyTest extends AbstractTestCase {
 	public static final Logger logger = Logger.getLogger(ImplyTest.class);
 
