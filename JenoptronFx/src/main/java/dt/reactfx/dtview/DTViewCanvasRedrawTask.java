@@ -43,10 +43,12 @@ public class DTViewCanvasRedrawTask extends CanvasRedrawTask<DTView> {
 
 	private void drawCell(final GraphicsContext graphicsContext, final DTView dtView, final Cell cell,
 			final double start_w, final double start_h) {
+		if (cell.isSelected()) {
+			graphicsContext.setFill(Paint.valueOf(Color.WHITE.toString()));
+			graphicsContext.fillRect(start_w, start_h, cell.getWidth(), cell.getHeight());
+		}
 		if (cell.getShortDescription() == null) {
 			if (cell.getAction() != null) {
-				// graphicsContext.setFill(Paint.valueOf(Color.WHITE.toString()));
-				// graphicsContext.fillRect(start_w, start_h, width, height);
 				graphicsContext.drawImage(
 						dtView.getImage(cell.getBinaryActionValue(), cell.getWidth(), cell.getHeight()), start_w,
 						start_h);

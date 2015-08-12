@@ -1,5 +1,8 @@
 package dt.reactfx.dtview;
 
+import org.apache.commons.lang.builder.ToStringBuilder;
+import org.apache.commons.lang.builder.ToStringStyle;
+
 import jdt.core.binary.BinaryActionValue;
 import jdt.core.binary.BinaryConditionValue;
 import jdt.icore.IAction;
@@ -16,8 +19,9 @@ public class Cell {
 	private final double width;
 	private final String shortDescription;
 	private final CellType cellType;
-
 	private final DTView dtView;
+
+	private boolean fSelected;
 
 	public Cell(final double width, final double height, final IAction action,
 			final BinaryActionValue binaryActionValue, final IRule iRule, final DTView dtView,
@@ -32,6 +36,7 @@ public class Cell {
 		this.condition = null;
 		this.binaryConditionValue = null;
 		this.shortDescription = null;
+		this.fSelected = false;
 	}
 
 	public Cell(final int width, final int height, final ICondition condition,
@@ -47,6 +52,7 @@ public class Cell {
 		this.condition = condition;
 		this.binaryConditionValue = binaryConditionValue;
 		this.shortDescription = null;
+		this.fSelected = false;
 	}
 
 	public Cell(final int width, final int height, final DTView dtView, final CellType cellType) {
@@ -60,12 +66,13 @@ public class Cell {
 		this.binaryConditionValue = null;
 		this.shortDescription = null;
 		this.iRule = null;
+		this.fSelected = false;
 	}
 
 	private Cell(final double width, final double height, final IAction action,
 			final BinaryActionValue binaryActionValue, final ICondition condition,
 			final BinaryConditionValue binaryConditionValue, final String shortDescription, final IRule iRule,
-			final DTView dtView, final CellType cellType) {
+			final DTView dtView, final CellType cellType, final boolean selected) {
 		this.width = width;
 		this.height = height;
 		this.action = action;
@@ -76,6 +83,7 @@ public class Cell {
 		this.dtView = dtView;
 		this.shortDescription = shortDescription;
 		this.cellType = cellType;
+		this.fSelected = selected;
 	}
 
 	public Cell(final int width, final int height, final ICondition condition, final String shortDescription,
@@ -90,6 +98,7 @@ public class Cell {
 		this.dtView = dtView;
 		this.shortDescription = shortDescription;
 		this.iRule = null;
+		this.fSelected = false;
 	}
 
 	public Cell(final int width, final int height, final IAction action, final String shortDescription,
@@ -104,6 +113,7 @@ public class Cell {
 		this.dtView = dtView;
 		this.shortDescription = shortDescription;
 		this.iRule = null;
+		this.fSelected = false;
 	}
 
 	public double getHeight() {
@@ -112,7 +122,7 @@ public class Cell {
 
 	public Cell enlarge(final double factor) {
 		return new Cell(width * factor, height * factor, getAction(), binaryActionValue, condition,
-				binaryConditionValue, shortDescription, iRule, dtView, cellType);
+				binaryConditionValue, shortDescription, iRule, dtView, cellType, fSelected);
 	}
 
 	public IAction getAction() {
@@ -145,5 +155,18 @@ public class Cell {
 
 	public CellType getCellType() {
 		return cellType;
+	}
+
+	public void toggleSelected() {
+		fSelected = fSelected ^ true;
+	}
+
+	public boolean isSelected() {
+		return fSelected;
+	}
+
+	@Override
+	public String toString() {
+		return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE).toString();
 	}
 }

@@ -42,43 +42,51 @@ public class DTCanvasPane extends Pane {
 		this.setBackground(background);
 
 		canvas.setOnMousePressed(event -> {
-			if (event.isSecondaryButtonDown()) {
-				if (contextMenu != null) {
-					contextMenu.hide();
-				}
+			{
+				if (event.isSecondaryButtonDown()) {
+					if (contextMenu != null) {
+						contextMenu.hide();
+					}
 
-				contextMenu = new ContextMenu();
-				final DTContext dtContext = dtView.getDTContext(event.getSceneX(), event.getSceneY());
+					contextMenu = new ContextMenu();
+					final DTContext dtContext = dtView.getDTContext(event.getSceneX(), event.getSceneY());
 
-				final ObservableList<MenuItem> items = contextMenu.getItems();
-				if (dtContext == null) {
-					// Outside the DT.
-					final MenuItem outside = new MenuItem("Outside");
-					items.addAll(outside);
+					final ObservableList<MenuItem> items = contextMenu.getItems();
+					if (dtContext == null) {
+						// Outside the DT.
+						final MenuItem outside = new MenuItem("Outside");
+						items.addAll(outside);
+					} else {
+						switch (dtContext.getCell().getCellType()) {
+						case ROOTCELL: {
+							final MenuItem outside = new MenuItem(dtContext.getCell().getCellType().name());
+							items.addAll(outside);
+							break;
+						}
+						default: {
+							final MenuItem outside = new MenuItem(dtContext.getCell().getCellType().name());
+							items.addAll(outside);
+						}
+						}
+					}
+
+					contextMenu.show(canvas, event.getScreenX(), event.getScreenY());
+				} else if (event.isPrimaryButtonDown()) {
+					final DTContext dtContext = dtView.getDTContext(event.getSceneX(), event.getSceneY());
+					if (dtContext != null) {
+						dtContext.getCell().toggleSelected();
+					}
+					this.dtViewCanvasRedrawTask.redraw(canvas.getGraphicsContext2D(), dtView);
 				} else {
-					switch (dtContext.getCell().getCellType()) {
-					case ROOTCELL: {
-						final MenuItem outside = new MenuItem(dtContext.getCell().getCellType().name());
-						items.addAll(outside);
-						break;
-					}
-					default: {
-						final MenuItem outside = new MenuItem(dtContext.getCell().getCellType().name());
-						items.addAll(outside);
-					}
-					}
+					System.out.println(event.getSceneX());
+					System.out.println(event.getScreenX());
 				}
-
-				contextMenu.show(canvas, event.getScreenX(), event.getScreenY());
-			} else {
-				System.out.println(event.getSceneX());
-				System.out.println(event.getScreenX());
 			}
 		});
 
 		addKeyEvents();
 
-		addMouseEvents();
+		// addMouseEvents();
 
 		// addMouseStreams();
 
