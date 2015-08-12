@@ -4,14 +4,14 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.apache.commons.lang.StringUtils;
+
 import jdt.core.binary.BinaryAction;
 import jdt.icore.IAction;
 import jdt.icore.ICondition;
 import jdt.icore.IConditionValue;
 import jdt.icore.IRule;
 import jdt.icore.IValue;
-
-import org.apache.commons.lang.StringUtils;
 
 /**
  * 
@@ -79,8 +79,7 @@ public class Rule extends Model implements IRule {
 	}
 
 	@Override
-	public IRule addCondition(final ICondition condition,
-			final IConditionValue conditionValue) {
+	public IRule addCondition(final ICondition condition, final IConditionValue conditionValue) {
 		conditions.put(condition, conditionValue);
 		fire();
 		return this;
@@ -92,8 +91,7 @@ public class Rule extends Model implements IRule {
 	}
 
 	@Override
-	public IRule setConditionValue(final ICondition condition,
-			final IConditionValue conditionValue) {
+	public IRule setConditionValue(final ICondition condition, final IConditionValue conditionValue) {
 		conditions.put(condition, conditionValue);
 		fire();
 
@@ -109,8 +107,6 @@ public class Rule extends Model implements IRule {
 	public IRule setActionValue(final IAction action, final IValue value) {
 		actions.put(action, value);
 
-		
-		
 		fire();
 
 		return this;
@@ -121,8 +117,7 @@ public class Rule extends Model implements IRule {
 		boolean fIsInstanceOf = true;
 
 		for (final ICondition condition : conditions.keySet()) {
-			fIsInstanceOf = conditions.get(condition).isInstanceOf(
-					rule.getConditionValue(condition));
+			fIsInstanceOf = conditions.get(condition).isInstanceOf(rule.getConditionValue(condition));
 			if (!fIsInstanceOf) {
 				break;
 			}
@@ -132,8 +127,7 @@ public class Rule extends Model implements IRule {
 	}
 
 	@Override
-	public IRule setConditionValues(
-			final Map<ICondition, IConditionValue> values) {
+	public IRule setConditionValues(final Map<ICondition, IConditionValue> values) {
 		for (final Entry<ICondition, IConditionValue> entry : values.entrySet()) {
 			conditions.put(entry.getKey(), entry.getValue());
 		}
@@ -149,19 +143,12 @@ public class Rule extends Model implements IRule {
 
 		for (final ICondition condition : getConditions().keySet()) {
 			if (fFirst) {
-				stringBuffer
-						.append(condition.getShortDescription())
-						.append(':')
-						.append(StringUtils.center(conditions.get(condition)
-								.toString(), 3));
+				stringBuffer.append(condition.getShortDescription()).append(':')
+						.append(StringUtils.center(conditions.get(condition).toString(), 3));
 				fFirst = false;
 			} else {
-				stringBuffer
-						.append(',')
-						.append(condition.getShortDescription())
-						.append(':')
-						.append(StringUtils.center(conditions.get(condition)
-								.toString(), 3));
+				stringBuffer.append(',').append(condition.getShortDescription()).append(':')
+						.append(StringUtils.center(conditions.get(condition).toString(), 3));
 			}
 		}
 
@@ -171,18 +158,11 @@ public class Rule extends Model implements IRule {
 
 		for (final IAction action : getActions().keySet()) {
 			if (fFirst) {
-				stringBuffer
-						.append(action.getShortDescription())
-						.append(':')
-						.append(StringUtils.center(actions.get(action)
-								.toString(), 4));
+				stringBuffer.append(action.getShortDescription()).append(':')
+						.append(StringUtils.center(actions.get(action).toString(), 4));
 			} else {
-				stringBuffer
-						.append(',')
-						.append(action.getShortDescription())
-						.append(':')
-						.append(StringUtils.center(actions.get(action)
-								.toString(), 4));
+				stringBuffer.append(',').append(action.getShortDescription()).append(':')
+						.append(StringUtils.center(actions.get(action).toString(), 4));
 			}
 		}
 
@@ -234,8 +214,7 @@ public class Rule extends Model implements IRule {
 
 			if (result == 0) {
 				for (final ICondition condition : conditions.keySet()) {
-					result = getConditionValue(condition).compareTo(
-							rule.getConditionValue(condition));
+					result = getConditionValue(condition).compareTo(rule.getConditionValue(condition));
 					if (result != 0) {
 						break;
 					}
@@ -244,8 +223,7 @@ public class Rule extends Model implements IRule {
 
 			if (result == 0) {
 				for (final IAction action : actions.keySet()) {
-					result = getActionValue(action).compareTo(
-							rule.getActionValue(action));
+					result = getActionValue(action).compareTo(rule.getActionValue(action));
 					if (result != 0) {
 						break;
 					}

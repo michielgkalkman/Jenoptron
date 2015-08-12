@@ -29,8 +29,7 @@ public interface IRule extends IObject, Comparable {
 
 	IRule addCondition(final ICondition condition);
 
-	IRule addCondition(final ICondition condition,
-			IConditionValue conditionValue);
+	IRule addCondition(final ICondition condition, IConditionValue conditionValue);
 
 	void remove(final IAction action);
 

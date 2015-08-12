@@ -32,8 +32,7 @@ import jdt.core.category.IGroup;
  * @author Michiel Kalkman
  * 
  */
-public interface IDecisionTable extends CUDDecisionTable,
-		PropertyChangeListener, Serializable, Cloneable, IObject {
+public interface IDecisionTable extends CUDDecisionTable, PropertyChangeListener, Serializable, Cloneable, IObject {
 	static final String PROP_SHORT_DESCRIPTION = "shortDescription";
 
 	/**
@@ -82,6 +81,16 @@ public interface IDecisionTable extends CUDDecisionTable,
 	 * @return
 	 */
 	IRule getRule(final IConditionValue... conditions);
+
+	/**
+	 * Retrieve the rule in the decision table with the given condition values.
+	 * 
+	 * Note that a rule might not exist anymore after reducing or splitting.
+	 * 
+	 * @param conditions
+	 * @return
+	 */
+	IRule getRule(final List<IConditionValue> conditions);
 
 	/**
 	 * Split all rules.
@@ -159,8 +168,7 @@ public interface IDecisionTable extends CUDDecisionTable,
 
 	public StringBuffer simpleDump();
 
-	boolean sameConditions(final IRule rule,
-			final IConditionValue... conditionValues);
+	boolean sameConditions(final IRule rule, final IConditionValue... conditionValues);
 
 	IDecisionTable setActionValues(final IValue value);
 
@@ -175,4 +183,8 @@ public interface IDecisionTable extends CUDDecisionTable,
 	int nrActions();
 
 	IDecisionTable setDefaultActionValue(BinaryActionValue binaryActionValue);
+
+	List<IConditionValue> getConditionValues(IRule irule);
+
+	boolean sameConditions(IRule rule, List<IConditionValue> conditionValues);
 }

@@ -14,6 +14,10 @@ import java.util.SortedSet;
 import java.util.Stack;
 import java.util.TreeSet;
 
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.collections.Predicate;
+import org.apache.log4j.Logger;
+
 import jdt.core.binary.BinaryAction;
 import jdt.core.binary.BinaryActionValue;
 import jdt.core.binary.BinaryCondition;
@@ -29,10 +33,6 @@ import jdt.icore.IValue;
 import jdt.util.DTException;
 import jdt.util.collections.IterableWrapper;
 
-import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.collections.Predicate;
-import org.apache.log4j.Logger;
-
 public class DecisionTable extends JDTModel implements IDecisionTable {
 	/**
 	 *
@@ -45,11 +45,9 @@ public class DecisionTable extends JDTModel implements IDecisionTable {
 	private final List<IGroup> groups;
 	private String shortDescription;
 
-	private final transient Predicate predicateLegalRule = new LegalRulePredicate(
-			this);
+	private final transient Predicate predicateLegalRule = new LegalRulePredicate(this);
 
-	private final transient RuleComparator ruleComparator = new RuleComparator(
-			this);
+	private final transient RuleComparator ruleComparator = new RuleComparator(this);
 
 	public DecisionTable() {
 		this("Some Decision Table");
@@ -63,8 +61,7 @@ public class DecisionTable extends JDTModel implements IDecisionTable {
 		this("Some Decision Table", defaultActionValue);
 	}
 
-	public DecisionTable(final String shortDescription,
-			final IValue defaultActionValue) {
+	public DecisionTable(final String shortDescription, final IValue defaultActionValue) {
 		super();
 		rules = new ArrayList<IRule>();
 		actions = new ArrayList<IAction>();
@@ -95,8 +92,7 @@ public class DecisionTable extends JDTModel implements IDecisionTable {
 	 * @throws IOException
 	 * @throws ClassNotFoundException
 	 */
-	private void readObject(final ObjectInputStream in) throws IOException,
-			ClassNotFoundException {
+	private void readObject(final ObjectInputStream in) throws IOException, ClassNotFoundException {
 		in.defaultReadObject();
 	}
 
@@ -109,7 +105,7 @@ public class DecisionTable extends JDTModel implements IDecisionTable {
 			fEquals = tableConditions.equals(decisionTable.getConditions())
 					&& actions.equals(decisionTable.getActions()) &&
 
-					rules.equals(decisionTable.getRules());
+			rules.equals(decisionTable.getRules());
 		}
 
 		logger.debug("END equals(Object obj)");
@@ -158,8 +154,7 @@ public class DecisionTable extends JDTModel implements IDecisionTable {
 	}
 
 	@Override
-	public IDecisionTable addActions(
-			final Collection<? extends IAction> newActions) {
+	public IDecisionTable addActions(final Collection<? extends IAction> newActions) {
 		for (final IAction action : newActions) {
 			doAdd(action);
 		}
@@ -196,8 +191,7 @@ public class DecisionTable extends JDTModel implements IDecisionTable {
 	}
 
 	@Override
-	public IDecisionTable add(final ICondition... conditions)
-			throws DTException {
+	public IDecisionTable add(final ICondition... conditions) throws DTException {
 		for (final ICondition condition : conditions) {
 			doAdd(condition);
 		}
@@ -233,8 +227,7 @@ public class DecisionTable extends JDTModel implements IDecisionTable {
 		return this;
 	}
 
-	public IDecisionTable addConditions(
-			final List<ICondition> additionalConditions) {
+	public IDecisionTable addConditions(final List<ICondition> additionalConditions) {
 		for (final ICondition condition : additionalConditions) {
 			add(condition);
 		}
@@ -261,8 +254,7 @@ public class DecisionTable extends JDTModel implements IDecisionTable {
 			}
 
 			// Create all rules possible.
-			createRules(rules2, conditionStack,
-					new HashMap<ICondition, IConditionValue>());
+			createRules(rules2, conditionStack, new HashMap<ICondition, IConditionValue>());
 
 			// These rules only have conditions yet. Give m actions.
 			for (final IRule rule : rules2) {
@@ -270,7 +262,7 @@ public class DecisionTable extends JDTModel implements IDecisionTable {
 					rule.addAction(action, defaultActionValue);
 				}
 			}
-			
+
 			// Now copy action values from the old rules.
 			for (final IRule rule : rules2) {
 				final IRule existingRule = findRule(rule);
@@ -281,8 +273,7 @@ public class DecisionTable extends JDTModel implements IDecisionTable {
 					}
 				} else {
 					for (final IAction action : actions) {
-						rule.setActionValue(action,
-								existingRule.getActionValue(action));
+						rule.setActionValue(action, existingRule.getActionValue(action));
 					}
 				}
 			}
@@ -320,8 +311,7 @@ public class DecisionTable extends JDTModel implements IDecisionTable {
 		return equivalentRule;
 	}
 
-	private void createRules(final List<IRule> rules2,
-			final Stack<ICondition> stack,
+	private void createRules(final List<IRule> rules2, final Stack<ICondition> stack,
 			final Map<ICondition, IConditionValue> listOrderedMap) {
 		if (stack.isEmpty()) {
 			// No more conditions to process.
@@ -346,14 +336,14 @@ public class DecisionTable extends JDTModel implements IDecisionTable {
 
 			stack.push(condition);
 		}
-		logger.debug("END createRules(final List<IRule> rules2, final Queue<ICondition> queue, final Map<ICondition,IValue> values)");
+		logger.debug(
+				"END createRules(final List<IRule> rules2, final Queue<ICondition> queue, final Map<ICondition,IValue> values)");
 	}
 
 	@Override
 	@SuppressWarnings("unchecked")
 	public List<IRule> getRules() {
-		final List<IRule> applicableRules = (List<IRule>) CollectionUtils
-				.select(rules, predicateLegalRule);
+		final List<IRule> applicableRules = (List<IRule>) CollectionUtils.select(rules, predicateLegalRule);
 
 		logger.debug("END List<IRule> getRules(): " + applicableRules.size());
 		return applicableRules;
@@ -482,8 +472,7 @@ public class DecisionTable extends JDTModel implements IDecisionTable {
 		for (int i = tableConditions.size() - 1; i >= 0; i--) {
 			final ICondition condition = tableConditions.get(i);
 
-			reduce(condition, handledConditions, step, reduced, invalidRules,
-					_rules);
+			reduce(condition, handledConditions, step, reduced, invalidRules, _rules);
 
 			handledConditions.add(condition);
 			step = step * 2;
@@ -512,8 +501,7 @@ public class DecisionTable extends JDTModel implements IDecisionTable {
 		return this;
 	}
 
-	private void logReducedDecisionTable(final boolean[] reduced,
-			final List<IRule> _rules) {
+	private void logReducedDecisionTable(final boolean[] reduced, final List<IRule> _rules) {
 		if (logger.isDebugEnabled()) {
 			final StringBuffer stringBuffer = simpleDump(reduced, _rules);
 
@@ -530,13 +518,12 @@ public class DecisionTable extends JDTModel implements IDecisionTable {
 		return simpleDump(null, getRules(), start, end);
 	}
 
-	private StringBuffer simpleDump(final boolean[] reduced,
-			final List<IRule> irules) {
+	private StringBuffer simpleDump(final boolean[] reduced, final List<IRule> irules) {
 		return simpleDump(reduced, irules, "", "\n");
 	}
 
-	private StringBuffer simpleDump(final boolean[] reduced,
-			final List<IRule> irules, final String start, final String end) {
+	private StringBuffer simpleDump(final boolean[] reduced, final List<IRule> irules, final String start,
+			final String end) {
 		final StringBuffer stringBuffer = new StringBuffer();
 		final int size = irules.size();
 		for (final ICondition condition : tableConditions) {
@@ -546,8 +533,7 @@ public class DecisionTable extends JDTModel implements IDecisionTable {
 					stringBuffer.append("*");
 				} else {
 					final IRule rule = irules.get(i);
-					final IConditionValue conditionValue = rule
-							.getConditionValue(condition);
+					final IConditionValue conditionValue = rule.getConditionValue(condition);
 					final char value;
 					if (conditionValue == null) {
 						value = '0';
@@ -555,11 +541,9 @@ public class DecisionTable extends JDTModel implements IDecisionTable {
 						value = 'Y';
 					} else if (conditionValue.equals(BinaryConditionValue.NO)) {
 						value = 'N';
-					} else if (conditionValue
-							.equals(BinaryConditionValue.INITIAL_VALUE)) {
+					} else if (conditionValue.equals(BinaryConditionValue.INITIAL_VALUE)) {
 						value = '-';
-					} else if (conditionValue
-							.equals(BinaryConditionValue.DEFAULT_VALUE)) {
+					} else if (conditionValue.equals(BinaryConditionValue.DEFAULT_VALUE)) {
 						value = '?';
 					} else {
 						value = 'X';
@@ -568,8 +552,7 @@ public class DecisionTable extends JDTModel implements IDecisionTable {
 					stringBuffer.append(value);
 				}
 			}
-			stringBuffer.append(' ').append(condition.getShortDescription())
-					.append(end);
+			stringBuffer.append(' ').append(condition.getShortDescription()).append(end);
 		}
 		for (final IAction action : actions) {
 			stringBuffer.append(start);
@@ -592,32 +575,26 @@ public class DecisionTable extends JDTModel implements IDecisionTable {
 				}
 				stringBuffer.append(display);
 			}
-			stringBuffer.append(' ').append(action.getShortDescription())
-					.append(end);
+			stringBuffer.append(' ').append(action.getShortDescription()).append(end);
 		}
 		return stringBuffer;
 	}
 
-	private void reduce(final ICondition condition,
-			final List<ICondition> handledConditions, final int step,
-			final boolean[] reduced, final boolean[] invalidRules,
-			final List<IRule> _rules) {
+	private void reduce(final ICondition condition, final List<ICondition> handledConditions, final int step,
+			final boolean[] reduced, final boolean[] invalidRules, final List<IRule> _rules) {
 		final int size = rules.size();
 		final boolean[] processedRules = new boolean[size];
 
 		for (int index = 0; index < size; index++) {
 			final IRule rule = _rules.get(index);
 			final int otherIndex = index + step;
-			if (!processedRules[index] && !reduced[index]
-					&& (otherIndex < size)) {
+			if (!processedRules[index] && !reduced[index] && (otherIndex < size)) {
 				final IRule otherRule = _rules.get(otherIndex);
 
 				if (sameActions(rule, otherRule)
-						&& (reduced[otherIndex] || sameStrictHandledConditions(
-								rule, otherRule, handledConditions))) {
+						&& (reduced[otherIndex] || sameStrictHandledConditions(rule, otherRule, handledConditions))) {
 					if (invalidRules[index] && !invalidRules[otherIndex]) {
-						otherRule.setConditionValue(condition,
-								condition.getIrrelevantValue());
+						otherRule.setConditionValue(condition, condition.getIrrelevantValue());
 
 						// Swap rules
 						_rules.set(index, otherRule);
@@ -629,12 +606,10 @@ public class DecisionTable extends JDTModel implements IDecisionTable {
 						invalidRules[otherIndex] = true;
 					} else if (invalidRules[otherIndex] && invalidRules[index]) {
 						// Both rules are invalid
-						rule.setConditionValue(condition,
-								condition.getIrrelevantValue());
+						rule.setConditionValue(condition, condition.getIrrelevantValue());
 						reduced[otherIndex] = true;
 					} else {
-						rule.setConditionValue(condition,
-								condition.getIrrelevantValue());
+						rule.setConditionValue(condition, condition.getIrrelevantValue());
 						reduced[otherIndex] = true;
 					}
 				}
@@ -643,18 +618,17 @@ public class DecisionTable extends JDTModel implements IDecisionTable {
 				processedRules[otherIndex] = true;
 			}
 		}
-		logger.debug("END reduce( final ICondition condition, final List<ICondition> handledConditions, final int step, final boolean[] reduced)");
+		logger.debug(
+				"END reduce( final ICondition condition, final List<ICondition> handledConditions, final int step, final boolean[] reduced)");
 	}
 
-	private boolean sameStrictHandledConditions(final IRule rule,
-			final IRule originalRule, final List<ICondition> handledConditions) {
+	private boolean sameStrictHandledConditions(final IRule rule, final IRule originalRule,
+			final List<ICondition> handledConditions) {
 		boolean fSame = true;
 
 		for (final ICondition condition : handledConditions) {
-			final IConditionValue conditionValue = rule
-					.getConditionValue(condition);
-			final IConditionValue originalConditionValue = originalRule
-					.getConditionValue(condition);
+			final IConditionValue conditionValue = rule.getConditionValue(condition);
+			final IConditionValue originalConditionValue = originalRule.getConditionValue(condition);
 			if (!conditionValue.equals(originalConditionValue)) {
 				fSame = false;
 				break;
@@ -664,17 +638,14 @@ public class DecisionTable extends JDTModel implements IDecisionTable {
 		return fSame;
 	}
 
-	private boolean sameHandledConditions(final IRule nonReducedRule,
-			final IRule possibleReducedRule,
+	private boolean sameHandledConditions(final IRule nonReducedRule, final IRule possibleReducedRule,
 			final List<ICondition> handledConditions) {
 		boolean fSame = true;
 
 		for (final ICondition condition : handledConditions) {
-			if (!(nonReducedRule.getConditionValue(condition).equals(
-					possibleReducedRule.getConditionValue(condition)) || possibleReducedRule
-					.getConditionValue(condition).equals(
-							possibleReducedRule.getConditionValue(condition)
-									.getInitialValue()))) {
+			if (!(nonReducedRule.getConditionValue(condition).equals(possibleReducedRule.getConditionValue(condition))
+					|| possibleReducedRule.getConditionValue(condition)
+							.equals(possibleReducedRule.getConditionValue(condition).getInitialValue()))) {
 				fSame = false;
 				break;
 			}
@@ -687,8 +658,7 @@ public class DecisionTable extends JDTModel implements IDecisionTable {
 		boolean fEquals = true;
 
 		for (final IAction action : actions) {
-			if (!rule1.getActionValue(action).equals(
-					rule2.getActionValue(action))) {
+			if (!rule1.getActionValue(action).equals(rule2.getActionValue(action))) {
 				fEquals = false;
 				break;
 			}
@@ -765,11 +735,9 @@ public class DecisionTable extends JDTModel implements IDecisionTable {
 		split();
 		for (final IRule possibleReducedRule : possibleReducedRules) {
 			for (final IRule nonReducedRule : rules) {
-				if (sameHandledConditions(nonReducedRule, possibleReducedRule,
-						getConditions())) {
+				if (sameHandledConditions(nonReducedRule, possibleReducedRule, getConditions())) {
 					for (final IAction action : actions) {
-						nonReducedRule.setActionValue(action,
-								possibleReducedRule.getActionValue(action));
+						nonReducedRule.setActionValue(action, possibleReducedRule.getActionValue(action));
 					}
 				}
 			}
@@ -878,8 +846,7 @@ public class DecisionTable extends JDTModel implements IDecisionTable {
 
 	// @Override
 	@Override
-	public IDecisionTable getSubtable(final int[] requestedConditions,
-			final int[] requestedActions) {
+	public IDecisionTable getSubtable(final int[] requestedConditions, final int[] requestedActions) {
 		final IDecisionTable subtable = new DecisionTable();
 
 		{
@@ -904,8 +871,7 @@ public class DecisionTable extends JDTModel implements IDecisionTable {
 
 		{
 			for (final IRule subtableRule : subtable.getRules()) {
-				final Map<ICondition, IConditionValue> conditions = subtableRule
-						.getConditions();
+				final Map<ICondition, IConditionValue> conditions = subtableRule.getConditions();
 
 				final List<IRule> interestingRules = getRules(conditions);
 
@@ -933,16 +899,13 @@ public class DecisionTable extends JDTModel implements IDecisionTable {
 	}
 
 	@Override
-	public List<IRule> getRules(
-			final Map<ICondition, IConditionValue> certainConditions) {
+	public List<IRule> getRules(final Map<ICondition, IConditionValue> certainConditions) {
 		final List<IRule> certainConditionRules = new ArrayList<IRule>();
 
 		for (final IRule rule : rules) {
 			boolean sameConditions = true;
-			for (final Map.Entry<ICondition, IConditionValue> conditionEntry : certainConditions
-					.entrySet()) {
-				if (!conditionEntry.getValue().equals(
-						rule.getConditionValue(conditionEntry.getKey()))) {
+			for (final Map.Entry<ICondition, IConditionValue> conditionEntry : certainConditions.entrySet()) {
+				if (!conditionEntry.getValue().equals(rule.getConditionValue(conditionEntry.getKey()))) {
 					sameConditions = false;
 					break;
 				}
@@ -980,11 +943,9 @@ public class DecisionTable extends JDTModel implements IDecisionTable {
 			if (rule2 != null) {
 				rules.remove(rule2);
 				for (final IAction action : actions) {
-					if (!rule1.getActionValue(action).equals(
-							rule2.getActionValue(action))) {
+					if (!rule1.getActionValue(action).equals(rule2.getActionValue(action))) {
 						// Different values so make them unknown.
-						final IValue value = rule1.getActionValue(action)
-								.getInitialValue();
+						final IValue value = rule1.getActionValue(action).getInitialValue();
 						rule1.setActionValue(action, value);
 					}
 				}
@@ -1006,8 +967,7 @@ public class DecisionTable extends JDTModel implements IDecisionTable {
 
 	@Override
 	public void propertyChange(final PropertyChangeEvent propertyChangeEvent) {
-		logger.debug("propertyChange on " + getClass().getName() + ":"
-				+ propertyChangeEvent.getPropertyName());
+		logger.debug("propertyChange on " + getClass().getName() + ":" + propertyChangeEvent.getPropertyName());
 		fire();
 	}
 
@@ -1072,7 +1032,7 @@ public class DecisionTable extends JDTModel implements IDecisionTable {
 
 	public void setGroups(final List<IGroup> groups) {
 		groups.addAll(groups);
-		
+
 		logger.debug("END setConditionGroups(List<IGroup> groups)");
 	}
 
@@ -1144,8 +1104,7 @@ public class DecisionTable extends JDTModel implements IDecisionTable {
 	}
 
 	@Override
-	public IDecisionTable setActionValues(final IRule rule,
-			final IValue... actions) {
+	public IDecisionTable setActionValues(final IRule rule, final IValue... actions) {
 		if (actions.length != this.actions.size()) {
 			throw new DTException("Incorrect number of actions");
 		}
@@ -1183,8 +1142,7 @@ public class DecisionTable extends JDTModel implements IDecisionTable {
 	}
 
 	@Override
-	public IDecisionTable setActionValues(final IValue value,
-			final IAction action) {
+	public IDecisionTable setActionValues(final IValue value, final IAction action) {
 		for (final IRule rule : rules) {
 			rule.setActionValue(action, value);
 		}
@@ -1193,15 +1151,28 @@ public class DecisionTable extends JDTModel implements IDecisionTable {
 	}
 
 	@Override
-	public boolean sameConditions(final IRule rule,
-			final IConditionValue... conditionValues) {
+	public boolean sameConditions(final IRule rule, final IConditionValue... conditionValues) {
 		if (conditionValues.length != this.tableConditions.size()) {
 			throw new DTException("Incorrect number of conditions");
 		}
 
 		for (int index = 0; index < conditionValues.length; index++) {
-			if (!rule.getConditionValue(getConditions().get(index)).equals(
-					conditionValues[index])) {
+			if (!rule.getConditionValue(getConditions().get(index)).equals(conditionValues[index])) {
+				return false;
+			}
+		}
+
+		return true;
+	}
+
+	@Override
+	public boolean sameConditions(final IRule rule, final List<IConditionValue> conditionValues) {
+		if (conditionValues.size() != this.tableConditions.size()) {
+			throw new DTException("Incorrect number of conditions");
+		}
+
+		for (int index = 0; index < conditionValues.size(); index++) {
+			if (!rule.getConditionValue(getConditions().get(index)).equals(conditionValues.get(index))) {
 				return false;
 			}
 		}
@@ -1212,10 +1183,39 @@ public class DecisionTable extends JDTModel implements IDecisionTable {
 	private IValue defaultActionValue = BinaryActionValue.UNKNOWN;
 
 	@Override
-	public IDecisionTable setDefaultActionValue(
-			final BinaryActionValue binaryActionValue) {
+	public IDecisionTable setDefaultActionValue(final BinaryActionValue binaryActionValue) {
 		this.defaultActionValue = binaryActionValue;
 
 		return this;
+	}
+
+	@Override
+	public IRule getRule(final List<IConditionValue> conditions) {
+		if (conditions.size() != this.tableConditions.size()) {
+			throw new DTException("Incorrect number of conditions");
+		}
+
+		for (final IRule rule : rules) {
+			if (sameConditions(rule, conditions)) {
+				if (isInvalid(rule)) {
+					return null;
+				} else {
+					return rule;
+				}
+			}
+		}
+
+		return null;
+	}
+
+	@Override
+	public List<IConditionValue> getConditionValues(final IRule irule) {
+		final List<IConditionValue> conditionValues = new ArrayList<>();
+
+		this.tableConditions.stream().forEach(condition -> {
+			conditionValues.add(irule.getConditionValue(condition));
+		});
+
+		return conditionValues;
 	}
 }
