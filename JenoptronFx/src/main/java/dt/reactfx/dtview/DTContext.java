@@ -2,35 +2,24 @@ package dt.reactfx.dtview;
 
 import jdt.icore.IAction;
 import jdt.icore.ICondition;
-import jdt.icore.IRule;
 
 public class DTContext {
-	private final ICondition iCondition;
-	private final IAction iAction;
-	private final IRule iRule;
 	private final int cellX;
 	private final int cellY;
+	private final Cell cell;
 
-	public DTContext(final int cellX, final int cellY, final IRule iRule, final ICondition iCondition,
-			final IAction iAction) {
-		super();
-		this.cellX = cellX;
-		this.cellY = cellY;
-		this.iRule = iRule;
-		this.iCondition = iCondition;
-		this.iAction = iAction;
+	public DTContext(final int cell_x, final int cell_y, final Cell cell) {
+		cellX = cell_x;
+		cellY = cell_y;
+		this.cell = cell;
 	}
 
 	public final ICondition getiCondition() {
-		return iCondition;
+		return getCell().getCondition();
 	}
 
 	public final IAction getiAction() {
-		return iAction;
-	}
-
-	public IRule getiRule() {
-		return iRule;
+		return getCell().getAction();
 	}
 
 	public int getCellX() {
@@ -39,5 +28,9 @@ public class DTContext {
 
 	public int getCellY() {
 		return cellY;
+	}
+
+	public Cell getCell() {
+		return cell;
 	}
 }

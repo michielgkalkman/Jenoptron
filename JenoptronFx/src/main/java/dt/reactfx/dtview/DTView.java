@@ -52,29 +52,32 @@ public class DTView {
 
 		final int textWidth = 100;
 		final Column textColumn = new Column(textWidth);
-		textColumn.addCell(new Cell(textWidth, row_height, this));
+		textColumn.addCell(new Cell(textWidth, row_height, this, CellType.ROOTCELL));
 		iDecisionTable.getConditions().stream().forEach(condition -> {
-			textColumn.addCell(new Cell(textWidth, row_height, condition, condition.getShortDescription(), this));
+			textColumn.addCell(new Cell(textWidth, row_height, condition, condition.getShortDescription(), this,
+					CellType.CONDITION_SHORTDESCRIPTION));
 		});
 
 		iDecisionTable.getActions().stream().forEach(action -> {
-			textColumn.addCell(new Cell(textWidth, row_height, action, action.getShortDescription(), this));
+			textColumn.addCell(new Cell(textWidth, row_height, action, action.getShortDescription(), this,
+					CellType.ACTION_SHORTDESCRIPTION));
 		});
 		tmpColumns.add(textColumn);
 
 		iDecisionTable.getAllRules().stream().forEach(irule -> {
 			final Column column = new Column(column_width);
 
-			column.addCell(new Cell(column_width, row_height, this));
+			column.addCell(new Cell(column_width, row_height, this, CellType.RULE_HEADER));
 
 			iDecisionTable.getConditions().stream().forEach(condition -> {
 				column.addCell(new Cell(column_width, row_height, condition,
-						(BinaryConditionValue) irule.getConditionValue(condition), irule, this));
+						(BinaryConditionValue) irule.getConditionValue(condition), irule, this,
+						CellType.CONDITION_VALUE));
 			});
 
 			iDecisionTable.getActions().stream().forEach(action -> {
 				column.addCell(new Cell(column_width, row_height, action,
-						(BinaryActionValue) irule.getActionValue(action), irule, this));
+						(BinaryActionValue) irule.getActionValue(action), irule, this, CellType.ACTION_VALUE));
 			});
 
 			tmpColumns.add(column);
@@ -322,8 +325,7 @@ public class DTView {
 
 						if (y >= sceneY) {
 							// Found cell.
-							tmpDTContext = new DTContext(cell_x, cell_y, cell.getiRule(), cell.getCondition(),
-									cell.getAction());
+							tmpDTContext = new DTContext(cell_x, cell_y, cell);
 
 							return tmpDTContext;
 						}

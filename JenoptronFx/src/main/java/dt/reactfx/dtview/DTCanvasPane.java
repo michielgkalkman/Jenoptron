@@ -49,20 +49,38 @@ public class DTCanvasPane extends Pane {
 					// Outside the DT.
 					final MenuItem outside = new MenuItem("Outside");
 					items.addAll(outside);
-				} else if (dtContext.getiRule() == null) {
-					final MenuItem outside = new MenuItem("Text");
-					items.addAll(outside);
-				} else if (dtContext.getiAction() != null) {
-					final MenuItem outside = new MenuItem("Action");
-					items.addAll(outside);
-				} else if (dtContext.getiCondition() != null) {
-					final MenuItem outside = new MenuItem("Condition");
-					items.addAll(outside);
 				} else {
-					// Outside the DT.
-					final MenuItem outside = new MenuItem("Outside");
-					items.addAll(outside);
+					switch (dtContext.getCell().getCellType()) {
+					case ROOTCELL: {
+						final MenuItem outside = new MenuItem(dtContext.getCell().getCellType().name());
+						items.addAll(outside);
+						break;
+					}
+					default: {
+						final MenuItem outside = new MenuItem(dtContext.getCell().getCellType().name());
+						items.addAll(outside);
+					}
+					}
 				}
+
+				// if (dtContext == null) {
+				// // Outside the DT.
+				// final MenuItem outside = new MenuItem("Outside");
+				// items.addAll(outside);
+				// } else if (dtContext.getiRule() == null) {
+				// final MenuItem outside = new MenuItem("Text");
+				// items.addAll(outside);
+				// } else if (dtContext.getiAction() != null) {
+				// final MenuItem outside = new MenuItem("Action");
+				// items.addAll(outside);
+				// } else if (dtContext.getiCondition() != null) {
+				// final MenuItem outside = new MenuItem("Condition");
+				// items.addAll(outside);
+				// } else {
+				// // Outside the DT.
+				// final MenuItem outside = new MenuItem("Outside");
+				// items.addAll(outside);
+				// }
 
 				contextMenu.show(canvas, event.getScreenX(), event.getScreenY());
 			} else {

@@ -15,27 +15,32 @@ public class Cell {
 	private final double height;
 	private final double width;
 	private final String shortDescription;
+	private final CellType cellType;
 
 	private final DTView dtView;
 
 	public Cell(final double width, final double height, final IAction action,
-			final BinaryActionValue binaryActionValue, final IRule iRule, final DTView dtView) {
+			final BinaryActionValue binaryActionValue, final IRule iRule, final DTView dtView,
+			final CellType cellType) {
 		this.width = width;
 		this.height = height;
 		this.action = action;
 		this.binaryActionValue = binaryActionValue;
 		this.iRule = iRule;
 		this.dtView = dtView;
+		this.cellType = cellType;
 		this.condition = null;
 		this.binaryConditionValue = null;
 		this.shortDescription = null;
 	}
 
 	public Cell(final int width, final int height, final ICondition condition,
-			final BinaryConditionValue binaryConditionValue, final IRule iRule, final DTView dtView) {
+			final BinaryConditionValue binaryConditionValue, final IRule iRule, final DTView dtView,
+			final CellType cellType) {
 		this.width = width;
 		this.height = height;
 		this.iRule = iRule;
+		this.cellType = cellType;
 		this.action = null;
 		this.binaryActionValue = null;
 		this.dtView = dtView;
@@ -44,9 +49,10 @@ public class Cell {
 		this.shortDescription = null;
 	}
 
-	public Cell(final int width, final int height, final DTView dtView) {
+	public Cell(final int width, final int height, final DTView dtView, final CellType cellType) {
 		this.width = width;
 		this.height = height;
+		this.cellType = cellType;
 		this.action = null;
 		this.binaryActionValue = null;
 		this.dtView = dtView;
@@ -59,7 +65,7 @@ public class Cell {
 	private Cell(final double width, final double height, final IAction action,
 			final BinaryActionValue binaryActionValue, final ICondition condition,
 			final BinaryConditionValue binaryConditionValue, final String shortDescription, final IRule iRule,
-			final DTView dtView) {
+			final DTView dtView, final CellType cellType) {
 		this.width = width;
 		this.height = height;
 		this.action = action;
@@ -69,12 +75,14 @@ public class Cell {
 		this.iRule = iRule;
 		this.dtView = dtView;
 		this.shortDescription = shortDescription;
+		this.cellType = cellType;
 	}
 
 	public Cell(final int width, final int height, final ICondition condition, final String shortDescription,
-			final DTView dtView) {
+			final DTView dtView, final CellType cellType) {
 		this.width = width;
 		this.height = height;
+		this.cellType = cellType;
 		this.action = null;
 		this.binaryActionValue = null;
 		this.condition = condition;
@@ -85,10 +93,11 @@ public class Cell {
 	}
 
 	public Cell(final int width, final int height, final IAction action, final String shortDescription,
-			final DTView dtView) {
+			final DTView dtView, final CellType cellType) {
 		this.width = width;
 		this.height = height;
 		this.action = action;
+		this.cellType = cellType;
 		this.binaryActionValue = null;
 		this.condition = null;
 		this.binaryConditionValue = null;
@@ -103,7 +112,7 @@ public class Cell {
 
 	public Cell enlarge(final double factor) {
 		return new Cell(width * factor, height * factor, getAction(), binaryActionValue, condition,
-				binaryConditionValue, shortDescription, iRule, dtView);
+				binaryConditionValue, shortDescription, iRule, dtView, cellType);
 	}
 
 	public IAction getAction() {
@@ -132,5 +141,9 @@ public class Cell {
 
 	public IRule getiRule() {
 		return iRule;
+	}
+
+	public CellType getCellType() {
+		return cellType;
 	}
 }
