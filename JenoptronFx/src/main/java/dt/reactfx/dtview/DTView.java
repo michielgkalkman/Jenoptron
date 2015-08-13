@@ -392,7 +392,19 @@ public class DTView {
 	}
 
 	public DTView setSelectedToDont() {
-		// TODO Auto-generated method stub
-		return null;
+		final DTView newDTView;
+
+		if (columns.stream().anyMatch(column -> column.isAnyActionSelected())) {
+			newDTView = runOnSelected(this, (cell, idecisiontable) -> {
+				final IRule irule = cell.getiRule();
+				final IRule rule = idecisiontable.getRule(iDecisionTable.getConditionValues(irule));
+
+				rule.setActionValue(cell.getAction(), BinaryActionValue.DONT);
+			});
+		} else {
+			newDTView = this;
+		}
+
+		return newDTView;
 	}
 }
