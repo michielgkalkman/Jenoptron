@@ -23,7 +23,6 @@ import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
 import jdt.core.binary.BinaryActionValue;
 import jdt.core.binary.BinaryConditionValue;
-import jdt.icore.IConditionValue;
 import jdt.icore.IDecisionTable;
 import jdt.icore.IRule;
 
@@ -205,7 +204,7 @@ public class DTView {
 			imageView.setSmooth(true);
 
 			final Pane pane = new Pane(imageView);
-			final Scene offScreenScene = new Scene(pane);
+			new Scene(pane);
 			final WritableImage snapshot2 = imageView.snapshot(parameters, null);
 
 			final WritableImage croppedImage = new WritableImage(snapshot2.getPixelReader(), 0, 0, (int) minWidth,
@@ -338,30 +337,6 @@ public class DTView {
 		return dtContext;
 	}
 
-	public DTView setSelectedToDo() {
-		final DTView newDTView;
-
-		if (columns.stream().anyMatch(column -> column.isAnyActionSelected())) {
-			final IDecisionTable deepcopy = iDecisionTable.deepcopy();
-
-			columns.stream().forEach(column -> {
-				column.getCells().stream().filter(cell -> cell.isSelected()).forEach(cell -> {
-					final IRule irule = cell.getiRule();
-					final List<IConditionValue> conditionValues = this.iDecisionTable.getConditionValues(irule);
-					final IRule rule = deepcopy.getRule(iDecisionTable.getConditionValues(irule));
-
-					rule.setActionValue(cell.getAction(), BinaryActionValue.DO);
-				});
-			});
-
-			newDTView = new DTView(deepcopy, font, start_dt_w, start_dt_h);
-		} else {
-			newDTView = this;
-		}
-
-		return newDTView;
-	}
-
 	public DTView toggleSelected(final Cell cell) {
 		final List<Column> newColumns = new ArrayList<>();
 
@@ -380,5 +355,44 @@ public class DTView {
 	public DTView split() {
 		final IDecisionTable reduce = this.iDecisionTable.split();
 		return new DTView(reduce, font);
+	}
+
+	@FunctionalInterface
+	interface CellRunner {
+		void run(Cell cell, IDecisionTable decisionTable);
+	}
+
+	private DTView runOnSelected(final DTView dtView, final CellRunner cellRunner) {
+		final IDecisionTable deepcopy = iDecisionTable.deepcopy();
+
+		columns.stream().forEach(column -> {
+			column.getCells().stream().filter(cell -> cell.isSelected()).forEach(cell -> {
+				cellRunner.run(cell, deepcopy);
+			});
+		});
+
+		return new DTView(deepcopy, font, start_dt_w, start_dt_h);
+	}
+
+	public DTView setSelectedToDo() {
+		final DTView newDTView;
+
+		if (columns.stream().anyMatch(column -> column.isAnyActionSelected())) {
+			newDTView = runOnSelected(this, (cell, idecisiontable) -> {
+				final IRule irule = cell.getiRule();
+				final IRule rule = idecisiontable.getRule(iDecisionTable.getConditionValues(irule));
+
+				rule.setActionValue(cell.getAction(), BinaryActionValue.DO);
+			});
+		} else {
+			newDTView = this;
+		}
+
+		return newDTView;
+	}
+
+	public DTView setSelectedToDont() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

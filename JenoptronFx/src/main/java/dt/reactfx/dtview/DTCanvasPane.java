@@ -112,6 +112,8 @@ public class DTCanvasPane extends Pane {
 				dtView = dtView.split();
 			} else if (KeyCode.T.equals(code)) {
 				dtView = dtView.setSelectedToDo();
+			} else if (KeyCode.F.equals(code)) {
+				dtView = dtView.setSelectedToDont();
 			} else {
 				System.out.println(code.getName());
 			}
