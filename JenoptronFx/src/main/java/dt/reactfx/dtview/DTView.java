@@ -23,7 +23,9 @@ import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
 import jdt.core.binary.BinaryActionValue;
 import jdt.core.binary.BinaryConditionValue;
+import jdt.icore.IConditionValue;
 import jdt.icore.IDecisionTable;
+import jdt.icore.IRule;
 
 public class DTView {
 	private static final Paint PAINT_RESOLVED = Paint.valueOf(Color.KHAKI.toString());
@@ -44,6 +46,22 @@ public class DTView {
 	private final double start_dt_h;
 
 	public DTView(final IDecisionTable iDecisionTable, final Font font) {
+		this(iDecisionTable, font, 0.0, 0.0);
+	}
+
+	private DTView(final IDecisionTable iDecisionTable, final Font font, final List<Column> newColumns,
+			final double start_dt_w, final double start_dt_h) {
+		this.iDecisionTable = iDecisionTable;
+		this.font = font;
+
+		columns = Collections.unmodifiableList(newColumns);
+
+		this.start_dt_w = start_dt_w;
+		this.start_dt_h = start_dt_h;
+	}
+
+	private DTView(final IDecisionTable iDecisionTable, final Font font, final double start_dt_w,
+			final double start_dt_h) {
 		this.iDecisionTable = iDecisionTable;
 		this.font = font;
 
@@ -87,17 +105,6 @@ public class DTView {
 
 		this.start_dt_w = 0.0;
 		this.start_dt_h = 0.0;
-	}
-
-	private DTView(final IDecisionTable iDecisionTable, final Font font, final List<Column> newColumns,
-			final double start_dt_w, final double start_dt_h) {
-		this.iDecisionTable = iDecisionTable;
-		this.font = font;
-
-		columns = Collections.unmodifiableList(newColumns);
-
-		this.start_dt_w = start_dt_w;
-		this.start_dt_h = start_dt_h;
 	}
 
 	public DTContext getContext(final double sceneX, final double sceneY) {
@@ -332,8 +339,27 @@ public class DTView {
 	}
 
 	public DTView setSelectedToDo() {
-		// TODO Auto-generated method stub
-		return null;
+		final DTView newDTView;
+
+		if (columns.stream().anyMatch(column -> column.isAnyActionSelected())) {
+			final IDecisionTable deepcopy = iDecisionTable.deepcopy();
+
+			columns.stream().forEach(column -> {
+				column.getCells().stream().filter(cell -> cell.isSelected()).forEach(cell -> {
+					final IRule irule = cell.getiRule();
+					final List<IConditionValue> conditionValues = this.iDecisionTable.getConditionValues(irule);
+					final IRule rule = deepcopy.getRule(iDecisionTable.getConditionValues(irule));
+
+					rule.setActionValue(cell.getAction(), BinaryActionValue.DO);
+				});
+			});
+
+			newDTView = new DTView(deepcopy, font, start_dt_w, start_dt_h);
+		} else {
+			newDTView = this;
+		}
+
+		return newDTView;
 	}
 
 	public DTView toggleSelected(final Cell cell) {

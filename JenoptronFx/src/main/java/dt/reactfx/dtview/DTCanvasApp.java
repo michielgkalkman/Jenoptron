@@ -54,7 +54,7 @@ public class DTCanvasApp extends Application {
 		{
 			final IAction action = new BinaryAction();
 			decisionTable.add(action);
-			decisionTable.setActionValues(BinaryActionValue.DO);
+			decisionTable.setActionValues(BinaryActionValue.UNKNOWN);
 		}
 
 		decisionTable.split();

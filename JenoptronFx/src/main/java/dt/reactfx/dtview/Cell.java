@@ -176,4 +176,8 @@ public class Cell {
 		}
 		return newCell;
 	}
+
+	public boolean isSelectedAction() {
+		return action != null && fSelected;
+	}
 }

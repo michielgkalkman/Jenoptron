@@ -1,6 +1,7 @@
 package dt.reactfx.dtview;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class Column {
@@ -40,13 +41,21 @@ public class Column {
 	}
 
 	public Column toggleSelect(final Cell newCell) {
-		final List<Cell> newCells = new ArrayList<>();
+		final Column newColumn;
+		if (cells.stream().anyMatch(cell -> cell.equals(newCell))) {
+			final List<Cell> newCells = new ArrayList<>();
+			cells.stream().forEach(cell -> {
+				newCells.add(cell.toggleSelect(newCell));
+			});
+			newColumn = new Column(width, Collections.unmodifiableList(newCells));
+		} else {
+			newColumn = this;
+		}
 
-		cells.stream().forEach(cell -> {
-			newCells.add(cell.toggleSelect(newCell));
-		});
-
-		return new Column(width, newCells);
+		return newColumn;
 	}
 
+	public boolean isAnyActionSelected() {
+		return cells.stream().anyMatch(cell -> cell.isSelectedAction());
+	}
 }
