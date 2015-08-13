@@ -384,18 +384,34 @@ public class DTView {
 	public DTView setSelectedToDo() {
 		return runOnSelected(this, (cell, idecisiontable) -> {
 			final IRule irule = cell.getiRule();
-			final IRule rule = idecisiontable.getRule(iDecisionTable.getConditionValues(irule));
+			if (irule != null) {
+				final IRule rule = idecisiontable.getRule(iDecisionTable.getConditionValues(irule));
 
-			rule.setActionValue(cell.getAction(), BinaryActionValue.DO);
+				rule.setActionValue(cell.getAction(), BinaryActionValue.DO);
+			}
 		});
 	}
 
 	public DTView setSelectedToDont() {
 		return runOnSelected(this, (cell, idecisiontable) -> {
 			final IRule irule = cell.getiRule();
-			final IRule rule = idecisiontable.getRule(iDecisionTable.getConditionValues(irule));
+			if (irule != null) {
+				final IRule rule = idecisiontable.getRule(iDecisionTable.getConditionValues(irule));
 
-			rule.setActionValue(cell.getAction(), BinaryActionValue.DONT);
+				rule.setActionValue(cell.getAction(), BinaryActionValue.DONT);
+			}
 		});
+	}
+
+	public DTView toggleSelectedRow(final Cell cell) {
+		final boolean selected = !cell.isSelected();
+
+		final List<Column> newColumns = new ArrayList<>();
+
+		columns.stream().forEach(column -> {
+			newColumns.add(column.setSelected(cell, selected));
+		});
+
+		return new DTView(iDecisionTable, font, newColumns, start_dt_w, start_dt_h);
 	}
 }

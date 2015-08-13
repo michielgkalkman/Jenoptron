@@ -74,7 +74,15 @@ public class DTCanvasPane extends Pane {
 				} else if (event.isPrimaryButtonDown()) {
 					final DTContext dtContext = dtView.getDTContext(event.getSceneX(), event.getSceneY());
 					if (dtContext != null) {
-						dtView = dtView.toggleSelected(dtContext.getCell());
+						if (event.isAltDown()) {
+							final CellType cellType = dtContext.getCell().getCellType();
+							if (cellType == CellType.ACTION_SHORTDESCRIPTION
+									|| cellType == CellType.CONDITION_SHORTDESCRIPTION) {
+								dtView = dtView.toggleSelectedRow(dtContext.getCell());
+							}
+						} else {
+							dtView = dtView.toggleSelected(dtContext.getCell());
+						}
 					}
 					this.dtViewCanvasRedrawTask.redraw(canvas.getGraphicsContext2D(), dtView);
 				} else {

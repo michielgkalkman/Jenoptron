@@ -180,4 +180,15 @@ public class Cell {
 	public boolean isSelectedAction() {
 		return action != null && fSelected;
 	}
+
+	public Cell setSelected(final boolean selected) {
+		final Cell newCell;
+		if (this.fSelected == selected) {
+			newCell = this; // cell is intended to be immutable
+		} else {
+			newCell = new Cell(width, height, action, binaryActionValue, condition, binaryConditionValue,
+					shortDescription, iRule, dtView, cellType, selected);
+		}
+		return newCell;
+	}
 }

@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import jdt.icore.IAction;
+import jdt.icore.ICondition;
+
 public class Column {
 	private final double width;
 	private final List<Cell> cells;
@@ -57,5 +60,42 @@ public class Column {
 
 	public boolean isAnyActionSelected() {
 		return cells.stream().anyMatch(cell -> cell.isSelectedAction());
+	}
+
+	public Column setSelected(final Cell cell, final boolean selected) {
+		final Column newColumn;
+		final IAction action = cell.getAction();
+		if (action == null) {
+			final ICondition condition = cell.getCondition();
+
+			if (condition == null) {
+				final List<Cell> newCells = new ArrayList<>();
+
+				cells.stream().forEach(c -> {
+					if (condition.equals(c.getCondition())) {
+						newCells.add(c.setSelected(selected));
+					} else {
+						newCells.add(c);
+					}
+				});
+
+				newColumn = new Column(width, Collections.unmodifiableList(newCells));
+			} else {
+				newColumn = this;
+			}
+		} else {
+			final List<Cell> newCells = new ArrayList<>();
+
+			cells.stream().forEach(c -> {
+				if (action.equals(c.getAction())) {
+					newCells.add(c.setSelected(selected));
+				} else {
+					newCells.add(c);
+				}
+			});
+			newColumn = new Column(width, Collections.unmodifiableList(newCells));
+		}
+
+		return newColumn;
 	}
 }
