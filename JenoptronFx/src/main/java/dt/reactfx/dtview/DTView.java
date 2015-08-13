@@ -363,48 +363,39 @@ public class DTView {
 	}
 
 	private DTView runOnSelected(final DTView dtView, final CellRunner cellRunner) {
-		final IDecisionTable deepcopy = iDecisionTable.deepcopy();
+		final DTView newDTView;
+		if (columns.stream().anyMatch(column -> column.isAnyActionSelected())) {
+			final IDecisionTable deepcopy = iDecisionTable.deepcopy();
 
-		columns.stream().forEach(column -> {
-			column.getCells().stream().filter(cell -> cell.isSelected()).forEach(cell -> {
-				cellRunner.run(cell, deepcopy);
+			columns.stream().forEach(column -> {
+				column.getCells().stream().filter(cell -> cell.isSelected()).forEach(cell -> {
+					cellRunner.run(cell, deepcopy);
+				});
 			});
-		});
 
-		return new DTView(deepcopy, font, start_dt_w, start_dt_h);
+			newDTView = new DTView(deepcopy, font, start_dt_w, start_dt_h);
+		} else {
+			newDTView = this;
+		}
+
+		return newDTView;
 	}
 
 	public DTView setSelectedToDo() {
-		final DTView newDTView;
+		return runOnSelected(this, (cell, idecisiontable) -> {
+			final IRule irule = cell.getiRule();
+			final IRule rule = idecisiontable.getRule(iDecisionTable.getConditionValues(irule));
 
-		if (columns.stream().anyMatch(column -> column.isAnyActionSelected())) {
-			newDTView = runOnSelected(this, (cell, idecisiontable) -> {
-				final IRule irule = cell.getiRule();
-				final IRule rule = idecisiontable.getRule(iDecisionTable.getConditionValues(irule));
-
-				rule.setActionValue(cell.getAction(), BinaryActionValue.DO);
-			});
-		} else {
-			newDTView = this;
-		}
-
-		return newDTView;
+			rule.setActionValue(cell.getAction(), BinaryActionValue.DO);
+		});
 	}
 
 	public DTView setSelectedToDont() {
-		final DTView newDTView;
+		return runOnSelected(this, (cell, idecisiontable) -> {
+			final IRule irule = cell.getiRule();
+			final IRule rule = idecisiontable.getRule(iDecisionTable.getConditionValues(irule));
 
-		if (columns.stream().anyMatch(column -> column.isAnyActionSelected())) {
-			newDTView = runOnSelected(this, (cell, idecisiontable) -> {
-				final IRule irule = cell.getiRule();
-				final IRule rule = idecisiontable.getRule(iDecisionTable.getConditionValues(irule));
-
-				rule.setActionValue(cell.getAction(), BinaryActionValue.DONT);
-			});
-		} else {
-			newDTView = this;
-		}
-
-		return newDTView;
+			rule.setActionValue(cell.getAction(), BinaryActionValue.DONT);
+		});
 	}
 }
