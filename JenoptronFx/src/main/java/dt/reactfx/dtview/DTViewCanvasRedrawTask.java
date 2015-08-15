@@ -45,7 +45,10 @@ public class DTViewCanvasRedrawTask extends CanvasRedrawTask<DTView> {
 			final double start_w, final double start_h) {
 		if (cell.isSelected()) {
 			graphicsContext.setFill(Paint.valueOf(Color.WHITE.toString()));
+			final double globalAlpha = graphicsContext.getGlobalAlpha();
+			graphicsContext.setGlobalAlpha(0.3);
 			graphicsContext.fillRect(start_w, start_h, cell.getWidth(), cell.getHeight());
+			graphicsContext.setGlobalAlpha(globalAlpha);
 		}
 		if (cell.getShortDescription() == null) {
 			if (cell.getAction() != null) {
