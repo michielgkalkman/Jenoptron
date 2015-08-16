@@ -39,6 +39,7 @@ public class DTCanvasApp extends Application {
 		masterDetailPane.setMasterNode(dtCanvasPane);
 		masterDetailPane.setDetailNode(dtDetailsPane);
 		masterDetailPane.setDetailSide(Side.BOTTOM);
+		masterDetailPane.setMinHeight(350.0);
 		masterDetailPane.setShowDetailNode(true);
 
 		final Scene scene = new Scene(masterDetailPane, Color.YELLOW);
