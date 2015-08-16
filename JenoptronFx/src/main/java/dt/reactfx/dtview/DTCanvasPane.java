@@ -83,7 +83,7 @@ public class DTCanvasPane extends Pane {
 							}
 						} else if (cellType == CellType.ACTION_SHORTDESCRIPTION
 								|| cellType == CellType.CONDITION_SHORTDESCRIPTION) {
-
+							getDtView().set(getDtView().get().toggleSelected(dtContext.getCell()));
 						} else {
 							getDtView().set(getDtView().get().toggleSelected(dtContext.getCell()));
 						}

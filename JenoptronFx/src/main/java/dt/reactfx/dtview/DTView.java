@@ -414,4 +414,16 @@ public class DTView {
 
 		return new DTView(iDecisionTable, font, newColumns, start_dt_w, start_dt_h);
 	}
+
+	public List<Cell> getSelectedCells() {
+		final List<Cell> selectedCells = new ArrayList<>();
+
+		columns.parallelStream().forEach(column -> {
+			column.getCells().stream().filter(cell -> cell.isSelected()).forEach(cell -> {
+				selectedCells.add(cell);
+			});
+		});
+
+		return selectedCells;
+	}
 }
