@@ -395,10 +395,10 @@ public class DTView {
 	public DTView setSelectedToDont() {
 		return runOnSelected(this, (cell, idecisiontable) -> {
 			final IRule irule = cell.getiRule();
-			if( irule != null) {
-			final IRule rule = idecisiontable.getRule(iDecisionTable.getConditionValues(irule));
+			if (irule != null) {
+				final IRule rule = idecisiontable.getRule(iDecisionTable.getConditionValues(irule));
 
-			rule.setActionValue(cell.getAction(), BinaryActionValue.DONT);
+				rule.setActionValue(cell.getAction(), BinaryActionValue.DONT);
 			}
 		});
 	}
