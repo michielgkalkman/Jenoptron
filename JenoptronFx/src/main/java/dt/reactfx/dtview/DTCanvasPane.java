@@ -32,8 +32,7 @@ public class DTCanvasPane extends Pane {
 	private ContextMenu contextMenu;
 
 	public DTCanvasPane(final IDecisionTable iDecisionTable, final Font font) {
-		final DTView dtView2 = new DTView(iDecisionTable, font);
-		this.dtView = dtView2.enlarge(0.5);
+		dtView = new DTView(iDecisionTable, font);
 
 		getChildren().add(canvas);
 

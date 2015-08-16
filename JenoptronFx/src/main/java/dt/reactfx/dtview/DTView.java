@@ -31,8 +31,8 @@ public class DTView {
 	private static final Paint PAINT_NO = Paint.valueOf(Color.INDIANRED.toString());
 	private static final Paint PAINT_YES = Paint.valueOf(Color.DARKOLIVEGREEN.toString());
 
-	private static final int row_height = 40;
-	private static final int column_width = 40;
+	private static final int row_height = 20;
+	private static final int column_width = 20;
 	private final IDecisionTable iDecisionTable;
 	private final List<Column> columns;
 	private final Font font;
