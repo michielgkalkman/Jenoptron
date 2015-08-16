@@ -7,6 +7,8 @@ import org.reactfx.EventStream;
 import org.reactfx.EventStreams;
 import org.reactfx.util.Either;
 
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.ObservableList;
 import javafx.geometry.Point2D;
 import javafx.scene.canvas.Canvas;
@@ -27,12 +29,12 @@ import jdt.icore.IDecisionTable;
 
 public class DTCanvasPane extends Pane {
 	private final Canvas canvas = new Canvas();
-	private DTView dtView;
+	private final ObjectProperty<DTView> dtView = new SimpleObjectProperty<>();
 
 	private ContextMenu contextMenu;
 
 	public DTCanvasPane(final IDecisionTable iDecisionTable, final Font font) {
-		dtView = new DTView(iDecisionTable, font);
+		getDtView().set(new DTView(iDecisionTable, font));
 
 		getChildren().add(canvas);
 
@@ -48,7 +50,7 @@ public class DTCanvasPane extends Pane {
 					}
 
 					contextMenu = new ContextMenu();
-					final DTContext dtContext = dtView.getDTContext(event.getSceneX(), event.getSceneY());
+					final DTContext dtContext = getDtView().get().getDTContext(event.getSceneX(), event.getSceneY());
 
 					final ObservableList<MenuItem> items = contextMenu.getItems();
 					if (dtContext == null) {
@@ -71,19 +73,22 @@ public class DTCanvasPane extends Pane {
 
 					contextMenu.show(canvas, event.getScreenX(), event.getScreenY());
 				} else if (event.isPrimaryButtonDown()) {
-					final DTContext dtContext = dtView.getDTContext(event.getSceneX(), event.getSceneY());
+					final DTContext dtContext = getDtView().get().getDTContext(event.getSceneX(), event.getSceneY());
 					if (dtContext != null) {
+						final CellType cellType = dtContext.getCell().getCellType();
 						if (event.isAltDown()) {
-							final CellType cellType = dtContext.getCell().getCellType();
 							if (cellType == CellType.ACTION_SHORTDESCRIPTION
 									|| cellType == CellType.CONDITION_SHORTDESCRIPTION) {
-								dtView = dtView.toggleSelectedRow(dtContext.getCell());
+								getDtView().set(getDtView().get().toggleSelectedRow(dtContext.getCell()));
 							}
+						} else if (cellType == CellType.ACTION_SHORTDESCRIPTION
+								|| cellType == CellType.CONDITION_SHORTDESCRIPTION) {
+
 						} else {
-							dtView = dtView.toggleSelected(dtContext.getCell());
+							getDtView().set(getDtView().get().toggleSelected(dtContext.getCell()));
 						}
 					}
-					this.dtViewCanvasRedrawTask.redraw(canvas.getGraphicsContext2D(), dtView);
+					this.dtViewCanvasRedrawTask.redraw(canvas.getGraphicsContext2D(), getDtView().get());
 				} else {
 					System.out.println(event.getSceneX());
 					System.out.println(event.getScreenX());
@@ -106,25 +111,25 @@ public class DTCanvasPane extends Pane {
 
 			final KeyCode code = event.getCode();
 			if (code.equals(KeyCode.ADD)) {
-				dtView = dtView.enlarge(2);
+				getDtView().set(getDtView().get().enlarge(2));
 			} else if (KeyCode.SUBTRACT.equals(code)) {
-				dtView = dtView.enlarge(0.5);
+				getDtView().set(getDtView().get().enlarge(0.5));
 			} else if (new KeyCodeCombination(KeyCode.S, KeyCombination.CONTROL_DOWN).match(event)) {
 				System.out.println("CTRL-S");
 			} else if (new KeyCodeCombination(KeyCode.R, KeyCombination.CONTROL_DOWN).match(event)) {
 				System.out.println("CTRL-R");
-				dtView = dtView.reduce();
+				getDtView().set(getDtView().get().reduce());
 			} else if (new KeyCodeCombination(KeyCode.S, KeyCombination.ALT_DOWN).match(event)) {
 				System.out.println("ALT-S");
-				dtView = dtView.split();
+				getDtView().set(getDtView().get().split());
 			} else if (KeyCode.T.equals(code)) {
-				dtView = dtView.setSelectedToDo();
+				getDtView().set(getDtView().get().setSelectedToDo());
 			} else if (KeyCode.F.equals(code)) {
-				dtView = dtView.setSelectedToDont();
+				getDtView().set(getDtView().get().setSelectedToDont());
 			} else {
 				System.out.println(code.getName());
 			}
-			this.dtViewCanvasRedrawTask.redraw(canvas.getGraphicsContext2D(), dtView);
+			this.dtViewCanvasRedrawTask.redraw(canvas.getGraphicsContext2D(), getDtView().get());
 		});
 	}
 
@@ -193,15 +198,15 @@ public class DTCanvasPane extends Pane {
 				final double percentage = ((canvas.getWidth() / 2) - sceneX) / ((canvas.getWidth() / 2));
 
 				// dtView = dtView.moveWidthPercentage(percentage);
-				dtView = dtView.moveWidth(-10.0);
-				dtViewCanvasRedrawTask.redraw(canvas.getGraphicsContext2D(), dtView);
+				getDtView().set(getDtView().get().moveWidth(-10.0));
+				dtViewCanvasRedrawTask.redraw(canvas.getGraphicsContext2D(), getDtView().get());
 			} else if (sceneX > canvas.getWidth() / 2) {
 
 				final double percentage = (sceneX - (canvas.getWidth() / 2)) / (canvas.getWidth());
 
 				// dtView = dtView.moveWidthPercentage(percentage);
-				dtView = dtView.moveWidth(+10.0);
-				dtViewCanvasRedrawTask.redraw(canvas.getGraphicsContext2D(), dtView);
+				getDtView().set(getDtView().get().moveWidth(+10.0));
+				dtViewCanvasRedrawTask.redraw(canvas.getGraphicsContext2D(), getDtView().get());
 			}
 		});
 		// canvas.setOnMouseDragExited(event -> {
@@ -247,7 +252,11 @@ public class DTCanvasPane extends Pane {
 
 			// dtView.draw(canvas, w, h);
 
-			dtViewCanvasRedrawTask.redraw(canvas.getGraphicsContext2D(), dtView);
+			dtViewCanvasRedrawTask.redraw(canvas.getGraphicsContext2D(), getDtView().get());
 		}
+	}
+
+	public ObjectProperty<DTView> getDtView() {
+		return dtView;
 	}
 }

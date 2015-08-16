@@ -16,28 +16,30 @@ public class DTViewCanvasRedrawTask extends CanvasRedrawTask<DTView> {
 
 	@Override
 	protected void redraw(final GraphicsContext graphicsContext, final DTView dtView) {
-		graphicsContext.setFill(Paint.valueOf(Color.WHITE.toString()));
-		final double canvas_width = canvas.getWidth();
-		final double canvas_height = canvas.getHeight();
-		graphicsContext.clearRect(0, 0, canvas_width, canvas_height);
+		if (dtView != null) {
+			graphicsContext.setFill(Paint.valueOf(Color.WHITE.toString()));
+			final double canvas_width = canvas.getWidth();
+			final double canvas_height = canvas.getHeight();
+			graphicsContext.clearRect(0, 0, canvas_width, canvas_height);
 
-		double start_w = -dtView.getStart_dt_w();
-		for (final Column column : dtView.getColumns()) {
-			final double width = column.getWidth();
+			double start_w = -dtView.getStart_dt_w();
+			for (final Column column : dtView.getColumns()) {
+				final double width = column.getWidth();
 
-			if (start_w + width > 0 && start_w < canvas_width) {
-				double start_h = -dtView.getStart_dt_h();
-				for (final Cell cell : column.getCells()) {
-					final double height = cell.getHeight();
+				if (start_w + width > 0 && start_w < canvas_width) {
+					double start_h = -dtView.getStart_dt_h();
+					for (final Cell cell : column.getCells()) {
+						final double height = cell.getHeight();
 
-					if (start_h + height > 0.0 && start_h < canvas_height) {
-						drawCell(graphicsContext, dtView, cell, start_w, start_h);
+						if (start_h + height > 0.0 && start_h < canvas_height) {
+							drawCell(graphicsContext, dtView, cell, start_w, start_h);
+						}
+						start_h += height;
 					}
-					start_h += height;
 				}
-			}
 
-			start_w += width;
+				start_w += width;
+			}
 		}
 	}
 

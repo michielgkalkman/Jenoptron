@@ -6,11 +6,7 @@ import javafx.application.Application;
 import javafx.geometry.Side;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
-import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javafx.stage.Stage;
@@ -36,17 +32,12 @@ public class DTCanvasApp extends Application {
 
 		final DTCanvasPane dtCanvasPane = new DTCanvasPane(iDecisionTable, font);
 
+		final DTDetailsPane dtDetailsPane = new DTDetailsPane(dtCanvasPane.getDtView().get());
+
 		final MasterDetailPane masterDetailPane = new MasterDetailPane();
 
-		final Pane pane = new Pane();
-		final BackgroundFill fills = new BackgroundFill(Paint.valueOf(Color.CORAL.toString()), null, null);
-		final Background background = new Background(fills);
-		pane.setBackground(background);
-
-		// final PropertySheet node = new PropertySheet();
-
 		masterDetailPane.setMasterNode(dtCanvasPane);
-		masterDetailPane.setDetailNode(pane);
+		masterDetailPane.setDetailNode(dtDetailsPane);
 		masterDetailPane.setDetailSide(Side.BOTTOM);
 		masterDetailPane.setShowDetailNode(true);
 
@@ -57,6 +48,8 @@ public class DTCanvasApp extends Application {
 		stage.setWidth(600);
 		stage.setHeight(600);
 		stage.show();
+
+		dtCanvasPane.getDtView().bindBidirectional(dtDetailsPane.getDtViewProperty());
 	}
 
 	public static void main(final String[] args) {
