@@ -191,4 +191,30 @@ public class Cell {
 		}
 		return newCell;
 	}
+
+	public Cell setShortDescription(final String shortDescription) {
+		final Cell newCell;
+
+		if (condition != null) {
+			condition.setShortDescription(shortDescription);
+			newCell = new Cell(width, height, action, binaryActionValue, condition, binaryConditionValue,
+					shortDescription, iRule, dtView, cellType, fSelected);
+		} else {
+			newCell = this;
+		}
+
+		return newCell;
+	}
+
+	public Cell replace(final Cell cell, final Cell replaceByCell) {
+		final Cell newCell;
+
+		if (this == cell) {
+			newCell = replaceByCell;
+		} else {
+			newCell = this;
+		}
+
+		return newCell;
+	}
 }

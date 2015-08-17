@@ -36,6 +36,10 @@ public class DTCanvasPane extends Pane {
 	public DTCanvasPane(final IDecisionTable iDecisionTable, final Font font) {
 		getDtView().set(new DTView(iDecisionTable, font));
 
+		dtView.addListener(c -> {
+			this.dtViewCanvasRedrawTask.redraw(canvas.getGraphicsContext2D(), getDtView().get());
+		});
+
 		getChildren().add(canvas);
 
 		final BackgroundFill fills = new BackgroundFill(Paint.valueOf(Color.BLUEVIOLET.toString()), null, null);

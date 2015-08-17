@@ -98,4 +98,14 @@ public class Column {
 
 		return newColumn;
 	}
+
+	public Column replace(final Cell cell, final Cell newCell) {
+		final Column newColumn;
+		final List<Cell> newCells = new ArrayList<>();
+		cells.stream().forEach(someCell -> {
+			newCells.add(someCell.replace(cell, newCell));
+		});
+		newColumn = new Column(width, Collections.unmodifiableList(newCells));
+		return newColumn;
+	}
 }

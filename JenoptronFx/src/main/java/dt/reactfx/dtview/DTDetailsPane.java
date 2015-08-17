@@ -1,12 +1,16 @@
 package dt.reactfx.dtview;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.StringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import javafx.scene.control.Label;
+import javafx.scene.Node;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.Pane;
@@ -25,19 +29,50 @@ public class DTDetailsPane extends Pane {
 		final DTDetailsPane dtDetailsPane = this;
 
 		final ChangeListener<DTView> listener = new ChangeListener<DTView>() {
+			final Map<Object, Node> cell2Node = new HashMap<>();
 
 			@Override
 			public void changed(final ObservableValue<? extends DTView> observable, final DTView oldValue,
 					final DTView newValue) {
 				dtDetailsPane.getChildren().clear();
 
-				System.out.println("Changed!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!11");
-
 				final List<Cell> selectedCells = newValue.getSelectedCells();
 				if (selectedCells.size() == 1) {
 					final Cell selectedCell = selectedCells.get(0);
 					if (selectedCell.getCellType().equals(CellType.CONDITION_SHORTDESCRIPTION)) {
-						dtDetailsPane.getChildren().add(new Label(selectedCell.getShortDescription()));
+						final Node node;
+						if (cell2Node.containsKey(oldValue)) {
+							node = cell2Node.get(oldValue);
+
+							node.requestFocus();
+							((TextField) node).positionCaret(selectedCell.getShortDescription().length());
+
+							dtDetailsPane.setFocused(true);
+						} else {
+
+							final TextField textField = new TextField(selectedCell.getShortDescription());
+
+							textField.requestFocus();
+							textField.positionCaret(selectedCell.getShortDescription().length());
+
+							dtDetailsPane.setFocused(true);
+
+							textField.textProperty().addListener(s -> {
+								final String text = ((StringProperty) s).getValue();
+
+								final Cell newCell = selectedCell.setShortDescription(text);
+
+								dtDetailsPane.dtView.set(dtDetailsPane.dtView.get().replace(selectedCell, newCell));
+
+								cell2Node.remove(oldValue);
+								cell2Node.put(newValue, textField);
+							});
+
+							node = textField;
+						}
+
+						dtDetailsPane.getChildren().add(node);
+						node.requestFocus();
 					}
 				}
 

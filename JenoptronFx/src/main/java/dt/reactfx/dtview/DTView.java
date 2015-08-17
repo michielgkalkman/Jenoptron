@@ -426,4 +426,14 @@ public class DTView {
 
 		return selectedCells;
 	}
+
+	public DTView replace(final Cell cell, final Cell newCell) {
+		final List<Column> newColumns = new ArrayList<>();
+
+		columns.stream().forEach(column -> {
+			newColumns.add(column.replace(cell, newCell));
+		});
+
+		return new DTView(iDecisionTable, font, newColumns, start_dt_w, start_dt_h);
+	}
 }
