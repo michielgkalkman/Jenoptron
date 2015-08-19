@@ -62,6 +62,10 @@ public class Column {
 		return cells.stream().anyMatch(cell -> cell.isSelectedAction());
 	}
 
+	public boolean isAnySelected() {
+		return cells.stream().anyMatch(cell -> cell.isSelected());
+	}
+
 	public Column setSelected(final Cell cell, final boolean selected) {
 		final Column newColumn;
 		final IAction action = cell.getAction();
@@ -69,6 +73,8 @@ public class Column {
 			final ICondition condition = cell.getCondition();
 
 			if (condition == null) {
+				newColumn = this;
+			} else {
 				final List<Cell> newCells = new ArrayList<>();
 
 				cells.stream().forEach(c -> {
@@ -80,8 +86,6 @@ public class Column {
 				});
 
 				newColumn = new Column(width, Collections.unmodifiableList(newCells));
-			} else {
-				newColumn = this;
 			}
 		} else {
 			final List<Cell> newCells = new ArrayList<>();
@@ -106,6 +110,21 @@ public class Column {
 			newCells.add(someCell.replace(cell, newCell));
 		});
 		newColumn = new Column(width, Collections.unmodifiableList(newCells));
+		return newColumn;
+	}
+
+	public Column clearAllSelected() {
+		final Column newColumn;
+
+		if (isAnySelected()) {
+			final List<Cell> newCells = new ArrayList<>();
+			cells.stream().forEach(cell -> {
+				newCells.add(cell.setSelected(false));
+			});
+			newColumn = new Column(width, Collections.unmodifiableList(newCells));
+		} else {
+			newColumn = this;
+		}
 		return newColumn;
 	}
 }

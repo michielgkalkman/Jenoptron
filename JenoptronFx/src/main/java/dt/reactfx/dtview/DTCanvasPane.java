@@ -77,19 +77,32 @@ public class DTCanvasPane extends Pane {
 
 					contextMenu.show(canvas, event.getScreenX(), event.getScreenY());
 				} else if (event.isPrimaryButtonDown()) {
-					final DTContext dtContext = getDtView().get().getDTContext(event.getSceneX(), event.getSceneY());
-					if (dtContext != null) {
-						final CellType cellType = dtContext.getCell().getCellType();
-						if (event.isAltDown()) {
-							if (cellType == CellType.ACTION_SHORTDESCRIPTION
+					final int clickCount = event.getClickCount();
+					if (clickCount == 1) {
+						final DTContext dtContext = getDtView().get().getDTContext(event.getSceneX(),
+								event.getSceneY());
+
+						getDtView().set(getDtView().get().clearAllSelected());
+
+						getDtView().set(getDtView().get().toggleSelectedRow(dtContext.getCell()));
+					} else if (clickCount == 2) {
+						getDtView().set(getDtView().get().clearAllSelected());
+
+						final DTContext dtContext = getDtView().get().getDTContext(event.getSceneX(),
+								event.getSceneY());
+						if (dtContext != null) {
+							final CellType cellType = dtContext.getCell().getCellType();
+							if (event.isAltDown()) {
+								if (cellType == CellType.ACTION_SHORTDESCRIPTION
+										|| cellType == CellType.CONDITION_SHORTDESCRIPTION) {
+									getDtView().set(getDtView().get().toggleSelectedRow(dtContext.getCell()));
+								}
+							} else if (cellType == CellType.ACTION_SHORTDESCRIPTION
 									|| cellType == CellType.CONDITION_SHORTDESCRIPTION) {
-								getDtView().set(getDtView().get().toggleSelectedRow(dtContext.getCell()));
+								getDtView().set(getDtView().get().toggleSelected(dtContext.getCell()));
+							} else {
+								getDtView().set(getDtView().get().toggleSelected(dtContext.getCell()));
 							}
-						} else if (cellType == CellType.ACTION_SHORTDESCRIPTION
-								|| cellType == CellType.CONDITION_SHORTDESCRIPTION) {
-							getDtView().set(getDtView().get().toggleSelected(dtContext.getCell()));
-						} else {
-							getDtView().set(getDtView().get().toggleSelected(dtContext.getCell()));
 						}
 					}
 					this.dtViewCanvasRedrawTask.redraw(canvas.getGraphicsContext2D(), getDtView().get());
