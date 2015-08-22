@@ -11,20 +11,29 @@ import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.ObservableList;
 import javafx.geometry.Point2D;
+import javafx.geometry.VPos;
+import javafx.scene.Cursor;
+import javafx.scene.SnapshotParameters;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
+import javafx.scene.image.ImageView;
+import javafx.scene.image.WritableImage;
+import javafx.scene.input.ClipboardContent;
+import javafx.scene.input.Dragboard;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.input.TransferMode;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
+import javafx.scene.text.TextAlignment;
 import jdt.icore.IDecisionTable;
 
 public class DTCanvasPane extends Pane {
@@ -92,14 +101,9 @@ public class DTCanvasPane extends Pane {
 								event.getSceneY());
 						if (dtContext != null) {
 							final CellType cellType = dtContext.getCell().getCellType();
-							if (event.isAltDown()) {
-								if (cellType == CellType.ACTION_SHORTDESCRIPTION
-										|| cellType == CellType.CONDITION_SHORTDESCRIPTION) {
-									getDtView().set(getDtView().get().toggleSelectedRow(dtContext.getCell()));
-								}
-							} else if (cellType == CellType.ACTION_SHORTDESCRIPTION
+							if (cellType == CellType.ACTION_SHORTDESCRIPTION
 									|| cellType == CellType.CONDITION_SHORTDESCRIPTION) {
-								getDtView().set(getDtView().get().toggleSelected(dtContext.getCell()));
+								getDtView().set(getDtView().get().toggleSelectedRow(dtContext.getCell()));
 							} else {
 								getDtView().set(getDtView().get().toggleSelected(dtContext.getCell()));
 							}
@@ -107,8 +111,6 @@ public class DTCanvasPane extends Pane {
 					}
 					this.dtViewCanvasRedrawTask.redraw(canvas.getGraphicsContext2D(), getDtView().get());
 				} else {
-					System.out.println(event.getSceneX());
-					System.out.println(event.getScreenX());
 				}
 			}
 		});
@@ -119,6 +121,140 @@ public class DTCanvasPane extends Pane {
 
 		// addMouseStreams();
 
+		final Pane dtCanvasPane = this;
+		// https://rterp.wordpress.com/2013/09/19/drag-and-drop-with-custom-components-in-javafx/
+
+		// CANVAS ANY event: MOUSE_PRESSED
+		// CANVAS ANY event: MOUSE_DRAGGED
+		// CANVAS ANY event: DRAG_DETECTED
+		// CANVAS ANY event: MOUSE_DRAGGED
+		// CANVAS ANY event: MOUSE_DRAGGED
+		// CANVAS ANY event: MOUSE_RELEASED
+
+		canvas.setOnMousePressed(event -> {
+			final DTContext dtContext = getDtView().get().getDTContext(event.getSceneX(), event.getSceneY());
+
+			if (dtContext == null) {
+				System.out.println("setOnMousePressed: null");
+			} else {
+				System.out.println("setOnMousePressed: " + dtContext.getiCondition() + "," + dtContext.getiAction());
+			}
+			final javafx.scene.Cursor cursor = javafx.scene.Cursor.S_RESIZE;
+			dtCanvasPane.setCursor(cursor);
+
+			///////////////////////////////////////////////////
+			// final SnapshotParameters parameters = new SnapshotParameters();
+			// parameters.setFill(Color.TRANSPARENT);
+			// final WritableImage writableImage = new WritableImage(300, 40);
+			// final WritableImage snapshot = canvas.snapshot(parameters,
+			// writableImage);
+			//
+			// imageView = new ImageView(snapshot);
+
+			event.consume();
+		});
+
+		canvas.setOnMouseDragged(event -> {
+
+			if (dragImageView != null) {
+				final Point2D localPoint = dtCanvasPane.getScene().getRoot()
+						.sceneToLocal(new Point2D(event.getSceneX(), event.getSceneY()));
+				dragImageView.relocate((int) (localPoint.getX() - dragImageView.getBoundsInLocal().getWidth() / 2),
+						(int) (localPoint.getY() - dragImageView.getBoundsInLocal().getHeight() / 2));
+			}
+			event.consume();
+		});
+
+		canvas.setOnDragDetected(event -> {
+			System.out.println("setOnDragDetected" + event.getEventType());
+
+			// For now, create an draggable image from a piece of text.
+			final WritableImage text2image = text2image(300, 300, "X", Color.RED);
+			dragImageView = new ImageView(text2image);
+
+			if (!dtCanvasPane.getChildren().contains(dragImageView)) {
+				dtCanvasPane.getChildren().add(dragImageView);
+			}
+
+			dragImageView.setOpacity(0.5);
+			dragImageView.toFront();
+			dragImageView.setMouseTransparent(true);
+			dragImageView.setVisible(true);
+			dragImageView.relocate((int) (event.getSceneX() - dragImageView.getBoundsInLocal().getWidth() / 2),
+					(int) (event.getSceneY() - dragImageView.getBoundsInLocal().getHeight() / 2));
+
+			final Dragboard db = dtCanvasPane.startDragAndDrop(TransferMode.ANY);
+			final ClipboardContent content = new ClipboardContent();
+
+			// final InboundBean inboundBean = (InboundBean)
+			// myTableView.getSelectionModel().getSelectedItem();
+			// content.putString(inboundBean.getVfcNumber());
+			db.setContent(content);
+
+			event.consume();
+		});
+
+		canvas.setOnMouseDragReleased(event -> {
+			dtCanvasPane.setCursor(Cursor.DEFAULT);
+			System.out.println("setOnMouseDragReleased");
+
+			event.consume();
+		});
+
+		canvas.setOnMouseReleased(event -> {
+			dtCanvasPane.setCursor(Cursor.DEFAULT);
+			System.out.println("setOnMouseReleased");
+
+			dtCanvasPane.setCursor(Cursor.DEFAULT);
+
+			dragImageView.setVisible(false);
+
+			event.consume();
+		});
+
+		canvas.setOnDragOver(event -> {
+			System.out.println("setOnDragOver");
+
+			// final Point2D localPoint = canvas.getScene().getRoot()
+			// .sceneToLocal(new Point2D(event.getSceneX(), event.getSceneY()));
+			// imageView.relocate((int) (localPoint.getX() -
+			// imageView.getBoundsInLocal().getWidth() / 2),
+			// (int) (localPoint.getY() -
+			// imageView.getBoundsInLocal().getHeight() / 2));
+			event.consume();
+		});
+	};
+
+	private ImageView dragImageView;
+
+	private WritableImage text2image(final double text_w, final double text_h, final String text,
+			final Paint paintYes) {
+		final Canvas canvas2 = new Canvas();
+		canvas2.setWidth(text_w);
+		canvas2.setHeight(text_h);
+
+		{
+			final GraphicsContext graphicsContext2D = canvas2.getGraphicsContext2D();
+			final Font font = dtView.get().getFont();
+			final Font font2 = Font.font(font.getFamily(), text_h);
+			graphicsContext2D.setFont(font2);
+			System.out.println("Y Font wordt " + font.getName() + " x " + font2.getSize());
+
+			graphicsContext2D.setTextAlign(TextAlignment.CENTER);
+			graphicsContext2D.setTextBaseline(VPos.CENTER);
+
+			graphicsContext2D.clearRect(0, 0, text_w, text_h);
+
+			graphicsContext2D.setFill(paintYes);
+
+			graphicsContext2D.fillText(text, text_w / 2, text_h / 2, text_w);
+		}
+
+		final SnapshotParameters parameters = new SnapshotParameters();
+		parameters.setFill(Color.TRANSPARENT);
+		final WritableImage writableImage = new WritableImage((int) text_w, (int) text_w);
+		final WritableImage snapshot = canvas2.snapshot(parameters, writableImage);
+		return snapshot;
 	}
 
 	private void addKeyEvents() {
@@ -132,19 +268,16 @@ public class DTCanvasPane extends Pane {
 			} else if (KeyCode.SUBTRACT.equals(code)) {
 				getDtView().set(getDtView().get().enlarge(0.5));
 			} else if (new KeyCodeCombination(KeyCode.S, KeyCombination.CONTROL_DOWN).match(event)) {
-				System.out.println("CTRL-S");
 			} else if (new KeyCodeCombination(KeyCode.R, KeyCombination.CONTROL_DOWN).match(event)) {
-				System.out.println("CTRL-R");
 				getDtView().set(getDtView().get().reduce());
 			} else if (new KeyCodeCombination(KeyCode.S, KeyCombination.ALT_DOWN).match(event)) {
-				System.out.println("ALT-S");
 				getDtView().set(getDtView().get().split());
 			} else if (KeyCode.T.equals(code)) {
 				getDtView().set(getDtView().get().setSelectedToDo());
 			} else if (KeyCode.F.equals(code)) {
 				getDtView().set(getDtView().get().setSelectedToDont());
 			} else {
-				System.out.println(code.getName());
+				// System.out.println(code.getName());
 			}
 			this.dtViewCanvasRedrawTask.redraw(canvas.getGraphicsContext2D(), getDtView().get());
 		});
@@ -183,9 +316,9 @@ public class DTCanvasPane extends Pane {
 		// System.out.println("right");
 		// }));
 
-		stationaryEvents.subscribe(s -> {
-			System.out.println(s.isLeft());
-		});
+		// stationaryEvents.subscribe(s -> {
+		// System.out.println(s.isLeft());
+		// });
 	}
 
 	private void addMouseEvents() {

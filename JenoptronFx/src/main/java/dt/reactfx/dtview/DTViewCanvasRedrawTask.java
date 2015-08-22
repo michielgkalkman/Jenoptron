@@ -80,13 +80,15 @@ public class DTViewCanvasRedrawTask extends CanvasRedrawTask<DTView> {
 
 		final Font font2 = Font.font(font.getFamily(), cell.getHeight());
 
-		System.out.println("Determine text size from " + font2.getName() + " x " + font2.getSize());
+		// System.out.println("Determine text size from " + font2.getName() + "
+		// x " + font2.getSize());
 
 		text.setFont(font2);
 
 		final Bounds layoutBounds = text.getLayoutBounds();
 
-		System.out.println("Determined text size = " + layoutBounds.getWidth() + " x " + layoutBounds.getHeight());
+		// System.out.println("Determined text size = " +
+		// layoutBounds.getWidth() + " x " + layoutBounds.getHeight());
 
 		return layoutBounds;
 	}

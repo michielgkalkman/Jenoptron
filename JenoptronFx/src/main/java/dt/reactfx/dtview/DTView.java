@@ -23,6 +23,8 @@ import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
 import jdt.core.binary.BinaryActionValue;
 import jdt.core.binary.BinaryConditionValue;
+import jdt.icore.IAction;
+import jdt.icore.ICondition;
 import jdt.icore.IDecisionTable;
 import jdt.icore.IRule;
 
@@ -168,13 +170,14 @@ public class DTView {
 			canvas2.setWidth(layoutBounds.getWidth());
 			canvas2.setHeight(layoutBounds.getHeight());
 
-			System.out.println("Image wordt " + width + " x " + height);
+			// System.out.println("Image wordt " + width + " x " + height);
 
 			{
 				final GraphicsContext graphicsContext2D = canvas2.getGraphicsContext2D();
 				final Font font2 = Font.font(font.getFamily(), height);
 
-				System.out.println("Font wordt " + font2.getName() + " x " + font2.getSize());
+				// System.out.println("Font wordt " + font2.getName() + " x " +
+				// font2.getSize());
 
 				graphicsContext2D.setFont(font2);
 
@@ -225,7 +228,8 @@ public class DTView {
 			final GraphicsContext graphicsContext2D = canvas2.getGraphicsContext2D();
 			final Font font2 = Font.font(font.getFamily(), text_h);
 			graphicsContext2D.setFont(font2);
-			System.out.println("Y Font wordt " + font.getName() + " x " + font2.getSize());
+			// System.out.println("Y Font wordt " + font.getName() + " x " +
+			// font2.getSize());
 
 			graphicsContext2D.setTextAlign(TextAlignment.CENTER);
 			graphicsContext2D.setTextBaseline(VPos.CENTER);
@@ -285,7 +289,7 @@ public class DTView {
 	}
 
 	public DTView moveWidthPercentage(final double percentage) {
-		System.out.println("percentage = " + percentage);
+		// System.out.println("percentage = " + percentage);
 		final double d = getWidth() * percentage;
 
 		return moveWidth(d);
@@ -415,18 +419,6 @@ public class DTView {
 		return new DTView(iDecisionTable, font, newColumns, start_dt_w, start_dt_h);
 	}
 
-	public List<Cell> getSelectedCells() {
-		final List<Cell> selectedCells = new ArrayList<>();
-
-		columns.parallelStream().forEach(column -> {
-			column.getCells().stream().filter(cell -> cell.isSelected()).forEach(cell -> {
-				selectedCells.add(cell);
-			});
-		});
-
-		return selectedCells;
-	}
-
 	public DTView replace(final Cell cell, final Cell newCell) {
 		final List<Column> newColumns = new ArrayList<>();
 
@@ -445,5 +437,50 @@ public class DTView {
 		});
 
 		return new DTView(iDecisionTable, font, newColumns, start_dt_w, start_dt_h);
+	}
+
+	public List<Cell> getSelectedCells() {
+		final List<Cell> selectedCells = new ArrayList<>();
+
+		columns.stream().forEach(column -> {
+			column.getCells().stream().filter(cell -> cell.isSelected()).forEach(cell -> {
+				selectedCells.add(cell);
+			});
+		});
+
+		return selectedCells;
+	}
+
+	public List<Cell> getSelectedRows() {
+
+		final List<ICondition> conditions = new ArrayList<>();
+		final List<IAction> actions = new ArrayList<>();
+
+		getSelectedCells().forEach(cell -> {
+			conditions.add(cell.getCondition());
+			actions.add(cell.getAction());
+		});
+
+		columns.stream().filter(column -> !conditions.isEmpty() || !actions.isEmpty()).forEach(column -> {
+			column.getCells().stream().filter(c -> !c.isSelected()).forEach(c -> {
+				conditions.remove(c.getCondition());
+				actions.remove(c.getAction());
+			});
+		});
+
+		final List<Cell> selectedCells = new ArrayList<>();
+
+		columns.parallelStream().forEach(column -> {
+			column.getCells().forEach(cell -> {
+				if ((cell.getCellType().equals(CellType.CONDITION_SHORTDESCRIPTION)
+						&& conditions.contains(cell.getCondition()))
+						|| (cell.getCellType().equals(CellType.ACTION_SHORTDESCRIPTION)
+								&& actions.contains(cell.getAction()))) {
+					selectedCells.add(cell);
+				}
+			});
+		});
+
+		return selectedCells;
 	}
 }

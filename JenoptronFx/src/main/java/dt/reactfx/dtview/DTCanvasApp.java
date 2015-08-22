@@ -23,7 +23,7 @@ public class DTCanvasApp extends Application {
 	@Override
 	public void start(final Stage stage) throws Exception {
 
-		System.setProperty("sun.java2d.opengl", "true");
+		// System.setProperty("sun.java2d.opengl", "true");
 
 		final IDecisionTable iDecisionTable = createDecisionTable();
 

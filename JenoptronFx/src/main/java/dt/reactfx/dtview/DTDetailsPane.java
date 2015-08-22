@@ -36,7 +36,7 @@ public class DTDetailsPane extends Pane {
 					final DTView newValue) {
 				dtDetailsPane.getChildren().clear();
 
-				final List<Cell> selectedCells = newValue.getSelectedCells();
+				final List<Cell> selectedCells = newValue.getSelectedRows();
 				if (selectedCells.size() == 1) {
 					final Cell selectedCell = selectedCells.get(0);
 					if (selectedCell.getCellType().equals(CellType.CONDITION_SHORTDESCRIPTION)) {
