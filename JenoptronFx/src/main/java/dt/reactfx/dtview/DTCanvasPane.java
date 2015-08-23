@@ -10,6 +10,7 @@ import org.reactfx.util.Either;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.ObservableList;
+import javafx.event.EventType;
 import javafx.geometry.Point2D;
 import javafx.geometry.VPos;
 import javafx.scene.Cursor;
@@ -139,22 +140,20 @@ public class DTCanvasPane extends Pane {
 			} else {
 				System.out.println("setOnMousePressed: " + dtContext.getiCondition() + "," + dtContext.getiAction());
 			}
-			final javafx.scene.Cursor cursor = javafx.scene.Cursor.S_RESIZE;
-			dtCanvasPane.setCursor(cursor);
-
-			///////////////////////////////////////////////////
-			// final SnapshotParameters parameters = new SnapshotParameters();
-			// parameters.setFill(Color.TRANSPARENT);
-			// final WritableImage writableImage = new WritableImage(300, 40);
-			// final WritableImage snapshot = canvas.snapshot(parameters,
-			// writableImage);
-			//
-			// imageView = new ImageView(snapshot);
-
 			event.consume();
 		});
 
 		canvas.setOnMouseDragged(event -> {
+			final DTContext dtContext = getDtView().get().getDTContext(event.getSceneX(), event.getSceneY());
+
+			if (dtContext == null) {
+				System.out.println("setOnMouseDragged: null");
+			} else {
+				System.out.println("setOnMouseDragged: " + dtContext.getiCondition() + "," + dtContext.getiAction());
+			}
+
+			final javafx.scene.Cursor cursor = javafx.scene.Cursor.S_RESIZE;
+			dtCanvasPane.setCursor(cursor);
 
 			if (dragImageView != null) {
 				final Point2D localPoint = dtCanvasPane.getScene().getRoot()
@@ -166,44 +165,44 @@ public class DTCanvasPane extends Pane {
 		});
 
 		canvas.setOnDragDetected(event -> {
-			System.out.println("setOnDragDetected" + event.getEventType());
+			final DTContext dtContext = getDtView().get().getDTContext(event.getSceneX(), event.getSceneY());
 
-			// For now, create an draggable image from a piece of text.
-			final WritableImage text2image = text2image(300, 300, "X", Color.RED);
-			dragImageView = new ImageView(text2image);
-
-			if (!dtCanvasPane.getChildren().contains(dragImageView)) {
-				dtCanvasPane.getChildren().add(dragImageView);
+			if (dtContext == null) {
+				System.out.println("setOnDragDetected: null");
+			} else {
+				System.out.println("setOnDragDetected: " + dtContext.getiCondition() + "," + dtContext.getiAction());
 			}
 
-			dragImageView.setOpacity(0.5);
-			dragImageView.toFront();
-			dragImageView.setMouseTransparent(true);
-			dragImageView.setVisible(true);
-			dragImageView.relocate((int) (event.getSceneX() - dragImageView.getBoundsInLocal().getWidth() / 2),
-					(int) (event.getSceneY() - dragImageView.getBoundsInLocal().getHeight() / 2));
-
-			final Dragboard db = dtCanvasPane.startDragAndDrop(TransferMode.ANY);
-			final ClipboardContent content = new ClipboardContent();
-
-			// final InboundBean inboundBean = (InboundBean)
-			// myTableView.getSelectionModel().getSelectedItem();
-			// content.putString(inboundBean.getVfcNumber());
-			db.setContent(content);
+			createDraggableNode(dtCanvasPane, event);
 
 			event.consume();
 		});
 
-		canvas.setOnMouseDragReleased(event -> {
-			dtCanvasPane.setCursor(Cursor.DEFAULT);
-			System.out.println("setOnMouseDragReleased");
-
-			event.consume();
-		});
+		// canvas.setOnMouseDragReleased(event -> {
+		// final DTContext dtContext =
+		// getDtView().get().getDTContext(event.getSceneX(), event.getSceneY());
+		//
+		// if (dtContext == null) {
+		// System.out.println("setOnMouseDragReleased: null");
+		// } else {
+		// System.out
+		// .println("setOnMouseDragReleased: " + dtContext.getiCondition() + ","
+		// + dtContext.getiAction());
+		// }
+		//
+		// dtCanvasPane.setCursor(Cursor.DEFAULT);
+		//
+		// event.consume();
+		// });
 
 		canvas.setOnMouseReleased(event -> {
-			dtCanvasPane.setCursor(Cursor.DEFAULT);
-			System.out.println("setOnMouseReleased");
+			final DTContext dtContext = getDtView().get().getDTContext(event.getSceneX(), event.getSceneY());
+
+			if (dtContext == null) {
+				System.out.println("setOnMouseReleased: null");
+			} else {
+				System.out.println("setOnMouseReleased: " + dtContext.getiCondition() + "," + dtContext.getiAction());
+			}
 
 			dtCanvasPane.setCursor(Cursor.DEFAULT);
 
@@ -212,17 +211,54 @@ public class DTCanvasPane extends Pane {
 			event.consume();
 		});
 
-		canvas.setOnDragOver(event -> {
-			System.out.println("setOnDragOver");
+		// canvas.setOnDragOver(event -> {
+		// final DTContext dtContext =
+		// getDtView().get().getDTContext(event.getSceneX(), event.getSceneY());
+		//
+		// if (dtContext == null) {
+		// System.out.println("setOnDragOver: null");
+		// } else {
+		// System.out.println("setOnDragOver: " + dtContext.getiCondition() +
+		// "," + dtContext.getiAction());
+		// }
+		//
+		// // final Point2D localPoint = canvas.getScene().getRoot()
+		// // .sceneToLocal(new Point2D(event.getSceneX(), event.getSceneY()));
+		// // imageView.relocate((int) (localPoint.getX() -
+		// // imageView.getBoundsInLocal().getWidth() / 2),
+		// // (int) (localPoint.getY() -
+		// // imageView.getBoundsInLocal().getHeight() / 2));
+		// event.consume();
+		// });
 
-			// final Point2D localPoint = canvas.getScene().getRoot()
-			// .sceneToLocal(new Point2D(event.getSceneX(), event.getSceneY()));
-			// imageView.relocate((int) (localPoint.getX() -
-			// imageView.getBoundsInLocal().getWidth() / 2),
-			// (int) (localPoint.getY() -
-			// imageView.getBoundsInLocal().getHeight() / 2));
-			event.consume();
+		canvas.addEventFilter(EventType.ROOT, event -> {
+			System.out.println("Event: " + event.getEventType());
 		});
+	}
+
+	private void createDraggableNode(final Pane dtCanvasPane, final MouseEvent event) {
+		// For now, create an draggable image from a piece of text.
+		final WritableImage text2image = text2image(300, 300, "X", Color.RED);
+		dragImageView = new ImageView(text2image);
+
+		if (!dtCanvasPane.getChildren().contains(dragImageView)) {
+			dtCanvasPane.getChildren().add(dragImageView);
+		}
+
+		dragImageView.setOpacity(0.5);
+		dragImageView.toFront();
+		dragImageView.setMouseTransparent(true);
+		dragImageView.setVisible(true);
+		dragImageView.relocate((int) (event.getSceneX() - dragImageView.getBoundsInLocal().getWidth() / 2),
+				(int) (event.getSceneY() - dragImageView.getBoundsInLocal().getHeight() / 2));
+
+		final Dragboard db = dtCanvasPane.startDragAndDrop(TransferMode.ANY);
+		final ClipboardContent content = new ClipboardContent();
+
+		// final InboundBean inboundBean = (InboundBean)
+		// myTableView.getSelectionModel().getSelectedItem();
+		// content.putString(inboundBean.getVfcNumber());
+		db.setContent(content);
 	};
 
 	private ImageView dragImageView;
