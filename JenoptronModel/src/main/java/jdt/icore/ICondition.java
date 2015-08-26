@@ -3,7 +3,7 @@ package jdt.icore;
 import java.io.Serializable;
 import java.util.List;
 
-import jdt.core.category.IGroup;
+import jdt.core.binary.BinaryCondition;
 
 /**
  * A description of a condition.
@@ -29,7 +29,5 @@ public interface ICondition extends Serializable {
 
 	String getShortDescription();
 
-	void setGroup(IGroup group);
-
-	void setShortDescription(String shortDescription);
+	BinaryCondition setShortDescription(String shortDescription);
 }

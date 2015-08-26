@@ -3,6 +3,8 @@ package jdt.icore;
 import java.io.Serializable;
 import java.util.List;
 
+import jdt.core.binary.BinaryAction;
+
 /**
  * Describes a kind of action.
  * 
@@ -26,7 +28,7 @@ public interface IAction extends Serializable {
 
 	String getShortDescription();
 
-	void setShortDescription(String shortDescription);
+	BinaryAction setShortDescription(String shortDescription);
 
 	IValue parse(String string);
 }

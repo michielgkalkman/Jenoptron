@@ -2,6 +2,8 @@ package jdt.core.binary;
 
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
+
 import jdt.icore.IAction;
 import jdt.icore.IValue;
 
@@ -10,7 +12,7 @@ public class BinaryAction extends jdt.core.Model implements IAction {
 	 * 
 	 */
 	private static final long serialVersionUID = -1617158798961613116L;
-	private String shortDescription;
+	private final String shortDescription;
 
 	public BinaryAction() {
 		this("BinaryAction");
@@ -58,8 +60,13 @@ public class BinaryAction extends jdt.core.Model implements IAction {
 	}
 
 	@Override
-	public void setShortDescription(final String shortDescription) {
-		final String oldShortDescription = this.shortDescription;
-		this.shortDescription = shortDescription;
+	public BinaryAction setShortDescription(final String shortDescription) {
+		final BinaryAction binaryAction;
+		if (StringUtils.equals(shortDescription, this.shortDescription)) {
+			binaryAction = this;
+		} else {
+			binaryAction = new BinaryAction(shortDescription);
+		}
+		return binaryAction;
 	}
 }

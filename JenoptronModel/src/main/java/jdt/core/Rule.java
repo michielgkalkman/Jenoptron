@@ -24,17 +24,21 @@ public class Rule extends Model implements IRule {
 	 */
 	private static final long serialVersionUID = -5076191126313606983L;
 	private final Map<IAction, IValue> actions;
-	private final Map<ICondition, IConditionValue> conditions; // Dit moet een
-																// list / map
-																// zijn !!!
+	private final Map<ICondition, IConditionValue> conditions;
 
 	// Een Rule weet alleen maar welke waarde voor een conditie / actie van
 	// toepassing is !!!
 	// De table weet de volgorde van de elementen !!
 
 	public Rule() {
-		actions = new HashMap<IAction, IValue>();
-		conditions = new HashMap<ICondition, IConditionValue>();
+		this(new HashMap<IAction, IValue>(), new HashMap<ICondition, IConditionValue>());
+	}
+
+	private Rule(final Map<IAction, IValue> actions, final Map<ICondition, IConditionValue> conditions) {
+		super();
+
+		this.actions = actions;
+		this.conditions = conditions;
 	}
 
 	@Override
@@ -54,9 +58,17 @@ public class Rule extends Model implements IRule {
 
 	@Override
 	public final IRule addAction(final IAction action) {
-		actions.put(action, action.getUnknownValue());
-		fire();
-		return this;
+		IRule newRule;
+		if (actions.containsKey(action)) {
+			newRule = this;
+		} else {
+			final Map<IAction, IValue> newActions = new HashMap<>();
+			newActions.putAll(actions);
+			newActions.put(action, action.getUnknownValue());
+			newRule = new Rule(newActions, conditions);
+			fire();
+		}
+		return newRule;
 	}
 
 	@Override

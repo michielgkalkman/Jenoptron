@@ -13,31 +13,31 @@ public class BinaryActionValue implements IValue {
 	 *
 	 */
 	private static final long serialVersionUID = 8840365481949810899L;
-	public static final BinaryActionValue DO = new BinaryActionValue( Values.DO);
-	public static final BinaryActionValue DONT = new BinaryActionValue( Values.DONT);
-	public static final BinaryActionValue UNKNOWN = new BinaryActionValue( Values.UNKNOWN);
+	public static final BinaryActionValue DO = new BinaryActionValue(Values.DO);
+	public static final BinaryActionValue DONT = new BinaryActionValue(Values.DONT);
+	public static final BinaryActionValue UNKNOWN = new BinaryActionValue(Values.UNKNOWN);
 
-	private static final BinaryActionValue binaryActionValues[] = {	DO, DONT, UNKNOWN };
+	private static final BinaryActionValue binaryActionValues[] = { DO, DONT, UNKNOWN };
 
-	public static final BinaryActionValue INITIAL_VALUE = new BinaryActionValue( Values.UNKNOWN);
-	public static final BinaryActionValue DEFAULT_VALUE = new BinaryActionValue( Values.DO);
+	public static final BinaryActionValue INITIAL_VALUE = new BinaryActionValue(Values.UNKNOWN);
+	public static final BinaryActionValue DEFAULT_VALUE = new BinaryActionValue(Values.DO);
 
-	private static List<IValue> selectableValuesList;
+	private static final List<IValue> selectableValuesList;
 
-	public enum Values { DO, DONT, UNKNOWN; }
-
+	public enum Values {
+		DO, DONT, UNKNOWN;
+	}
 
 	static {
-		selectableValuesList = new ArrayList<IValue>();
+		final List tmpSelectableValuesList = new ArrayList<IValue>();
 		// @todo: report the following - it does not work !
 		// Arrays.fill( binaryActionValues, possibleValuesList);
-		for( final BinaryActionValue binaryActionValue : binaryActionValues) {
-			selectableValuesList.add( binaryActionValue);
+		for (final BinaryActionValue binaryActionValue : binaryActionValues) {
+			tmpSelectableValuesList.add(binaryActionValue);
 		}
-		selectableValuesList = Collections.unmodifiableList( selectableValuesList);
+		selectableValuesList = Collections.unmodifiableList(tmpSelectableValuesList);
 
-		XMLEncoderFactory.add( BinaryActionValue.Values.class,
-			EnumDelegate.create( BinaryActionValue.Values.class));
+		XMLEncoderFactory.add(BinaryActionValue.Values.class, EnumDelegate.create(BinaryActionValue.Values.class));
 	}
 
 	private Values value;
@@ -46,7 +46,7 @@ public class BinaryActionValue implements IValue {
 		super();
 	}
 
-	public BinaryActionValue( final Values value) {
+	public BinaryActionValue(final Values value) {
 		super();
 		this.value = value;
 	}
@@ -55,10 +55,12 @@ public class BinaryActionValue implements IValue {
 		return value;
 	}
 
+	@Override
 	public IValue getDefaultValue() {
 		return defaultValue();
 	}
 
+	@Override
 	public IValue getInitialValue() {
 		return initialValue();
 	}
@@ -75,7 +77,7 @@ public class BinaryActionValue implements IValue {
 		return value;
 	}
 
-	public void setValue( final Values values) {
+	public void setValue(final Values values) {
 		this.value = values;
 	}
 
@@ -86,23 +88,31 @@ public class BinaryActionValue implements IValue {
 	@Override
 	public String toString() {
 		String strValue;
-		switch( value) {
-		case DO: strValue = "Do"; break;
-		case DONT: strValue = "Dont"; break;
-		case UNKNOWN: strValue = "?"; break;
-		default: strValue = "Unknown";
+		switch (value) {
+		case DO:
+			strValue = "Do";
+			break;
+		case DONT:
+			strValue = "Dont";
+			break;
+		case UNKNOWN:
+			strValue = "?";
+			break;
+		default:
+			strValue = "Unknown";
 		}
 		return strValue;
 	}
 
+	@Override
 	public boolean isInstanceOf(final IValue value) {
-		return this.equals( value) || value.equals( defaultValue());
+		return this.equals(value) || value.equals(defaultValue());
 	}
 
 	@Override
 	public boolean equals(final Object object) {
 		boolean fEquals = false;
-		if( object instanceof BinaryActionValue) {
+		if (object instanceof BinaryActionValue) {
 			final BinaryActionValue binaryActionValue = (BinaryActionValue) object;
 			fEquals = this.getValue() == binaryActionValue.getValue();
 		}
@@ -116,9 +126,9 @@ public class BinaryActionValue implements IValue {
 
 	public static final IValue parse(final String string) {
 		final IValue value;
-		if( DO.value.toString().equalsIgnoreCase( string)) {
+		if (DO.value.toString().equalsIgnoreCase(string)) {
 			value = DO;
-		} else if( DONT.value.toString().equalsIgnoreCase( string)) {
+		} else if (DONT.value.toString().equalsIgnoreCase(string)) {
 			value = DONT;
 		} else {
 			value = UNKNOWN;
@@ -128,8 +138,10 @@ public class BinaryActionValue implements IValue {
 
 	/*
 	 * @param Object object because
+	 * 
 	 * @see java.lang.Comparable#compareTo(java.lang.Object)
 	 */
+	@Override
 	public int compareTo(final Object object) {
 		return 0;
 	}

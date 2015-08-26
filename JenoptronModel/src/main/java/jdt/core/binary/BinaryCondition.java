@@ -2,8 +2,9 @@ package jdt.core.binary;
 
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
+
 import jdt.core.Model;
-import jdt.core.category.IGroup;
 import jdt.icore.ICondition;
 import jdt.icore.IConditionValue;
 
@@ -23,9 +24,9 @@ public class BinaryCondition extends Model implements ICondition {
 	 * 
 	 */
 	private static final long serialVersionUID = -5040711107026041534L;
-	private String shortDescription;
-	private IGroup group;
+	private final String shortDescription;
 
+	@Override
 	public BinaryCondition deepcopy() {
 		return this;
 	}
@@ -40,14 +41,17 @@ public class BinaryCondition extends Model implements ICondition {
 		this.shortDescription = shortDescription;
 	}
 
+	@Override
 	public IConditionValue getDefaultValue() {
 		return BinaryConditionValue.defaultValue();
 	}
 
+	@Override
 	public IConditionValue getIrrelevantValue() {
 		return BinaryConditionValue.initialValue();
 	}
 
+	@Override
 	public List<IConditionValue> getPossibleValues() {
 		return BinaryConditionValue.getPossibleValues();
 	}
@@ -57,20 +61,19 @@ public class BinaryCondition extends Model implements ICondition {
 		return getShortDescription();
 	}
 
+	@Override
 	public String getShortDescription() {
 		return shortDescription;
 	}
 
-	public void setShortDescription(final String shortDescription) {
-		final String oldShortDescription = this.shortDescription;
-		this.shortDescription = shortDescription;
-	}
-
-	public IGroup getGroup() {
-		return group;
-	}
-
-	public void setGroup(final IGroup group) {
-		this.group = group;
+	@Override
+	public BinaryCondition setShortDescription(final String shortDescription) {
+		final BinaryCondition binaryCondition;
+		if (StringUtils.equals(shortDescription, this.shortDescription)) {
+			binaryCondition = this;
+		} else {
+			binaryCondition = new BinaryCondition(shortDescription);
+		}
+		return binaryCondition;
 	}
 }
