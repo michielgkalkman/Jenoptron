@@ -38,8 +38,7 @@ public class RuleTest extends AbstractTestCase {
 		final IRule rule2;
 
 		{
-			rule = new Rule();
-			rule.addCondition(new BinaryCondition());
+			rule = new Rule().addCondition(new BinaryCondition());
 		}
 
 		{
@@ -75,13 +74,11 @@ public class RuleTest extends AbstractTestCase {
 		final IRule rule2;
 
 		{
-			rule = new Rule();
-			rule.addAction(new BinaryAction());
+			rule = new Rule().addAction(new BinaryAction());
 		}
 
 		{
-			rule2 = new Rule();
-			rule2.addCondition(new BinaryCondition());
+			rule2 = new Rule().addCondition(new BinaryCondition());
 		}
 
 		assertFalse(rule.equals(rule2));
@@ -119,15 +116,11 @@ public class RuleTest extends AbstractTestCase {
 		final ICondition condition = new BinaryCondition();
 
 		{
-			rule = new Rule();
-			rule.addCondition(condition);
-			rule.setConditionValue(condition, BinaryConditionValue.NO);
+			rule = new Rule().addCondition(condition).setConditionValue(condition, BinaryConditionValue.NO);
 		}
 
 		{
-			rule2 = new Rule();
-			rule2.addCondition(condition);
-			rule2.setConditionValue(condition, BinaryConditionValue.NO);
+			rule2 = new Rule().addCondition(condition).setConditionValue(condition, BinaryConditionValue.NO);
 		}
 
 		assertTrue(rule.equals(rule2));
@@ -144,19 +137,15 @@ public class RuleTest extends AbstractTestCase {
 		final ICondition condition2 = new BinaryCondition();
 
 		{
-			rule = new Rule();
-			rule.addCondition(condition);
-			rule.addCondition(condition2);
-			rule.setConditionValue(condition, BinaryConditionValue.NO);
-			rule.setConditionValue(condition2, BinaryConditionValue.YES);
+			rule = new Rule().addCondition(condition).addCondition(condition2)
+					.setConditionValue(condition, BinaryConditionValue.NO)
+					.setConditionValue(condition2, BinaryConditionValue.YES);
 		}
 
 		{
-			rule2 = new Rule();
-			rule2.addCondition(condition);
-			rule2.addCondition(condition2);
-			rule2.setConditionValue(condition, BinaryConditionValue.NO);
-			rule2.setConditionValue(condition2, BinaryConditionValue.YES);
+			rule2 = new Rule().addCondition(condition).addCondition(condition2)
+					.setConditionValue(condition, BinaryConditionValue.NO)
+					.setConditionValue(condition2, BinaryConditionValue.YES);
 		}
 
 		assertTrue(rule.equals(rule2));

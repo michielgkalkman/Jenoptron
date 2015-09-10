@@ -63,12 +63,12 @@ public class ExclusiveConditionsGroup implements IExclusiveConditionGroup {
 	}
 
 	@Override
-	public Iterable<ICondition> conditions() {
+	public List<ICondition> conditions() {
 		return mutualExclusiveConditions;
 	}
 
 	@Override
-	public Iterable<IAction> actions() {
+	public List<IAction> actions() {
 		return Collections.EMPTY_LIST;
 	}
 

@@ -17,12 +17,8 @@ public class OtherwiseTest extends AbstractTestCase {
 
 	@Test
 	public void testFluentInterface() {
-		final IDecisionTable decisionTable = new DecisionTable();
-
-		decisionTable.setDefaultActionValue(DONT).addBinaryActions("action1", "action2")
-				.addBinaryConditions("condition1", "condition2");
-
-		decisionTable.split();
+		final IDecisionTable decisionTable = new DecisionTable().setDefaultActionValue(DONT)
+				.addBinaryActions("action1", "action2").addBinaryConditions("condition1", "condition2").split();
 
 		{
 			final String string = dump(decisionTable);
@@ -42,9 +38,8 @@ public class OtherwiseTest extends AbstractTestCase {
 
 	@Test
 	public void testDefaultValue() {
-		final IDecisionTable decisionTable = new DecisionTable(DO);
-
-		decisionTable.addBinaryConditions("condition1", "condition2").addBinaryActions("action1", "action2").split();
+		final IDecisionTable decisionTable = new DecisionTable(DO).addBinaryConditions("condition1", "condition2")
+				.addBinaryActions("action1", "action2").split();
 
 		{
 			final String string = dump(decisionTable);

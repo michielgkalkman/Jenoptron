@@ -48,23 +48,19 @@ public class CategoryTest extends AbstractTestCase {
 		final IExclusiveConditionGroup categoryGroup = new ExclusiveConditionsGroup("Test")
 				.add(new BinaryCondition("A")).add(new BinaryCondition("B")).add(new BinaryCondition("C"));
 
-		decisionTable.add(categoryGroup);
-
-		decisionTable.add(new BinaryAction("abc"));
-		decisionTable.setActionValues(BinaryActionValue.DO);
-
-		decisionTable.split();
+		final IDecisionTable decisionTable2 = decisionTable.add(categoryGroup).add(new BinaryAction("abc"))
+				.setActionValues(BinaryActionValue.DO).split();
 
 		{
-			final String string = dump(decisionTable);
-			assertEquals("YNN A\n" + "NYN B\n" + "NNY C\n" + "XXX abc\n", string);
+			final String string = dump(decisionTable2);
+			assertEquals("YYYYNNNN A\n" + "YYNNYYNN B\n" + "YNYNYNYN C\n" + "XXXXXXXX abc\n", string);
 			logger.debug(string);
 		}
 
-		decisionTable.reduce();
+		final IDecisionTable decisionTable3 = decisionTable2.reduce();
 
 		{
-			final String string = dump(decisionTable);
+			final String string = dump(decisionTable3);
 			assertEquals("- A\n" + "- B\n" + "- C\n" + "X abc\n", string);
 			logger.debug(string);
 		}
@@ -77,12 +73,10 @@ public class CategoryTest extends AbstractTestCase {
 		final IExclusiveConditionGroup categoryGroup = new ExclusiveConditionsGroup("Test")
 				.add(new BinaryCondition("A")).add(new BinaryCondition("B")).add(new BinaryCondition("C"));
 
-		decisionTable.add(categoryGroup);
-
-		decisionTable.split();
+		final IDecisionTable decisionTable2 = decisionTable.add(categoryGroup).split();
 
 		{
-			final String string = dump(decisionTable);
+			final String string = dump(decisionTable2);
 			assertEquals("YNN A\n" + "NYN B\n" + "NNY C\n", string);
 			logger.debug(string);
 		}
@@ -167,12 +161,17 @@ public class CategoryTest extends AbstractTestCase {
 	public void testRules() {
 		final IDecisionTable decisionTable = new DecisionTable();
 
-		final IExclusiveConditionGroup categoryGroup = new ExclusiveConditionsGroup("Test")
-				.add(new BinaryCondition("A")).add(new BinaryCondition("B"));
+		final BinaryCondition binaryConditionA = new BinaryCondition("A");
+		final BinaryCondition binaryConditionB = new BinaryCondition("B");
+		final IExclusiveConditionGroup categoryGroup = new ExclusiveConditionsGroup("Test").add(binaryConditionA)
+				.add(binaryConditionB);
 
-		decisionTable.add(categoryGroup);
+		assertTrue(categoryGroup.conditions().contains(binaryConditionA));
+		assertTrue(categoryGroup.conditions().contains(binaryConditionB));
 
-		final IRule rule = decisionTable.getRule(BinaryConditionValue.YES, BinaryConditionValue.YES);
+		final IDecisionTable decisionTable2 = decisionTable.add(categoryGroup);
+
+		final IRule rule = decisionTable2.getRule(BinaryConditionValue.YES, BinaryConditionValue.YES);
 		assertNull(rule);
 	}
 }

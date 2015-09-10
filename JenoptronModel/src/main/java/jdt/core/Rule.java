@@ -1,6 +1,8 @@
 package jdt.core;
 
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -41,6 +43,10 @@ public class Rule extends Model implements IRule {
 		this.conditions = conditions;
 	}
 
+	public Rule(final Map<ICondition, IConditionValue> c2v) {
+		this(new HashMap<IAction, IValue>(), c2v);
+	}
+
 	@Override
 	public IRule deepcopy() {
 		final Rule rule = new Rule();
@@ -58,24 +64,57 @@ public class Rule extends Model implements IRule {
 
 	@Override
 	public final IRule addAction(final IAction action) {
-		IRule newRule;
-		if (actions.containsKey(action)) {
+		return addAction(action, action.getUnknownValue());
+	}
+
+	@Override
+	public final IRule addActions(final Collection<? extends IAction> actions, final IValue value) {
+		IRule newRule = this;
+		if (actions.isEmpty()) {
 			newRule = this;
 		} else {
-			final Map<IAction, IValue> newActions = new HashMap<>();
-			newActions.putAll(actions);
-			newActions.put(action, action.getUnknownValue());
-			newRule = new Rule(newActions, conditions);
-			fire();
+			for (final IAction action : actions) {
+				newRule = newRule.addAction(action, value);
+			}
+		}
+		return newRule;
+	}
+
+	@Override
+	public final IRule addActions(final Collection<? extends IAction> actions) {
+		IRule newRule = this;
+		if (actions.isEmpty()) {
+			newRule = this;
+		} else {
+			for (final IAction action : actions) {
+				newRule = newRule.addAction(action);
+			}
+		}
+		return newRule;
+	}
+
+	@Override
+	public final IRule addActions(final IValue value, final IAction... actions) {
+		IRule newRule = null;
+		for (final IAction action : actions) {
+			newRule = addAction(action, value);
 		}
 		return newRule;
 	}
 
 	@Override
 	public IRule addAction(final IAction action, final IValue value) {
-		actions.put(action, value);
-		fire();
-		return this;
+		IRule newRule;
+		if (actions.containsKey(action)) {
+			newRule = this;
+		} else {
+			final Map<IAction, IValue> newActions = new HashMap<>();
+			newActions.putAll(actions);
+			newActions.put(action, value);
+			newRule = new Rule(newActions, conditions);
+			fire();
+		}
+		return newRule;
 	}
 
 	private void fire() {
@@ -85,16 +124,22 @@ public class Rule extends Model implements IRule {
 
 	@Override
 	public final IRule addCondition(final ICondition condition) {
-		conditions.put(condition, condition.getIrrelevantValue());
-		fire();
-		return this;
+		return addCondition(condition, condition.getIrrelevantValue());
 	}
 
 	@Override
 	public IRule addCondition(final ICondition condition, final IConditionValue conditionValue) {
-		conditions.put(condition, conditionValue);
-		fire();
-		return this;
+		IRule newRule;
+		if (conditions.containsKey(condition)) {
+			newRule = this;
+		} else {
+			final Map<ICondition, IConditionValue> newConditions = new HashMap<>();
+			newConditions.putAll(conditions);
+			newConditions.put(condition, conditionValue);
+			newRule = new Rule(actions, newConditions);
+			fire();
+		}
+		return newRule;
 	}
 
 	@Override
@@ -104,10 +149,17 @@ public class Rule extends Model implements IRule {
 
 	@Override
 	public IRule setConditionValue(final ICondition condition, final IConditionValue conditionValue) {
-		conditions.put(condition, conditionValue);
-		fire();
-
-		return this;
+		IRule newRule;
+		if (conditions.containsKey(condition) && conditions.get(condition).equals(conditionValue)) {
+			newRule = this;
+		} else {
+			final Map<ICondition, IConditionValue> newConditions = new HashMap<>();
+			newConditions.putAll(conditions);
+			newConditions.put(condition, conditionValue);
+			newRule = new Rule(actions, newConditions);
+			fire();
+		}
+		return newRule;
 	}
 
 	@Override
@@ -267,9 +319,14 @@ public class Rule extends Model implements IRule {
 	}
 
 	@Override
-	public void remove(final IAction action) {
-		actions.remove(action);
+	public IRule remove(final IAction action) {
+		final Map<IAction, IValue> newActions = new HashMap<>();
+
+		newActions.putAll(actions);
+		newActions.remove(action);
 		fire();
+
+		return new Rule(newActions, conditions);
 	}
 
 	@Override
@@ -281,5 +338,49 @@ public class Rule extends Model implements IRule {
 	@Override
 	public IRule setActionValue(final String action, final IValue value) {
 		return setActionValue(new BinaryAction(action), value);
+	}
+
+	@Override
+	public IRule addConditions(final List<ICondition> newTableConditions) {
+		IRule newRule = null;
+		if (newTableConditions.isEmpty()) {
+			newRule = this;
+		} else {
+			newRule = this;
+			for (final ICondition condition : newTableConditions) {
+				newRule = newRule.addCondition(condition);
+			}
+		}
+		return newRule;
+	}
+
+	@Override
+	public IRule add(final Map<ICondition, IConditionValue> c2v) {
+		IRule newRule = null;
+		if (c2v.isEmpty()) {
+			newRule = this;
+		} else {
+			final Map<ICondition, IConditionValue> newConditions = new HashMap<>();
+			newConditions.putAll(conditions);
+			newConditions.putAll(c2v);
+			newRule = new Rule(actions, newConditions);
+			fire();
+		}
+		return newRule;
+	}
+
+	@Override
+	public IRule addActions(final Map<IAction, IValue> map) {
+		IRule newRule = null;
+		if (map.isEmpty()) {
+			newRule = this;
+		} else {
+			final Map<IAction, IValue> newActions = new HashMap<>();
+			newActions.putAll(actions);
+			newActions.putAll(map);
+			newRule = new Rule(newActions, conditions);
+			fire();
+		}
+		return newRule;
 	}
 }

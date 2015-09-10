@@ -1,5 +1,7 @@
 package jdt.icore;
 
+import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 
 public interface IRule extends IObject, Comparable {
@@ -31,9 +33,21 @@ public interface IRule extends IObject, Comparable {
 
 	IRule addCondition(final ICondition condition, IConditionValue conditionValue);
 
-	void remove(final IAction action);
+	IRule remove(final IAction action);
 
 	void remove(final ICondition condition);
 
 	boolean isInstanceOf(IRule rule);
+
+	IRule addActions(Collection<? extends IAction> actions, IValue defaultActionValue);
+
+	IRule addActions(IValue defaultActionValue, IAction... actions);
+
+	IRule addActions(Collection<? extends IAction> actions);
+
+	IRule addConditions(List<ICondition> newTableConditions);
+
+	IRule add(Map<ICondition, IConditionValue> c2v);
+
+	IRule addActions(Map<IAction, IValue> map);
 }

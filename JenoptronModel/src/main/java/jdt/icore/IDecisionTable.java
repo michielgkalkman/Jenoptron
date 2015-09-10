@@ -36,12 +36,6 @@ public interface IDecisionTable extends CUDDecisionTable, PropertyChangeListener
 	static final String PROP_SHORT_DESCRIPTION = "shortDescription";
 
 	/**
-	 * Deepcopy this table.
-	 */
-	@Override
-	IDecisionTable deepcopy();
-
-	/**
 	 * Add a condition.
 	 * 
 	 * This will add a condition to the template.
@@ -132,7 +126,7 @@ public interface IDecisionTable extends CUDDecisionTable, PropertyChangeListener
 
 	IDecisionTable insert(final int position, final ICondition condition);
 
-	void remove(final IAction action);
+	IDecisionTable remove(final IAction action);
 
 	void remove(final ICondition condition);
 
@@ -155,8 +149,6 @@ public interface IDecisionTable extends CUDDecisionTable, PropertyChangeListener
 	IRule getRule(final int ruleNr);
 
 	boolean showsAllRules();
-
-	IDecisionTable getSubtable(final int[] conditions, final int[] actions);
 
 	IDecisionTable getSubtable(final String... conditions);
 
@@ -187,4 +179,10 @@ public interface IDecisionTable extends CUDDecisionTable, PropertyChangeListener
 	List<IConditionValue> getConditionValues(IRule irule);
 
 	boolean sameConditions(IRule rule, List<IConditionValue> conditionValues);
+
+	IDecisionTable getSubtable(List<ICondition> conditions);
+
+	boolean validate();
+
+	IDecisionTable getSubtable(List<ICondition> conditions, List<IAction> releavantActions);
 }

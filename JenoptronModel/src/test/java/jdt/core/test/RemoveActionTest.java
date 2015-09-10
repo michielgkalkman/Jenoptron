@@ -1,5 +1,8 @@
 package jdt.core.test;
 
+import org.apache.log4j.Logger;
+import org.junit.Test;
+
 import jdt.core.DecisionTable;
 import jdt.core.binary.BinaryAction;
 import jdt.core.binary.BinaryCondition;
@@ -8,11 +11,8 @@ import jdt.icore.IAction;
 import jdt.icore.ICondition;
 import jdt.icore.IDecisionTable;
 
-import org.apache.log4j.Logger;
-import org.junit.Test;
-
 public class RemoveActionTest extends AbstractTestCase {
-	private static final Logger logger = Logger.getLogger( RemoveActionTest.class);
+	private static final Logger logger = Logger.getLogger(RemoveActionTest.class);
 
 	@Test
 	public void testSimple() {
@@ -21,58 +21,63 @@ public class RemoveActionTest extends AbstractTestCase {
 		// Add condition
 		{
 			final ICondition condition = new BinaryCondition();
-			decisionTable.add( condition);
+			decisionTable.add(condition);
 		}
 
 		// Add action
 		{
 			final IAction action = new BinaryAction();
-			decisionTable.add( action);
+			decisionTable.add(action);
 		}
 
 		// Add action
 		IAction action;
 		{
 			action = new BinaryAction();
-			decisionTable.add( action);
+			decisionTable.add(action);
 		}
 
-		decisionTable.remove( action);
+		decisionTable.remove(action);
 
-		logger.debug( dump( decisionTable));
+		logger.debug(dump(decisionTable));
 	}
 
 	@Test
 	public void testSimple2() {
-		final IDecisionTable decisionTable = new DecisionTable();
+		final IAction action = new BinaryAction();
 
-		// Add condition
+		final DecisionTable emptyDecisionTable = new DecisionTable();
+		assertEquals("", dump(emptyDecisionTable));
+
+		final IDecisionTable decisionTableWithCondition = emptyDecisionTable.add(new BinaryCondition());
+		assertEquals("YN BinaryCondition\n", dump(decisionTableWithCondition));
+
+		final IDecisionTable add = decisionTableWithCondition.add(new BinaryAction());
+		final IDecisionTable decisionTable = add.add(action);
+
+		assertEquals("YN BinaryCondition\n?? BinaryAction\n?? BinaryAction\n", dump(decisionTable));
+
+		final IDecisionTable decisionTable1 = decisionTable.reduce();
+		final String before = dump(decisionTable1);
+
+		assertEquals("- BinaryCondition\n? BinaryAction\n? BinaryAction\n", before);
+
+		final IDecisionTable decisionTable1a = decisionTable1.remove(action);
+
 		{
-			final ICondition condition = new BinaryCondition();
-			decisionTable.add( condition);
+			final String string = dump(decisionTable1a);
+			assertEquals("- BinaryCondition\n? BinaryAction\n", string);
 		}
 
-		// Add action
+		final IDecisionTable decisionTable2 = decisionTable1a.add(action);
+
 		{
-			final IAction action = new BinaryAction();
-			decisionTable.add( action);
+			final String string = dump(decisionTable2);
+			assertEquals("- BinaryCondition\n? BinaryAction\n? BinaryAction\n", string);
 		}
 
-		// Add action
-		IAction action;
-		{
-			action = new BinaryAction();
-			decisionTable.add( action);
-		}
+		final String after = dump(decisionTable2);
 
-		decisionTable.reduce();
-		final String before = dump( decisionTable);
-
-		decisionTable.remove( action);
-		decisionTable.add( action);
-
-		final String after = dump( decisionTable);
-
-		assertEquals( before, after);
+		assertEquals(before, after);
 	}
 }
