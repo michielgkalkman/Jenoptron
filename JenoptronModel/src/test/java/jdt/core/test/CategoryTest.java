@@ -73,7 +73,15 @@ public class CategoryTest extends AbstractTestCase {
 		final IExclusiveConditionGroup categoryGroup = new ExclusiveConditionsGroup("Test")
 				.add(new BinaryCondition("A")).add(new BinaryCondition("B")).add(new BinaryCondition("C"));
 
-		final IDecisionTable decisionTable2 = decisionTable.add(categoryGroup).split();
+		final IDecisionTable decisionTable1a = decisionTable.add(categoryGroup);
+
+		{
+			final String string = dump(decisionTable1a);
+			assertEquals("YNN A\n" + "NYN B\n" + "NNY C\n", string);
+			logger.debug(string);
+		}
+
+		final IDecisionTable decisionTable2 = decisionTable1a.split();
 
 		{
 			final String string = dump(decisionTable2);

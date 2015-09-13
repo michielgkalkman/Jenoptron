@@ -5,9 +5,6 @@ import java.util.List;
 import java.util.Map;
 
 public interface IRule extends IObject, Comparable {
-	@Override
-	IRule deepcopy();
-
 	IConditionValue getConditionValue(final ICondition condition);
 
 	IValue getActionValue(final IAction action);

@@ -143,26 +143,6 @@ public class DecisionTable extends JDTModel implements IDecisionTable {
 	}
 
 	@Override
-	public IDecisionTable deepcopy() {
-		final IDecisionTable table = new DecisionTable();
-
-		for (final ICondition condition : tableConditions) {
-			table.add(condition.deepcopy());
-		}
-
-		for (final IAction action : actions) {
-			table.add(action.deepcopy());
-		}
-
-		table.split();
-
-		table.setRules(rules);
-
-		logger.debug("END deepcopy()");
-		return table;
-	}
-
-	@Override
 	public IDecisionTable add(final IAction action) {
 		final List<IAction> newActionList = new ArrayList<>(actions);
 
@@ -1287,7 +1267,7 @@ public class DecisionTable extends JDTModel implements IDecisionTable {
 			List<IRule> tmpRules = new ArrayList<>(rules);
 			for (final ICondition condition : group.conditions()) {
 				if (!tableConditions.contains(condition)) {
-					final List<IRule> newTmpRules = new ArrayList<>(rules);
+					final List<IRule> newTmpRules = new ArrayList<>(tmpRules);
 					for (final IRule rule : tmpRules) {
 						newTmpRules.add(rule.addCondition(condition));
 					}

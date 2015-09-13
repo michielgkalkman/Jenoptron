@@ -48,21 +48,6 @@ public class Rule extends Model implements IRule {
 	}
 
 	@Override
-	public IRule deepcopy() {
-		final Rule rule = new Rule();
-
-		for (final ICondition condition : conditions.keySet()) {
-			rule.addCondition(condition.deepcopy(), conditions.get(condition));
-		}
-
-		for (final IAction action : actions.keySet()) {
-			rule.addAction(action.deepcopy(), actions.get(action));
-		}
-
-		return rule;
-	}
-
-	@Override
 	public final IRule addAction(final IAction action) {
 		return addAction(action, action.getUnknownValue());
 	}

@@ -95,4 +95,10 @@ public class ExclusiveConditionsGroup implements IExclusiveConditionGroup {
 	public String getShortDescription(final String groupMemberShortDescription) {
 		return getShortDescription() + ":" + groupMemberShortDescription;
 	}
+
+	@Override
+	public String toString() {
+		return getClass().getSimpleName() + '(' + getShortDescription() + "):"
+				+ StringUtils.join(mutualExclusiveConditions, ',');
+	}
 }
