@@ -19,12 +19,10 @@ public class CategoryTest extends AbstractTestCase {
 
 	@Test
 	public void testSimple() {
-		final IDecisionTable decisionTable = new DecisionTable();
-
 		final IExclusiveConditionGroup categoryGroup = new ExclusiveConditionsGroup("Test")
 				.add(new BinaryCondition("A")).add(new BinaryCondition("B"));
 
-		decisionTable.add(categoryGroup);
+		final IDecisionTable decisionTable = new DecisionTable().add(categoryGroup);
 
 		{
 			final String string = dump(decisionTable);
@@ -32,10 +30,10 @@ public class CategoryTest extends AbstractTestCase {
 			logger.debug("\n" + string);
 		}
 
-		decisionTable.reduce();
+		final IDecisionTable decisionTable2 = decisionTable.reduce();
 
 		{
-			final String string = dump(decisionTable);
+			final String string = dump(decisionTable2);
 			assertEquals("- A\n" + "- B\n", string);
 			logger.debug("\n" + string);
 		}
@@ -53,7 +51,7 @@ public class CategoryTest extends AbstractTestCase {
 
 		{
 			final String string = dump(decisionTable2);
-			assertEquals("YYYYNNNN A\n" + "YYNNYYNN B\n" + "YNYNYNYN C\n" + "XXXXXXXX abc\n", string);
+			assertEquals("YNN A\n" + "NYN B\n" + "NNY C\n" + "XXX abc\n", string);
 			logger.debug(string);
 		}
 
@@ -89,11 +87,10 @@ public class CategoryTest extends AbstractTestCase {
 			logger.debug(string);
 		}
 
-		decisionTable.reduce();
-		decisionTable.split();
+		final IDecisionTable decisionTable3 = decisionTable2.reduce().split();
 
 		{
-			final String string = dump(decisionTable);
+			final String string = dump(decisionTable3);
 			assertEquals("YNN A\n" + "NYN B\n" + "NNY C\n", string);
 			logger.debug(string);
 		}
@@ -101,15 +98,11 @@ public class CategoryTest extends AbstractTestCase {
 
 	@Test
 	public void testSimple4() {
-		final IDecisionTable decisionTable = new DecisionTable();
-
 		final IExclusiveConditionGroup categoryGroup = new ExclusiveConditionsGroup("Test")
 				.add(new BinaryCondition("A")).add(new BinaryCondition("B"));
 
-		decisionTable.add(categoryGroup);
-		decisionTable.add(new BinaryCondition("C"));
-
-		decisionTable.split();
+		final IDecisionTable decisionTable = new DecisionTable().add(categoryGroup).add(new BinaryCondition("C"))
+				.split();
 
 		{
 			final String string = dump(decisionTable);
@@ -117,49 +110,49 @@ public class CategoryTest extends AbstractTestCase {
 			logger.debug("\n" + string);
 		}
 
-		decisionTable.reduce();
-		decisionTable.split();
-		decisionTable.reduce();
+		final IDecisionTable reduce2 = decisionTable.reduce();
+		final IDecisionTable reduce = reduce2;
+		final IDecisionTable decisionTable2 = reduce.split().reduce();
 
 		{
-			final String string = dump(decisionTable);
+			final String string = dump(decisionTable2);
 			assertEquals("- A\n" + "- B\n" + "- C\n", string);
 			logger.debug("\n" + string);
 		}
 
-		decisionTable.split();
+		final IDecisionTable decisionTable3 = decisionTable2.split();
 
 		{
-			final String string = dump(decisionTable);
+			final String string = dump(decisionTable3);
 			assertEquals("YYNN A\n" + "NNYY B\n" + "YNYN C\n", string);
 			logger.debug("\n" + string);
 		}
 
 		final BinaryAction abc = new BinaryAction("abc");
-		decisionTable.add(abc);
+		final IDecisionTable decisionTable4 = decisionTable.add(abc);
 		{
-			final IRule rule = decisionTable.getRule(BinaryConditionValue.YES, BinaryConditionValue.YES,
+			final IRule rule = decisionTable4.getRule(BinaryConditionValue.YES, BinaryConditionValue.YES,
 					BinaryConditionValue.YES);
 			assertNull(rule);
 		}
 
-		decisionTable.setActionValues(BinaryActionValue.DO);
+		final IDecisionTable decisionTable5 = decisionTable.setActionValues(BinaryActionValue.DO);
 
-		final IRule rule = decisionTable.getRule(BinaryConditionValue.YES, BinaryConditionValue.NO,
+		final IRule rule = decisionTable5.getRule(BinaryConditionValue.YES, BinaryConditionValue.NO,
 				BinaryConditionValue.YES);
 		assertNotNull(rule);
 		rule.setActionValue(abc, BinaryActionValue.DONT);
 
 		{
-			final String string = dump(decisionTable);
+			final String string = dump(decisionTable5);
 
 			logger.debug("\n" + string);
 		}
 
-		decisionTable.reduce();
+		final IDecisionTable decisionTable6 = decisionTable5.reduce();
 
 		{
-			final String string = dump(decisionTable);
+			final String string = dump(decisionTable6);
 
 			logger.debug("\n" + string);
 		}

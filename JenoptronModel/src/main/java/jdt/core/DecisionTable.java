@@ -16,7 +16,6 @@ import java.util.Stack;
 import java.util.TreeSet;
 
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.collections.Predicate;
 import org.apache.log4j.Logger;
 
 import jdt.core.binary.BinaryAction;
@@ -51,7 +50,8 @@ public class DecisionTable extends JDTModel implements IDecisionTable {
 	private String shortDescription;
 	private IValue defaultActionValue = BinaryActionValue.UNKNOWN;
 
-	private final transient Predicate predicateLegalRule = new LegalRulePredicate(this);
+	// private final transient Predicate predicateLegalRule = new
+	// LegalRulePredicate(this);
 
 	public DecisionTable() {
 		this("Some Decision Table");
@@ -83,7 +83,7 @@ public class DecisionTable extends JDTModel implements IDecisionTable {
 	private IDecisionTable createDecisionTable(final List<ICondition> newTableConditions,
 			final List<IAction> newActions, final List<IRule> newRules, final List<IGroup> newGroups) {
 		// TODO Auto-generated method stub
-		return new DecisionTable(newRules, newActions, newTableConditions, groups, shortDescription,
+		return new DecisionTable(newRules, newActions, newTableConditions, newGroups, shortDescription,
 				defaultActionValue);
 	}
 
@@ -408,7 +408,7 @@ public class DecisionTable extends JDTModel implements IDecisionTable {
 	@Override
 	@SuppressWarnings("unchecked")
 	public List<IRule> getRules() {
-		final List<IRule> applicableRules = (List<IRule>) CollectionUtils.select(rules, predicateLegalRule);
+		final List<IRule> applicableRules = (List<IRule>) CollectionUtils.select(rules, new LegalRulePredicate(this));
 
 		logger.debug("END List<IRule> getRules(): " + applicableRules.size());
 		return applicableRules;
@@ -424,7 +424,7 @@ public class DecisionTable extends JDTModel implements IDecisionTable {
 	public Iterable<IRule> getLegalRulesIterable() {
 		logger.debug("END List<IRule> getLegalRules(): " + rules.size());
 
-		return new IterableWrapper<IRule>(rules, predicateLegalRule);
+		return new IterableWrapper<IRule>(rules, new LegalRulePredicate(this));
 	}
 
 	@Override
@@ -1232,8 +1232,7 @@ public class DecisionTable extends JDTModel implements IDecisionTable {
 	public IDecisionTable add(final IGroup group) {
 		final List<IAction> newActions = new ArrayList<>();
 		final List<ICondition> newTableConditions = new ArrayList<>();
-		final List<IGroup> newGroups = new ArrayList<>();
-		final List<IRule> newRules;
+		final List<IGroup> newGroups = new ArrayList<>(groups);
 
 		{
 			for (final ICondition condition : tableConditions) {
@@ -1259,26 +1258,12 @@ public class DecisionTable extends JDTModel implements IDecisionTable {
 			}
 		}
 
-		if (rules.isEmpty()) {
-			// Create a single rule.
-			newRules = new ArrayList<>();
-			newRules.add(new Rule().addConditions(newTableConditions).addActions(newActions));
-		} else {
-			List<IRule> tmpRules = new ArrayList<>(rules);
-			for (final ICondition condition : group.conditions()) {
-				if (!tableConditions.contains(condition)) {
-					final List<IRule> newTmpRules = new ArrayList<>(tmpRules);
-					for (final IRule rule : tmpRules) {
-						newTmpRules.add(rule.addCondition(condition));
-					}
-					tmpRules = newTmpRules;
-				}
-			}
-			newRules = tmpRules;
-		}
+		final List<IRule> newRules;
 
-		for (final IGroup someGroup : groups) {
-			newGroups.add(someGroup);
+		if (rules.size() == 0) {
+			newRules = splitRules(newTableConditions);
+		} else {
+			newRules = addToAllRules(newTableConditions);
 		}
 
 		newGroups.add(group);
