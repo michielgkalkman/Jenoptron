@@ -11,9 +11,11 @@ import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.ObservableList;
 import javafx.event.EventType;
+import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.geometry.VPos;
 import javafx.scene.Cursor;
+import javafx.scene.Node;
 import javafx.scene.SnapshotParameters;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -35,6 +37,8 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
+import jdt.icore.IAction;
+import jdt.icore.ICondition;
 import jdt.icore.IDecisionTable;
 
 public class DTCanvasPane extends Pane {
@@ -241,20 +245,47 @@ public class DTCanvasPane extends Pane {
 	}
 
 	private void createDraggableNode(final Pane dtCanvasPane, final MouseEvent event) {
-		// For now, create an draggable image from a piece of text.
-		final WritableImage text2image = text2image(300, 300, "X", Color.RED);
+		final DTContext dtContext = getDtView().get().getDTContext(event.getSceneX(), event.getSceneY());
+
+		final WritableImage text2image;
+
+		final ICondition condition = dtContext.getiCondition();
+		if (condition == null) {
+			final IAction action = dtContext.getiAction();
+			if (action == null) {
+				// For now, create an draggable image from a piece of text.
+				text2image = text2image(300, 300, "X", Color.WHITE);
+			} else {
+				// For now, create an draggable image from a piece of text.
+				text2image = text2image(300, 300, "X", Color.WHITE);
+			}
+		} else {
+			final double canvas_width = canvas.getWidth();
+			final double canvas_height = canvas.getHeight();
+
+			// For now, create an draggable image from a piece of text.
+			text2image = text2image(dtContext.getCell().getWidth(), dtContext.getCell().getHeight(),
+					condition.getShortDescription(), Color.WHITE);
+		}
+
+		createDraggableNode(dtCanvasPane, event, text2image);
+	}
+
+	private void createDraggableNode(final Pane dtCanvasPane, final MouseEvent event, final WritableImage text2image) {
 		dragImageView = new ImageView(text2image);
 
-		if (!dtCanvasPane.getChildren().contains(dragImageView)) {
-			dtCanvasPane.getChildren().add(dragImageView);
+		final ObservableList<Node> children = dtCanvasPane.getChildren();
+		if (!children.contains(dragImageView)) {
+			children.add(dragImageView);
 		}
 
 		dragImageView.setOpacity(0.5);
 		dragImageView.toFront();
 		dragImageView.setMouseTransparent(true);
 		dragImageView.setVisible(true);
-		dragImageView.relocate((int) (event.getSceneX() - dragImageView.getBoundsInLocal().getWidth() / 2),
-				(int) (event.getSceneY() - dragImageView.getBoundsInLocal().getHeight() / 2));
+		final Bounds boundsInLocal = dragImageView.getBoundsInLocal();
+		dragImageView.relocate((int) (event.getSceneX() - boundsInLocal.getWidth() / 2),
+				(int) (event.getSceneY() - boundsInLocal.getHeight() / 2));
 
 		final Dragboard db = dtCanvasPane.startDragAndDrop(TransferMode.ANY);
 		final ClipboardContent content = new ClipboardContent();
@@ -263,6 +294,12 @@ public class DTCanvasPane extends Pane {
 		// myTableView.getSelectionModel().getSelectedItem();
 		// content.putString(inboundBean.getVfcNumber());
 		db.setContent(content);
+	};
+
+	private void oldCreateDraggableNode(final Pane dtCanvasPane, final MouseEvent event) {
+		// For now, create an draggable image from a piece of text.
+		final WritableImage text2image = text2image(300, 300, "X", Color.RED);
+		createDraggableNode(dtCanvasPane, event, text2image);
 	};
 
 	private ImageView dragImageView;
@@ -292,7 +329,7 @@ public class DTCanvasPane extends Pane {
 
 		final SnapshotParameters parameters = new SnapshotParameters();
 		parameters.setFill(Color.TRANSPARENT);
-		final WritableImage writableImage = new WritableImage((int) text_w, (int) text_w);
+		final WritableImage writableImage = new WritableImage((int) text_w, (int) text_h);
 		final WritableImage snapshot = canvas2.snapshot(parameters, writableImage);
 		return snapshot;
 	}

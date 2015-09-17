@@ -243,7 +243,7 @@ public class DTView {
 
 		final SnapshotParameters parameters = new SnapshotParameters();
 		parameters.setFill(Color.TRANSPARENT);
-		final WritableImage writableImage = new WritableImage((int) text_w, (int) text_w);
+		final WritableImage writableImage = new WritableImage((int) text_w, (int) text_h);
 		final WritableImage snapshot = canvas2.snapshot(parameters, writableImage);
 		return snapshot;
 	}
