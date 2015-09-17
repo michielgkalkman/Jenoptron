@@ -69,7 +69,7 @@ public class DTView {
 		// Column for condition/action texts:
 		final List<Column> tmpColumns = new ArrayList<>();
 
-		final int textWidth = 100;
+		final int textWidth = 300;
 		final Column textColumn = new Column(textWidth);
 		textColumn.addCell(new Cell(textWidth, row_height, this, CellType.ROOTCELL));
 		iDecisionTable.getConditions().stream().forEach(condition -> {
