@@ -127,4 +127,19 @@ public class Column {
 		}
 		return newColumn;
 	}
+
+	public Column setDragged(final Cell newCell) {
+		final Column newColumn;
+		if (cells.stream().anyMatch(cell -> cell.equals(newCell))) {
+			final List<Cell> newCells = new ArrayList<>();
+			cells.stream().forEach(cell -> {
+				newCells.add(cell.setDragged(newCell));
+			});
+			newColumn = new Column(width, Collections.unmodifiableList(newCells));
+		} else {
+			newColumn = this;
+		}
+
+		return newColumn;
+	}
 }

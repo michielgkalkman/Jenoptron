@@ -369,7 +369,7 @@ public class DTView {
 	private DTView runOnSelected(final DTView dtView, final CellRunner cellRunner) {
 		final DTView newDTView;
 		if (columns.stream().anyMatch(column -> column.isAnyActionSelected())) {
-			final IDecisionTable deepcopy = iDecisionTable.deepcopy();
+			final IDecisionTable deepcopy = iDecisionTable;
 
 			columns.stream().forEach(column -> {
 				column.getCells().stream().filter(cell -> cell.isSelected()).forEach(cell -> {
@@ -482,5 +482,15 @@ public class DTView {
 		});
 
 		return selectedCells;
+	}
+
+	public DTView setDraggedRow(final Cell cell) {
+		final List<Column> newColumns = new ArrayList<>();
+
+		columns.stream().forEach(column -> {
+			newColumns.add(column.setDragged(cell));
+		});
+
+		return new DTView(iDecisionTable, font, newColumns, start_dt_w, start_dt_h);
 	}
 }

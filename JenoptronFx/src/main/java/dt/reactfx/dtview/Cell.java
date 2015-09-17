@@ -22,6 +22,7 @@ public class Cell {
 	private final DTView dtView;
 
 	private final boolean fSelected;
+	private final boolean fDragged;
 
 	public Cell(final double width, final double height, final IAction action,
 			final BinaryActionValue binaryActionValue, final IRule iRule, final DTView dtView,
@@ -37,6 +38,7 @@ public class Cell {
 		this.binaryConditionValue = null;
 		this.shortDescription = null;
 		this.fSelected = false;
+		this.fDragged = false;
 	}
 
 	public Cell(final int width, final int height, final ICondition condition,
@@ -53,6 +55,7 @@ public class Cell {
 		this.binaryConditionValue = binaryConditionValue;
 		this.shortDescription = null;
 		this.fSelected = false;
+		this.fDragged = false;
 	}
 
 	public Cell(final int width, final int height, final DTView dtView, final CellType cellType) {
@@ -67,12 +70,13 @@ public class Cell {
 		this.shortDescription = null;
 		this.iRule = null;
 		this.fSelected = false;
+		this.fDragged = false;
 	}
 
 	private Cell(final double width, final double height, final IAction action,
 			final BinaryActionValue binaryActionValue, final ICondition condition,
 			final BinaryConditionValue binaryConditionValue, final String shortDescription, final IRule iRule,
-			final DTView dtView, final CellType cellType, final boolean selected) {
+			final DTView dtView, final CellType cellType, final boolean selected, final boolean fDragged) {
 		this.width = width;
 		this.height = height;
 		this.action = action;
@@ -84,6 +88,7 @@ public class Cell {
 		this.shortDescription = shortDescription;
 		this.cellType = cellType;
 		this.fSelected = selected;
+		this.fDragged = fDragged;
 	}
 
 	public Cell(final int width, final int height, final ICondition condition, final String shortDescription,
@@ -99,6 +104,7 @@ public class Cell {
 		this.shortDescription = shortDescription;
 		this.iRule = null;
 		this.fSelected = false;
+		this.fDragged = false;
 	}
 
 	public Cell(final int width, final int height, final IAction action, final String shortDescription,
@@ -114,6 +120,7 @@ public class Cell {
 		this.shortDescription = shortDescription;
 		this.iRule = null;
 		this.fSelected = false;
+		this.fDragged = false;
 	}
 
 	public double getHeight() {
@@ -122,7 +129,7 @@ public class Cell {
 
 	public Cell enlarge(final double factor) {
 		return new Cell(width * factor, height * factor, getAction(), binaryActionValue, condition,
-				binaryConditionValue, shortDescription, iRule, dtView, cellType, fSelected);
+				binaryConditionValue, shortDescription, iRule, dtView, cellType, fSelected, fDragged);
 	}
 
 	public IAction getAction() {
@@ -170,7 +177,7 @@ public class Cell {
 		final Cell newCell;
 		if (this.equals(cell)) {
 			newCell = new Cell(width, height, action, binaryActionValue, condition, binaryConditionValue,
-					shortDescription, iRule, dtView, cellType, fSelected ^ true);
+					shortDescription, iRule, dtView, cellType, fSelected ^ true, fDragged);
 		} else {
 			newCell = this; // cell is intended to be immutable
 		}
@@ -187,7 +194,7 @@ public class Cell {
 			newCell = this; // cell is intended to be immutable
 		} else {
 			newCell = new Cell(width, height, action, binaryActionValue, condition, binaryConditionValue,
-					shortDescription, iRule, dtView, cellType, selected);
+					shortDescription, iRule, dtView, cellType, selected, fDragged);
 		}
 		return newCell;
 	}
@@ -198,7 +205,7 @@ public class Cell {
 		if (condition != null) {
 			condition.setShortDescription(shortDescription);
 			newCell = new Cell(width, height, action, binaryActionValue, condition, binaryConditionValue,
-					shortDescription, iRule, dtView, cellType, fSelected);
+					shortDescription, iRule, dtView, cellType, fSelected, fDragged);
 		} else {
 			newCell = this;
 		}
@@ -215,6 +222,21 @@ public class Cell {
 			newCell = this;
 		}
 
+		return newCell;
+	}
+
+	public Cell setDragged(final Cell cell) {
+		return apply(cell, () -> new Cell(width, height, action, binaryActionValue, condition, binaryConditionValue,
+				shortDescription, iRule, dtView, cellType, fSelected, true));
+	}
+
+	private Cell apply(final Cell cell, final CellFI runnable) {
+		final Cell newCell;
+		if (this.equals(cell)) {
+			newCell = runnable.apply();
+		} else {
+			newCell = this; // cell is intended to be immutable
+		}
 		return newCell;
 	}
 }

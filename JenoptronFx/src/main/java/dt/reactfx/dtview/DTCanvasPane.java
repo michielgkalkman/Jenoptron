@@ -42,6 +42,7 @@ public class DTCanvasPane extends Pane {
 	private final ObjectProperty<DTView> dtView = new SimpleObjectProperty<>();
 
 	private ContextMenu contextMenu;
+	private DTContext possiblyDraggedDTContext;
 
 	public DTCanvasPane(final IDecisionTable iDecisionTable, final Font font) {
 		getDtView().set(new DTView(iDecisionTable, font));
@@ -133,17 +134,20 @@ public class DTCanvasPane extends Pane {
 		// CANVAS ANY event: MOUSE_RELEASED
 
 		canvas.setOnMousePressed(event -> {
-			final DTContext dtContext = getDtView().get().getDTContext(event.getSceneX(), event.getSceneY());
+			possiblyDraggedDTContext = getDtView().get().getDTContext(event.getSceneX(), event.getSceneY());
 
-			if (dtContext == null) {
+			if (possiblyDraggedDTContext == null) {
 				System.out.println("setOnMousePressed: null");
 			} else {
-				System.out.println("setOnMousePressed: " + dtContext.getiCondition() + "," + dtContext.getiAction());
+				System.out.println("setOnMousePressed: " + possiblyDraggedDTContext.getiCondition() + ","
+						+ possiblyDraggedDTContext.getiAction());
 			}
 			event.consume();
 		});
 
 		canvas.setOnMouseDragged(event -> {
+			dtView.get().setDraggedRow(possiblyDraggedDTContext.getCell());
+
 			final DTContext dtContext = getDtView().get().getDTContext(event.getSceneX(), event.getSceneY());
 
 			if (dtContext == null) {

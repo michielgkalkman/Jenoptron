@@ -6,12 +6,9 @@ import javafx.scene.control.Label;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
-import javafx.stage.Stage;
 import jdt.core.DecisionTable;
 import jdt.core.binary.BinaryAction;
 import jdt.core.binary.BinaryCondition;
-import jdt.icore.IAction;
-import jdt.icore.ICondition;
 import jdt.icore.IDecisionTable;
 
 public class DTCanvasApp extends Application {
@@ -40,22 +37,12 @@ public class DTCanvasApp extends Application {
 	}
 
 	private IDecisionTable createDecisionTable() {
-		final IDecisionTable decisionTable = new DecisionTable();
+		IDecisionTable decisionTable = new DecisionTable();
 
 		for (int i = 0; i < 10; i++) {
-			// Add condition
-			final ICondition condition = new BinaryCondition("condition " + i);
-			decisionTable.add(condition);
+			decisionTable = decisionTable.add(new BinaryCondition("condition " + i));
 		}
 
-		// Add action
-		{
-			final IAction action = new BinaryAction();
-			decisionTable.add(action);
-		}
-
-		decisionTable.split();
-
-		return decisionTable;
+		return decisionTable.add(new BinaryAction()).split();
 	}
 }
