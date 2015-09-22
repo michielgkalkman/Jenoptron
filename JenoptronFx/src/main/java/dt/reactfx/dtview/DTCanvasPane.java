@@ -47,6 +47,7 @@ public class DTCanvasPane extends Pane {
 
 	private ContextMenu contextMenu;
 	private DTContext possiblyDraggedDTContext;
+	private ImageView dragImageView;
 
 	public DTCanvasPane(final IDecisionTable iDecisionTable, final Font font) {
 		getDtView().set(new DTView(iDecisionTable, font));
@@ -138,20 +139,26 @@ public class DTCanvasPane extends Pane {
 		// CANVAS ANY event: MOUSE_RELEASED
 
 		canvas.setOnMousePressed(event -> {
-			possiblyDraggedDTContext = getDtView().get().getDTContext(event.getSceneX(), event.getSceneY());
+			final DTView realDtView = getDtView().get();
+			possiblyDraggedDTContext = realDtView.getDTContext(event.getSceneX(), event.getSceneY());
 
 			if (possiblyDraggedDTContext == null) {
 				System.out.println("setOnMousePressed: null");
 			} else {
 				System.out.println("setOnMousePressed: " + possiblyDraggedDTContext.getiCondition() + ","
 						+ possiblyDraggedDTContext.getiAction());
+
+				final ICondition iCondition = possiblyDraggedDTContext.getiCondition();
+				if (iCondition != null) {
+					getDtView().set(realDtView.setDraggedRow(iCondition));
+				} else {
+					getDtView().set(realDtView.setDraggedRow(possiblyDraggedDTContext.getiAction()));
+				}
 			}
 			event.consume();
 		});
 
 		canvas.setOnMouseDragged(event -> {
-			dtView.get().setDraggedRow(possiblyDraggedDTContext.getCell());
-
 			final DTContext dtContext = getDtView().get().getDTContext(event.getSceneX(), event.getSceneY());
 
 			if (dtContext == null) {
@@ -214,7 +221,9 @@ public class DTCanvasPane extends Pane {
 
 			dtCanvasPane.setCursor(Cursor.DEFAULT);
 
-			dragImageView.setVisible(false);
+			if (dragImageView != null) {
+				dragImageView.setVisible(false);
+			}
 
 			event.consume();
 		});
@@ -301,8 +310,6 @@ public class DTCanvasPane extends Pane {
 		final WritableImage text2image = text2image(300, 300, "X", Color.RED);
 		createDraggableNode(dtCanvasPane, event, text2image);
 	};
-
-	private ImageView dragImageView;
 
 	private WritableImage text2image(final double text_w, final double text_h, final String text,
 			final Paint paintYes) {

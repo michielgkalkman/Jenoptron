@@ -128,12 +128,17 @@ public class Column {
 		return newColumn;
 	}
 
-	public Column setDragged(final Cell newCell) {
+	public Column setDragged(final ICondition condition) {
 		final Column newColumn;
-		if (cells.stream().anyMatch(cell -> cell.equals(newCell))) {
+
+		if (cells.stream().anyMatch(cell -> cell.getCondition() != null && cell.getCondition().equals(condition))) {
 			final List<Cell> newCells = new ArrayList<>();
 			cells.stream().forEach(cell -> {
-				newCells.add(cell.setDragged(newCell));
+				if (condition.equals(cell.getCondition())) {
+					newCells.add(cell.setDragged());
+				} else {
+					newCells.add(cell);
+				}
 			});
 			newColumn = new Column(width, Collections.unmodifiableList(newCells));
 		} else {
@@ -141,5 +146,10 @@ public class Column {
 		}
 
 		return newColumn;
+	}
+
+	public Column setDragged(final IAction action) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

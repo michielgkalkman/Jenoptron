@@ -225,18 +225,18 @@ public class Cell {
 		return newCell;
 	}
 
-	public Cell setDragged(final Cell cell) {
-		return apply(cell, () -> new Cell(width, height, action, binaryActionValue, condition, binaryConditionValue,
-				shortDescription, iRule, dtView, cellType, fSelected, true));
-	}
-
-	private Cell apply(final Cell cell, final CellFI runnable) {
+	public Cell setDragged() {
 		final Cell newCell;
-		if (this.equals(cell)) {
-			newCell = runnable.apply();
-		} else {
+		if (fDragged) {
 			newCell = this; // cell is intended to be immutable
+		} else {
+			newCell = new Cell(width, height, action, binaryActionValue, condition, binaryConditionValue,
+					shortDescription, iRule, dtView, cellType, fSelected, true);
 		}
 		return newCell;
+	}
+
+	public boolean isDragged() {
+		return fDragged;
 	}
 }

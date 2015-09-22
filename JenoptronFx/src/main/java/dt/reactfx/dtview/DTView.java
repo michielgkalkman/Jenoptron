@@ -39,6 +39,10 @@ public class DTView {
 	private final List<Column> columns;
 	private final Font font;
 
+	private final Map<Rect, Map<String, Image>> text2Image = new WeakHashMap<>();
+	private final Map<Rect, Map<BinaryActionValue, Image>> values2Image = new WeakHashMap<>();
+	private final Map<Rect, Map<BinaryConditionValue, Image>> binaryCondition2Image = new WeakHashMap<>();
+
 	public Font getFont() {
 		return font;
 	}
@@ -108,12 +112,6 @@ public class DTView {
 		this.start_dt_h = 0.0;
 	}
 
-	public DTContext getContext(final double sceneX, final double sceneY) {
-		return null;
-	}
-
-	private final Map<Rect, Map<BinaryActionValue, Image>> values2Image = new WeakHashMap<>();
-
 	public Image getImage(final BinaryActionValue binaryActionValue, final double width, final double height) {
 		final Rect rect = new Rect(width, height);
 		Map<BinaryActionValue, Image> map = values2Image.get(rect);
@@ -137,8 +135,6 @@ public class DTView {
 		return map.get(binaryActionValue);
 	}
 
-	private final Map<Rect, Map<BinaryConditionValue, Image>> binaryCondition2Image = new WeakHashMap<>();
-
 	public Image getImage(final BinaryConditionValue binaryConditionValue, final double width, final double height) {
 		final Rect rect = new Rect(width, height);
 		Map<BinaryConditionValue, Image> map = binaryCondition2Image.get(rect);
@@ -157,8 +153,6 @@ public class DTView {
 		}
 		return map.get(binaryConditionValue);
 	}
-
-	private final Map<Rect, Map<String, Image>> text2Image = new WeakHashMap<>();
 
 	public Image getImage(final String string, final double width, final double height, final Bounds layoutBounds) {
 		final Rect rect = new Rect(width, height);
@@ -484,11 +478,21 @@ public class DTView {
 		return selectedCells;
 	}
 
-	public DTView setDraggedRow(final Cell cell) {
+	public DTView setDraggedRow(final ICondition condition) {
 		final List<Column> newColumns = new ArrayList<>();
 
 		columns.stream().forEach(column -> {
-			newColumns.add(column.setDragged(cell));
+			newColumns.add(column.setDragged(condition));
+		});
+
+		return new DTView(iDecisionTable, font, newColumns, start_dt_w, start_dt_h);
+	}
+
+	public DTView setDraggedRow(final IAction action) {
+		final List<Column> newColumns = new ArrayList<>();
+
+		columns.stream().forEach(column -> {
+			newColumns.add(column.setDragged(action));
 		});
 
 		return new DTView(iDecisionTable, font, newColumns, start_dt_w, start_dt_h);

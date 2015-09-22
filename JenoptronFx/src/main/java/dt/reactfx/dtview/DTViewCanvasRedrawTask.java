@@ -22,23 +22,26 @@ public class DTViewCanvasRedrawTask extends CanvasRedrawTask<DTView> {
 			final double canvas_height = canvas.getHeight();
 			graphicsContext.clearRect(0, 0, canvas_width, canvas_height);
 
-			double start_w = -dtView.getStart_dt_w();
+			final XY xy = new XY();
+
+			xy.x = -dtView.getStart_dt_w();
 			for (final Column column : dtView.getColumns()) {
 				final double width = column.getWidth();
 
-				if (start_w + width > 0 && start_w < canvas_width) {
-					double start_h = -dtView.getStart_dt_h();
-					for (final Cell cell : column.getCells()) {
+				if (xy.x + width > 0 && xy.x < canvas_width) {
+					xy.y = -dtView.getStart_dt_h();
+
+					column.getCells().stream().filter(c -> !c.isDragged()).forEach(cell -> {
 						final double height = cell.getHeight();
 
-						if (start_h + height > 0.0 && start_h < canvas_height) {
-							drawCell(graphicsContext, dtView, cell, start_w, start_h);
+						if (xy.y + height > 0.0 && xy.y < canvas_height) {
+							drawCell(graphicsContext, dtView, cell, xy.x, xy.y);
 						}
-						start_h += height;
-					}
+						xy.y += height;
+					});
 				}
 
-				start_w += width;
+				xy.x += width;
 			}
 		}
 	}
