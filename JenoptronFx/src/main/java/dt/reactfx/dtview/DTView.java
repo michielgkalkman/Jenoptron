@@ -517,4 +517,14 @@ public class DTView {
 
 		return new DTView(iDecisionTable, font, newColumns, start_dt_w, start_dt_h);
 	}
+
+	public DTView dragSelected() {
+		final List<Column> newColumns = new ArrayList<>();
+
+		columns.stream().forEach(column -> {
+			newColumns.add(column.dragSelected());
+		});
+
+		return new DTView(iDecisionTable, font, newColumns, start_dt_w, start_dt_h);
+	}
 }

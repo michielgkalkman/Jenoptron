@@ -162,6 +162,8 @@ public class DTCanvasPane extends Pane {
 		});
 
 		canvas.setOnMouseDragged(event -> {
+			getDtView().set(getDtView().get().dragSelected());
+
 			final DTContext dtContext = getDtView().get().getDTContext(event.getSceneX(), event.getSceneY());
 
 			if (dtContext == null) {

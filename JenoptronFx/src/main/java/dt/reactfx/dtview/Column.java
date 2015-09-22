@@ -207,4 +207,24 @@ public class Column {
 
 		return newColumn;
 	}
+
+	public Column dragSelected() {
+		final Column newColumn;
+
+		if (cells.stream().anyMatch(cell -> cell.isSelected())) {
+			final List<Cell> newCells = new ArrayList<>();
+			cells.stream().forEach(cell -> {
+				if (cell.isSelected()) {
+					newCells.add(cell.setSelected(false).setDragged());
+				} else {
+					newCells.add(cell);
+				}
+			});
+			newColumn = new Column(width, Collections.unmodifiableList(newCells));
+		} else {
+			newColumn = this;
+		}
+
+		return newColumn;
+	}
 }
