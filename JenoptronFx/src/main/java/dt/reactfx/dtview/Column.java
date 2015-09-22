@@ -149,7 +149,22 @@ public class Column {
 	}
 
 	public Column setDragged(final IAction action) {
-		// TODO Auto-generated method stub
-		return null;
+		final Column newColumn;
+
+		if (cells.stream().anyMatch(cell -> cell.getAction() != null && cell.getAction().equals(action))) {
+			final List<Cell> newCells = new ArrayList<>();
+			cells.stream().forEach(cell -> {
+				if (action.equals(cell.getAction())) {
+					newCells.add(cell.setDragged());
+				} else {
+					newCells.add(cell);
+				}
+			});
+			newColumn = new Column(width, Collections.unmodifiableList(newCells));
+		} else {
+			newColumn = this;
+		}
+
+		return newColumn;
 	}
 }
