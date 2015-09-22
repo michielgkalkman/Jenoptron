@@ -139,8 +139,9 @@ public class DTCanvasPane extends Pane {
 		// CANVAS ANY event: MOUSE_RELEASED
 
 		canvas.setOnMousePressed(event -> {
-			final DTView realDtView = getDtView().get();
-			possiblyDraggedDTContext = realDtView.getDTContext(event.getSceneX(), event.getSceneY());
+			getDtView().set(getDtView().get().clearAllSelected());
+
+			possiblyDraggedDTContext = getDtView().get().getDTContext(event.getSceneX(), event.getSceneY());
 
 			if (possiblyDraggedDTContext == null) {
 				System.out.println("setOnMousePressed: null");
@@ -150,9 +151,11 @@ public class DTCanvasPane extends Pane {
 
 				final ICondition iCondition = possiblyDraggedDTContext.getiCondition();
 				if (iCondition != null) {
-					getDtView().set(realDtView.setDraggedRow(iCondition));
+					getDtView().set(getDtView().get().setSelectedRow(iCondition, true));
+					// getDtView().set(realDtView.setDraggedRow(iCondition));
 				} else {
-					getDtView().set(realDtView.setDraggedRow(possiblyDraggedDTContext.getiAction()));
+					getDtView().set(getDtView().get().setSelectedRow(possiblyDraggedDTContext.getiAction(), true));
+					// getDtView().set(realDtView.setDraggedRow(possiblyDraggedDTContext.getiAction()));
 				}
 			}
 			event.consume();

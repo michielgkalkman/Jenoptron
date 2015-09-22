@@ -167,4 +167,44 @@ public class Column {
 
 		return newColumn;
 	}
+
+	public Column setSelected(final ICondition condition, final boolean fSelected) {
+		final Column newColumn;
+
+		if (cells.stream().anyMatch(cell -> cell.getCondition() != null && cell.getCondition().equals(condition))) {
+			final List<Cell> newCells = new ArrayList<>();
+			cells.stream().forEach(cell -> {
+				if (condition.equals(cell.getCondition())) {
+					newCells.add(cell.setSelected(fSelected));
+				} else {
+					newCells.add(cell);
+				}
+			});
+			newColumn = new Column(width, Collections.unmodifiableList(newCells));
+		} else {
+			newColumn = this;
+		}
+
+		return newColumn;
+	}
+
+	public Column setSelected(final IAction action, final boolean fSelected) {
+		final Column newColumn;
+
+		if (cells.stream().anyMatch(cell -> cell.getAction() != null && cell.getAction().equals(action))) {
+			final List<Cell> newCells = new ArrayList<>();
+			cells.stream().forEach(cell -> {
+				if (action.equals(cell.getAction())) {
+					newCells.add(cell.setSelected(fSelected));
+				} else {
+					newCells.add(cell);
+				}
+			});
+			newColumn = new Column(width, Collections.unmodifiableList(newCells));
+		} else {
+			newColumn = this;
+		}
+
+		return newColumn;
+	}
 }

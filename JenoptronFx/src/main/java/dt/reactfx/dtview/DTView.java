@@ -497,4 +497,24 @@ public class DTView {
 
 		return new DTView(iDecisionTable, font, newColumns, start_dt_w, start_dt_h);
 	}
+
+	public DTView setSelectedRow(final ICondition condition, final boolean fSelected) {
+		final List<Column> newColumns = new ArrayList<>();
+
+		columns.stream().forEach(column -> {
+			newColumns.add(column.setSelected(condition, fSelected));
+		});
+
+		return new DTView(iDecisionTable, font, newColumns, start_dt_w, start_dt_h);
+	}
+
+	public DTView setSelectedRow(final IAction action, final boolean fSelected) {
+		final List<Column> newColumns = new ArrayList<>();
+
+		columns.stream().forEach(column -> {
+			newColumns.add(column.setSelected(action, fSelected));
+		});
+
+		return new DTView(iDecisionTable, font, newColumns, start_dt_w, start_dt_h);
+	}
 }
