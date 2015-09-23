@@ -48,6 +48,7 @@ public class DTCanvasPane extends Pane {
 	private ContextMenu contextMenu;
 	private DTContext possiblyDraggedDTContext;
 	private ImageView dragImageView;
+	private final XY mousePressedXY = new XY();
 
 	public DTCanvasPane(final IDecisionTable iDecisionTable, final Font font) {
 		getDtView().set(new DTView(iDecisionTable, font));
@@ -141,6 +142,9 @@ public class DTCanvasPane extends Pane {
 		canvas.setOnMousePressed(event -> {
 			getDtView().set(getDtView().get().clearAllSelected());
 
+			mousePressedXY.x = event.getSceneX();
+			mousePressedXY.y = event.getSceneY();
+
 			possiblyDraggedDTContext = getDtView().get().getDTContext(event.getSceneX(), event.getSceneY());
 
 			if (possiblyDraggedDTContext == null) {
@@ -186,7 +190,8 @@ public class DTCanvasPane extends Pane {
 
 		canvas.setOnDragDetected(event -> {
 			{
-				final DTContext dtContext = getDtView().get().getDTContext(event.getSceneX(), event.getSceneY());
+				final DTContext dtContext = possiblyDraggedDTContext; // getDtView().get().getDTContext(event.getSceneX(),
+																		// event.getSceneY());
 
 				if (dtContext == null) {
 					System.out.println("setOnDragDetected: null");
@@ -196,7 +201,7 @@ public class DTCanvasPane extends Pane {
 				}
 			}
 
-			createDraggableNode(dtCanvasPane, event);
+			createDraggableNode(dtCanvasPane, mousePressedXY.x, mousePressedXY.y);
 
 			event.consume();
 		});
@@ -267,7 +272,13 @@ public class DTCanvasPane extends Pane {
 	}
 
 	private void createDraggableNode(final Pane dtCanvasPane, final MouseEvent event) {
-		final DTContext dtContext = getDtView().get().getDTContext(event.getSceneX(), event.getSceneY(), true);
+		final double sceneX = event.getSceneX();
+		final double sceneY = event.getSceneY();
+		createDraggableNode(dtCanvasPane, sceneX, sceneY);
+	}
+
+	private void createDraggableNode(final Pane dtCanvasPane, final double sceneX, final double sceneY) {
+		final DTContext dtContext = getDtView().get().getDTContext(sceneX, sceneY, true);
 
 		final WritableImage text2image;
 
@@ -282,18 +293,16 @@ public class DTCanvasPane extends Pane {
 				text2image = text2image(300, 300, "X", Color.WHITE);
 			}
 		} else {
-			final double canvas_width = canvas.getWidth();
-			final double canvas_height = canvas.getHeight();
-
 			// For now, create an draggable image from a piece of text.
 			text2image = text2image(dtContext.getCell().getWidth(), dtContext.getCell().getHeight(),
 					condition.getShortDescription(), Color.WHITE);
 		}
 
-		createDraggableNode(dtCanvasPane, event, text2image);
+		createDraggableNode(dtCanvasPane, sceneX, sceneY, text2image);
 	}
 
-	private void createDraggableNode(final Pane dtCanvasPane, final MouseEvent event, final WritableImage text2image) {
+	private void createDraggableNode(final Pane dtCanvasPane, final double sceneX, final double sceneY,
+			final WritableImage text2image) {
 		dragImageView = new ImageView(text2image);
 
 		final ObservableList<Node> children = dtCanvasPane.getChildren();
@@ -306,8 +315,8 @@ public class DTCanvasPane extends Pane {
 		dragImageView.setMouseTransparent(true);
 		dragImageView.setVisible(true);
 		final Bounds boundsInLocal = dragImageView.getBoundsInLocal();
-		dragImageView.relocate((int) (event.getSceneX() - boundsInLocal.getWidth() / 2),
-				(int) (event.getSceneY() - boundsInLocal.getHeight() / 2));
+		dragImageView.relocate((int) (sceneX - boundsInLocal.getWidth() / 2),
+				(int) (sceneY - boundsInLocal.getHeight() / 2));
 
 		final Dragboard db = dtCanvasPane.startDragAndDrop(TransferMode.ANY);
 		final ClipboardContent content = new ClipboardContent();
@@ -316,12 +325,6 @@ public class DTCanvasPane extends Pane {
 		// myTableView.getSelectionModel().getSelectedItem();
 		// content.putString(inboundBean.getVfcNumber());
 		db.setContent(content);
-	};
-
-	private void oldCreateDraggableNode(final Pane dtCanvasPane, final MouseEvent event) {
-		// For now, create an draggable image from a piece of text.
-		final WritableImage text2image = text2image(300, 300, "X", Color.RED);
-		createDraggableNode(dtCanvasPane, event, text2image);
 	};
 
 	private WritableImage text2image(final double text_w, final double text_h, final String text,
