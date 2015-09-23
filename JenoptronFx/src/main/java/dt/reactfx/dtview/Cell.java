@@ -236,6 +236,17 @@ public class Cell {
 		return newCell;
 	}
 
+	public Cell setDragged(final boolean fDragged) {
+		final Cell newCell;
+		if (this.fDragged == fDragged) {
+			newCell = this; // cell is intended to be immutable
+		} else {
+			newCell = new Cell(width, height, action, binaryActionValue, condition, binaryConditionValue,
+					shortDescription, iRule, dtView, cellType, fSelected, fDragged);
+		}
+		return newCell;
+	}
+
 	public boolean isDragged() {
 		return fDragged;
 	}

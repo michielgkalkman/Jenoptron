@@ -185,12 +185,15 @@ public class DTCanvasPane extends Pane {
 		});
 
 		canvas.setOnDragDetected(event -> {
-			final DTContext dtContext = getDtView().get().getDTContext(event.getSceneX(), event.getSceneY());
+			{
+				final DTContext dtContext = getDtView().get().getDTContext(event.getSceneX(), event.getSceneY());
 
-			if (dtContext == null) {
-				System.out.println("setOnDragDetected: null");
-			} else {
-				System.out.println("setOnDragDetected: " + dtContext.getiCondition() + "," + dtContext.getiAction());
+				if (dtContext == null) {
+					System.out.println("setOnDragDetected: null");
+				} else {
+					System.out
+							.println("setOnDragDetected: " + dtContext.getiCondition() + "," + dtContext.getiAction());
+				}
 			}
 
 			createDraggableNode(dtCanvasPane, event);
@@ -230,6 +233,11 @@ public class DTCanvasPane extends Pane {
 				dragImageView.setVisible(false);
 			}
 
+			getDtView().set(getDtView().get().clearAllDragged());
+			//
+			// this.dtViewCanvasRedrawTask.redraw(canvas.getGraphicsContext2D(),
+			// getDtView().get());
+
 			event.consume();
 		});
 
@@ -259,7 +267,7 @@ public class DTCanvasPane extends Pane {
 	}
 
 	private void createDraggableNode(final Pane dtCanvasPane, final MouseEvent event) {
-		final DTContext dtContext = getDtView().get().getDTContext(event.getSceneX(), event.getSceneY());
+		final DTContext dtContext = getDtView().get().getDTContext(event.getSceneX(), event.getSceneY(), true);
 
 		final WritableImage text2image;
 

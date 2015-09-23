@@ -294,6 +294,10 @@ public class DTView {
 	}
 
 	public DTContext getDTContext(final double sceneX, final double sceneY) {
+		return getDTContext(sceneX, sceneY, false);
+	}
+
+	public DTContext getDTContext(final double sceneX, final double sceneY, final boolean fIgnoreDrag) {
 		final DTContext dtContext;
 		if (sceneX < 0.0) {
 			dtContext = null;
@@ -315,15 +319,17 @@ public class DTView {
 					int cell_y = 0;
 
 					for (final Cell cell : cells) {
-						y += cell.getHeight();
+						if (fIgnoreDrag || !cell.isDragged()) {
+							y += cell.getHeight();
 
-						if (y >= sceneY) {
-							// Found cell.
-							tmpDTContext = new DTContext(cell_x, cell_y, cell);
+							if (y >= sceneY) {
+								// Found cell.
+								tmpDTContext = new DTContext(cell_x, cell_y, cell);
 
-							return tmpDTContext;
+								return tmpDTContext;
+							}
+							cell_y++;
 						}
-						cell_y++;
 					}
 				}
 
@@ -428,6 +434,16 @@ public class DTView {
 
 		columns.stream().forEach(column -> {
 			newColumns.add(column.clearAllSelected());
+		});
+
+		return new DTView(iDecisionTable, font, newColumns, start_dt_w, start_dt_h);
+	}
+
+	public DTView clearAllDragged() {
+		final List<Column> newColumns = new ArrayList<>();
+
+		columns.stream().forEach(column -> {
+			newColumns.add(column.clearAllDragged());
 		});
 
 		return new DTView(iDecisionTable, font, newColumns, start_dt_w, start_dt_h);

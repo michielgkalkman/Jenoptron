@@ -66,6 +66,10 @@ public class Column {
 		return cells.stream().anyMatch(cell -> cell.isSelected());
 	}
 
+	public boolean isAnyDragged() {
+		return cells.stream().anyMatch(cell -> cell.isDragged());
+	}
+
 	public Column setSelected(final Cell cell, final boolean selected) {
 		final Column newColumn;
 		final IAction action = cell.getAction();
@@ -120,6 +124,21 @@ public class Column {
 			final List<Cell> newCells = new ArrayList<>();
 			cells.stream().forEach(cell -> {
 				newCells.add(cell.setSelected(false));
+			});
+			newColumn = new Column(width, Collections.unmodifiableList(newCells));
+		} else {
+			newColumn = this;
+		}
+		return newColumn;
+	}
+
+	public Column clearAllDragged() {
+		final Column newColumn;
+
+		if (isAnyDragged()) {
+			final List<Cell> newCells = new ArrayList<>();
+			cells.stream().forEach(cell -> {
+				newCells.add(cell.setDragged(false));
 			});
 			newColumn = new Column(width, Collections.unmodifiableList(newCells));
 		} else {
