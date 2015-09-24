@@ -35,15 +35,51 @@ public class DTViewCanvasRedrawTask extends CanvasRedrawTask<DTView> {
 						final double height = cell.getHeight();
 
 						if (xy.y + height > 0.0 && xy.y < canvas_height) {
-							drawCell(graphicsContext, dtView, cell, xy.x, xy.y);
+							final double y = dtView.getDraggedXY() == null ? 0 : dtView.getDraggedXY().y;
+							if (y > 0) {
+								if (xy.y + height < y || xy.y > y) {
+									drawCell(graphicsContext, dtView, cell, xy.x, xy.y);
+									xy.y += height;
+								} else {
+									if (y - xy.y < height / 2) {
+										// draw drag placeholder above.
+										xy.y += drawDragged(graphicsContext, dtView, cell, xy.x, xy.y);
+										drawCell(graphicsContext, dtView, cell, xy.x, xy.y);
+										xy.y += height;
+
+									} else {
+										// draw drag placeholder below.
+										drawCell(graphicsContext, dtView, cell, xy.x, xy.y);
+										xy.y += height;
+										xy.y += drawDragged(graphicsContext, dtView, cell, xy.x, xy.y);
+									}
+								}
+							} else {
+								drawCell(graphicsContext, dtView, cell, xy.x, xy.y);
+								xy.y += height;
+							}
 						}
-						xy.y += height;
 					});
 				}
 
 				xy.x += width;
 			}
 		}
+	}
+
+	private double drawDragged(final GraphicsContext graphicsContext, final DTView dtView, final Cell cell,
+			final double start_w, final double start_h) {
+		graphicsContext.setFill(Paint.valueOf(Color.CORNFLOWERBLUE.toString()));
+		final double globalAlpha = graphicsContext.getGlobalAlpha();
+		graphicsContext.setGlobalAlpha(0.3);
+		graphicsContext.fillRect(start_w, start_h, cell.getWidth(), cell.getHeight());
+		graphicsContext.setGlobalAlpha(globalAlpha);
+
+		final Bounds layoutBounds = determineTextSize(dtView, cell);
+		graphicsContext.drawImage(dtView.getImage("dragged stuff ..", cell.getWidth(), cell.getHeight(), layoutBounds),
+				start_w, start_h);
+
+		return cell.getHeight();
 	}
 
 	private void drawCell(final GraphicsContext graphicsContext, final DTView dtView, final Cell cell,

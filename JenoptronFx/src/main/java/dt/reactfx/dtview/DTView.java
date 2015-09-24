@@ -43,6 +43,8 @@ public class DTView {
 	private final Map<Rect, Map<BinaryActionValue, Image>> values2Image = new WeakHashMap<>();
 	private final Map<Rect, Map<BinaryConditionValue, Image>> binaryCondition2Image = new WeakHashMap<>();
 
+	private final XY draggedXY;
+
 	public Font getFont() {
 		return font;
 	}
@@ -51,11 +53,11 @@ public class DTView {
 	private final double start_dt_h;
 
 	public DTView(final IDecisionTable iDecisionTable, final Font font) {
-		this(iDecisionTable, font, 0.0, 0.0);
+		this(iDecisionTable, font, 0.0, 0.0, null);
 	}
 
 	private DTView(final IDecisionTable iDecisionTable, final Font font, final List<Column> newColumns,
-			final double start_dt_w, final double start_dt_h) {
+			final double start_dt_w, final double start_dt_h, final XY draggedXY) {
 		this.iDecisionTable = iDecisionTable;
 		this.font = font;
 
@@ -63,10 +65,11 @@ public class DTView {
 
 		this.start_dt_w = start_dt_w;
 		this.start_dt_h = start_dt_h;
+		this.draggedXY = draggedXY;
 	}
 
 	private DTView(final IDecisionTable iDecisionTable, final Font font, final double start_dt_w,
-			final double start_dt_h) {
+			final double start_dt_h, final XY draggedXY) {
 		this.iDecisionTable = iDecisionTable;
 		this.font = font;
 
@@ -110,6 +113,13 @@ public class DTView {
 
 		this.start_dt_w = 0.0;
 		this.start_dt_h = 0.0;
+
+		this.draggedXY = draggedXY;
+	}
+
+	private DTView(final IDecisionTable iDecisionTable, final Font font, final List<Column> columns,
+			final double start_dt_w, final double start_dt_h) {
+		this(iDecisionTable, font, columns, start_dt_w, start_dt_h, null);
 	}
 
 	public Image getImage(final BinaryActionValue binaryActionValue, final double width, final double height) {
@@ -377,7 +387,7 @@ public class DTView {
 				});
 			});
 
-			newDTView = new DTView(deepcopy, font, start_dt_w, start_dt_h);
+			newDTView = new DTView(deepcopy, font, start_dt_w, start_dt_h, getDraggedXY());
 		} else {
 			newDTView = this;
 		}
@@ -542,5 +552,16 @@ public class DTView {
 		});
 
 		return new DTView(iDecisionTable, font, newColumns, start_dt_w, start_dt_h);
+	}
+
+	public DTView drag(final double sceneX, final double sceneY) {
+		final XY xy = new XY();
+		xy.x = sceneX;
+		xy.y = sceneY;
+		return new DTView(iDecisionTable, font, columns, start_dt_w, start_dt_h, xy);
+	}
+
+	public XY getDraggedXY() {
+		return draggedXY;
 	}
 }

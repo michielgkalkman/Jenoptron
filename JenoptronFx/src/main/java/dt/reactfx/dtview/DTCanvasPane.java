@@ -166,7 +166,7 @@ public class DTCanvasPane extends Pane {
 		});
 
 		canvas.setOnMouseDragged(event -> {
-			getDtView().set(getDtView().get().dragSelected());
+			getDtView().set(getDtView().get().drag(event.getSceneX(), event.getSceneY()));
 
 			final DTContext dtContext = getDtView().get().getDTContext(event.getSceneX(), event.getSceneY());
 
@@ -189,17 +189,21 @@ public class DTCanvasPane extends Pane {
 		});
 
 		canvas.setOnDragDetected(event -> {
-			{
-				final DTContext dtContext = possiblyDraggedDTContext; // getDtView().get().getDTContext(event.getSceneX(),
-																		// event.getSceneY());
+			getDtView().set(getDtView().get().dragSelected());
 
-				if (dtContext == null) {
-					System.out.println("setOnDragDetected: null");
-				} else {
-					System.out
-							.println("setOnDragDetected: " + dtContext.getiCondition() + "," + dtContext.getiAction());
-				}
-			}
+			// {
+			// final DTContext dtContext = possiblyDraggedDTContext; //
+			// getDtView().get().getDTContext(event.getSceneX(),
+			// // event.getSceneY());
+			//
+			// if (dtContext == null) {
+			// System.out.println("setOnDragDetected: null");
+			// } else {
+			// System.out
+			// .println("setOnDragDetected: " + dtContext.getiCondition() + ","
+			// + dtContext.getiAction());
+			// }
+			// }
 
 			createDraggableNode(dtCanvasPane, mousePressedXY.x, mousePressedXY.y);
 
