@@ -16,7 +16,7 @@
 			<dependency>
 				<groupId>org.taHjaj.wo</groupId>
 				<artifactId>JenoptronModel</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
+				<version>0.0.1-SNAPSHOT</version>
 			</dependency>
 			<dependency>
 				<groupId>log4j</groupId>
@@ -60,7 +60,7 @@
 				<version>13.0.1</version>
 			</dependency>
 			<dependency>
-    			<groupId>io.reactivex</groupId>
+				<groupId>io.reactivex</groupId>
 				<artifactId>rxjava</artifactId>
 				<version>1.0.8</version>
 			</dependency>
@@ -98,6 +98,11 @@
 					<groupId>org.pitest</groupId>
 					<artifactId>pitest-maven</artifactId>
 					<version>1.1.6</version>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.rat</groupId>
+					<artifactId>apache-rat-plugin</artifactId>
+					<version>0.11</version>
 				</plugin>
 			</plugins>
 		</pluginManagement>
