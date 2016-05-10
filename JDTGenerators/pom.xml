@@ -11,29 +11,17 @@
       <plugin>
         <artifactId>maven-compiler-plugin</artifactId>
         <configuration>
-          <source>1.6</source>
-          <target>1.6</target>
+          <source>1.8</source>
+          <target>1.8</target>
         </configuration>
       </plugin>
     </plugins>
   </build>
   <dependencies>
-    <dependency>
-    	<groupId>www.taHjaj-wo.org</groupId>
-    	<artifactId>JDTCore</artifactId>
-    	<version>0.28-SNAPSHOT</version>
-    </dependency>
-    <dependency>
-    	<groupId>org.taHjaj.wo</groupId>
-    	<artifactId>UtilK</artifactId>
-    	<version>0.0.6-SNAPSHOT</version>
-    </dependency>
+  	<dependency>
+  		<groupId>org.taHjaj.wo</groupId>
+  		<artifactId>JenoptronModel</artifactId>
+  		<version>0.0.1-SNAPSHOT</version>
+  	</dependency>
   </dependencies>
-  <distributionManagement>
-    <site>
-      <id>Jenoptron</id>
-      <name>Jenoptron</name>
-      <url>file:F:/j3me/Jenoptron/JDTCore</url>
-    </site>
-  </distributionManagement>
 </project>

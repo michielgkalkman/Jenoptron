@@ -2,33 +2,31 @@ package dt.generators.ascii;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
-import org.taHjaj.wo.events.Observable;
-import org.taHjaj.wo.events.ObservableMediator;
 
 import dt.generators.GeneratorOptions;
 
-public class AsciiTableOptions implements GeneratorOptions, Observable {
+public class AsciiTableOptions implements GeneratorOptions {
 	@Override
 	public String toString() {
-		return ToStringBuilder.reflectionToString( this, ToStringStyle.MULTI_LINE_STYLE);
+		return ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE);
 	}
 
 	private void fire() {
-		ObservableMediator.getInstance().fire( this);
 	}
+
 	/**
 	 *
 	 */
 	private static final long serialVersionUID = 353838050855412550L;
 
 	@Override
-	public void copy( final GeneratorOptions generatorOptions) {
-		if( generatorOptions instanceof AsciiTableOptions) {
-			setOptions( (AsciiTableOptions) generatorOptions);
+	public void copy(final GeneratorOptions generatorOptions) {
+		if (generatorOptions instanceof AsciiTableOptions) {
+			setOptions((AsciiTableOptions) generatorOptions);
 		}
 	}
 
-	public void setOptions( final AsciiTableOptions asciiTableOptions) {
+	public void setOptions(final AsciiTableOptions asciiTableOptions) {
 		this.fBorders = asciiTableOptions.fBorders;
 		this.fConditionActionSeparator = asciiTableOptions.fConditionActionSeparator;
 		this.fWrapping = asciiTableOptions.fWrapping;
@@ -40,8 +38,8 @@ public class AsciiTableOptions implements GeneratorOptions, Observable {
 	private boolean fWrapping = false;
 	private int wrapLength = 20;
 
-	public AsciiTableOptions( final boolean fBorders, final boolean fConditionActionSeparator,
-			final boolean fWrapping, final int wrapLength) {
+	public AsciiTableOptions(final boolean fBorders, final boolean fConditionActionSeparator, final boolean fWrapping,
+			final int wrapLength) {
 		this.fBorders = fBorders;
 		this.fConditionActionSeparator = fConditionActionSeparator;
 		this.fWrapping = fWrapping;
