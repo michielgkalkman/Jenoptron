@@ -25,6 +25,8 @@ import org.reactfx.util.Either;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.event.EventType;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
@@ -298,12 +300,25 @@ public class DTCanvasPane extends Pane {
 			}
 			}
 		}
-	}
 
-	private void createDraggableNode(final Pane dtCanvasPane, final MouseEvent event) {
-		final double sceneX = event.getSceneX();
-		final double sceneY = event.getSceneY();
-		createDraggableNode(dtCanvasPane, sceneX, sceneY);
+		{
+			final MenuItem reduce = new MenuItem("Reduce");
+			reduce.setOnAction(e -> {
+				getDtView().set(getDtView().get().reduce());
+			});
+			items.add(reduce);
+		}
+
+		{
+			final MenuItem split = new MenuItem("Split");
+			split.setOnAction(new EventHandler<ActionEvent>() {
+				@Override
+				public void handle(final ActionEvent event) {
+					getDtView().set(getDtView().get().split());
+				}
+			});
+			items.add(split);
+		}
 	}
 
 	private void createDraggableNode(final Pane dtCanvasPane, final double sceneX, final double sceneY) {
