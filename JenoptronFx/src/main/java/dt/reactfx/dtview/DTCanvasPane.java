@@ -81,31 +81,7 @@ public class DTCanvasPane extends Pane {
 		canvas.setOnMousePressed(event -> {
 			{
 				if (event.isSecondaryButtonDown()) {
-					if (contextMenu != null) {
-						contextMenu.hide();
-					}
-
-					contextMenu = new ContextMenu();
-					final DTContext dtContext = getDtView().get().getDTContext(event.getSceneX(), event.getSceneY());
-
-					final ObservableList<MenuItem> items = contextMenu.getItems();
-					if (dtContext == null) {
-						// Outside the DT.
-						final MenuItem outside = new MenuItem("Outside");
-						items.addAll(outside);
-					} else {
-						switch (dtContext.getCell().getCellType()) {
-						case ROOTCELL: {
-							final MenuItem outside = new MenuItem(dtContext.getCell().getCellType().name());
-							items.addAll(outside);
-							break;
-						}
-						default: {
-							final MenuItem outside = new MenuItem(dtContext.getCell().getCellType().name());
-							items.addAll(outside);
-						}
-						}
-					}
+					createContextMenu(event);
 
 					contextMenu.show(canvas, event.getScreenX(), event.getScreenY());
 				} else if (event.isPrimaryButtonDown()) {
@@ -155,26 +131,32 @@ public class DTCanvasPane extends Pane {
 		// CANVAS ANY event: MOUSE_RELEASED
 
 		canvas.setOnMousePressed(event -> {
-			getDtView().set(getDtView().get().clearAllSelected());
+			if (event.isSecondaryButtonDown()) {
+				createContextMenu(event);
 
-			mousePressedXY.x = event.getSceneX();
-			mousePressedXY.y = event.getSceneY();
+				contextMenu.show(canvas, event.getScreenX(), event.getScreenY());
+			} else if (event.isPrimaryButtonDown()) {
+				getDtView().set(getDtView().get().clearAllSelected());
 
-			possiblyDraggedDTContext = getDtView().get().getDTContext(event.getSceneX(), event.getSceneY());
+				mousePressedXY.x = event.getSceneX();
+				mousePressedXY.y = event.getSceneY();
 
-			if (possiblyDraggedDTContext == null) {
-				System.out.println("setOnMousePressed: null");
-			} else {
-				System.out.println("setOnMousePressed: " + possiblyDraggedDTContext.getiCondition() + ","
-						+ possiblyDraggedDTContext.getiAction());
+				possiblyDraggedDTContext = getDtView().get().getDTContext(event.getSceneX(), event.getSceneY());
 
-				final ICondition iCondition = possiblyDraggedDTContext.getiCondition();
-				if (iCondition != null) {
-					getDtView().set(getDtView().get().setSelectedRow(iCondition, true));
-					// getDtView().set(realDtView.setDraggedRow(iCondition));
+				if (possiblyDraggedDTContext == null) {
+					System.out.println("setOnMousePressed: null");
 				} else {
-					getDtView().set(getDtView().get().setSelectedRow(possiblyDraggedDTContext.getiAction(), true));
-					// getDtView().set(realDtView.setDraggedRow(possiblyDraggedDTContext.getiAction()));
+					System.out.println("setOnMousePressed: " + possiblyDraggedDTContext.getiCondition() + ","
+							+ possiblyDraggedDTContext.getiAction());
+
+					final ICondition iCondition = possiblyDraggedDTContext.getiCondition();
+					if (iCondition != null) {
+						getDtView().set(getDtView().get().setSelectedRow(iCondition, true));
+						// getDtView().set(realDtView.setDraggedRow(iCondition));
+					} else {
+						getDtView().set(getDtView().get().setSelectedRow(possiblyDraggedDTContext.getiAction(), true));
+						// getDtView().set(realDtView.setDraggedRow(possiblyDraggedDTContext.getiAction()));
+					}
 				}
 			}
 			event.consume();
@@ -288,6 +270,34 @@ public class DTCanvasPane extends Pane {
 		canvas.addEventFilter(EventType.ROOT, event -> {
 			System.out.println("Event: " + event.getEventType());
 		});
+	}
+
+	private void createContextMenu(final MouseEvent event) {
+		if (contextMenu != null) {
+			contextMenu.hide();
+		}
+
+		contextMenu = new ContextMenu();
+		final DTContext dtContext = getDtView().get().getDTContext(event.getSceneX(), event.getSceneY());
+
+		final ObservableList<MenuItem> items = contextMenu.getItems();
+		if (dtContext == null) {
+			// Outside the DT.
+			final MenuItem outside = new MenuItem("Outside");
+			items.addAll(outside);
+		} else {
+			switch (dtContext.getCell().getCellType()) {
+			case ROOTCELL: {
+				final MenuItem outside = new MenuItem(dtContext.getCell().getCellType().name());
+				items.addAll(outside);
+				break;
+			}
+			default: {
+				final MenuItem outside = new MenuItem(dtContext.getCell().getCellType().name());
+				items.addAll(outside);
+			}
+			}
+		}
 	}
 
 	private void createDraggableNode(final Pane dtCanvasPane, final MouseEvent event) {
