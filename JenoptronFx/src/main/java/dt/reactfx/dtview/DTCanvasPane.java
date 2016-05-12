@@ -285,17 +285,32 @@ public class DTCanvasPane extends Pane {
 		final ObservableList<MenuItem> items = contextMenu.getItems();
 		if (dtContext == null) {
 			// Outside the DT.
-			final MenuItem outside = new MenuItem("Outside");
-			items.addAll(outside);
 		} else {
-			switch (dtContext.getCell().getCellType()) {
+			final CellType cellType = dtContext.getCell().getCellType();
+			switch (cellType) {
 			case ROOTCELL: {
-				final MenuItem outside = new MenuItem(dtContext.getCell().getCellType().name());
+				final MenuItem outside = new MenuItem(cellType.name());
 				items.addAll(outside);
 				break;
 			}
+			case ACTION_VALUE: {
+				{
+					final MenuItem reduce = new MenuItem("Do");
+					reduce.setOnAction(e -> {
+						getDtView().set(getDtView().get().setSelectedToDo());
+					});
+					items.add(reduce);
+				}
+				{
+					final MenuItem reduce = new MenuItem("Dont");
+					reduce.setOnAction(e -> {
+						getDtView().set(getDtView().get().setSelectedToDont());
+					});
+					items.add(reduce);
+				}
+			}
 			default: {
-				final MenuItem outside = new MenuItem(dtContext.getCell().getCellType().name());
+				final MenuItem outside = new MenuItem("Unknown celltype");
 				items.addAll(outside);
 			}
 			}
@@ -407,11 +422,13 @@ public class DTCanvasPane extends Pane {
 		canvas.setOnKeyPressed(event -> {
 
 			final KeyCode code = event.getCode();
+
+			System.out.println("code:" + code.toString());
+
 			if (code.equals(KeyCode.ADD)) {
 				getDtView().set(getDtView().get().enlarge(2));
 			} else if (KeyCode.SUBTRACT.equals(code)) {
 				getDtView().set(getDtView().get().enlarge(0.5));
-			} else if (new KeyCodeCombination(KeyCode.S, KeyCombination.CONTROL_DOWN).match(event)) {
 			} else if (new KeyCodeCombination(KeyCode.R, KeyCombination.CONTROL_DOWN).match(event)) {
 				getDtView().set(getDtView().get().reduce());
 			} else if (new KeyCodeCombination(KeyCode.S, KeyCombination.ALT_DOWN).match(event)) {
