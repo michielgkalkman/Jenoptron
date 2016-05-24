@@ -15,6 +15,8 @@
  *******************************************************************************/
 package dt.reactfx.dtview;
 
+import org.apache.commons.lang.StringUtils;
+
 import javafx.geometry.Bounds;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -32,6 +34,8 @@ public class DTViewCanvasRedrawTask extends CanvasRedrawTask<DTView> {
 	@Override
 	protected void redraw(final GraphicsContext graphicsContext, final DTView dtView) {
 		if (dtView != null) {
+			final XY draggedXY = dtView.getDraggedXY();
+
 			graphicsContext.setFill(Paint.valueOf(Color.WHITE.toString()));
 			final double canvas_width = canvas.getWidth();
 			final double canvas_height = canvas.getHeight();
@@ -50,7 +54,7 @@ public class DTViewCanvasRedrawTask extends CanvasRedrawTask<DTView> {
 						final double height = cell.getHeight();
 
 						if (xy.y + height > 0.0 && xy.y < canvas_height) {
-							final double y = dtView.getDraggedXY() == null ? 0 : dtView.getDraggedXY().y;
+							final double y = draggedXY == null ? 0 : draggedXY.y;
 							if (y > 0) {
 								if (xy.y + height < y || xy.y > y) {
 									drawCell(graphicsContext, dtView, cell, xy.x, xy.y);
@@ -91,8 +95,12 @@ public class DTViewCanvasRedrawTask extends CanvasRedrawTask<DTView> {
 		graphicsContext.setGlobalAlpha(globalAlpha);
 
 		final Bounds layoutBounds = determineTextSize(dtView, cell);
-		graphicsContext.drawImage(dtView.getImage("dragged stuff ..", cell.getWidth(), cell.getHeight(), layoutBounds),
-				start_w, start_h);
+		final String string =
+
+				dtView.getSelectedRows().get(0).getShortDescription();
+
+		graphicsContext.drawImage(dtView.getImage(string, cell.getWidth(), cell.getHeight(), layoutBounds), start_w,
+				start_h);
 
 		return cell.getHeight();
 	}
@@ -127,9 +135,11 @@ public class DTViewCanvasRedrawTask extends CanvasRedrawTask<DTView> {
 	}
 
 	private Bounds determineTextSize(final DTView dtView, final Cell cell) {
+		final String shortDescription = cell.getShortDescription();
 		// From:
 		// http://stackoverflow.com/questions/13015698/how-to-calculate-the-pixel-width-of-a-string-in-javafx
-		final Text text = new Text(cell.getShortDescription());
+		final Text text = new Text(
+				StringUtils.isEmpty(shortDescription) ? cell.getCellType().name() : shortDescription);
 		final Font font = dtView.getFont();
 
 		final Font font2 = Font.font(font.getFamily(), cell.getHeight());

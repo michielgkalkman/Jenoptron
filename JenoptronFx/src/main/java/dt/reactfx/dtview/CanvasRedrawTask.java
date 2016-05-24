@@ -25,7 +25,7 @@ import javafx.scene.canvas.GraphicsContext;
 // generic task that redraws the canvas when new data arrives
 // (but not more often than 60 times per second).
 public abstract class CanvasRedrawTask<T> extends AnimationTimer {
-	private final AtomicReference<T> data = new AtomicReference<T>(null);
+	private final AtomicReference<T> data = new AtomicReference<>(null);
 	protected final Canvas canvas;
 
 	public CanvasRedrawTask(final Canvas canvas) {

@@ -85,7 +85,7 @@ public class Column {
 		return cells.stream().anyMatch(cell -> cell.isDragged());
 	}
 
-	public Column setSelected(final Cell cell, final boolean selected) {
+	public Column setSelectedRow(final Cell cell, final boolean selected) {
 		final Column newColumn;
 		final IAction action = cell.getAction();
 		if (action == null) {

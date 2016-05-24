@@ -59,6 +59,11 @@ public class DTView {
 	private final Map<Rect, Map<BinaryConditionValue, Image>> binaryCondition2Image = new WeakHashMap<>();
 
 	private final XY draggedXY;
+	private final DTContext dragSourceContext;
+
+	public DTContext getDragSourceContext() {
+		return dragSourceContext;
+	}
 
 	public Font getFont() {
 		return font;
@@ -68,11 +73,11 @@ public class DTView {
 	private final double start_dt_h;
 
 	public DTView(final IDecisionTable iDecisionTable, final Font font) {
-		this(iDecisionTable, font, 0.0, 0.0, null);
+		this(iDecisionTable, font, 0.0, 0.0, null, null);
 	}
 
 	private DTView(final IDecisionTable iDecisionTable, final Font font, final List<Column> newColumns,
-			final double start_dt_w, final double start_dt_h, final XY draggedXY) {
+			final double start_dt_w, final double start_dt_h, final XY draggedXY, final DTContext dragSourceContext) {
 		this.iDecisionTable = iDecisionTable;
 		this.font = font;
 
@@ -81,10 +86,11 @@ public class DTView {
 		this.start_dt_w = start_dt_w;
 		this.start_dt_h = start_dt_h;
 		this.draggedXY = draggedXY;
+		this.dragSourceContext = dragSourceContext;
 	}
 
 	private DTView(final IDecisionTable iDecisionTable, final Font font, final double start_dt_w,
-			final double start_dt_h, final XY draggedXY) {
+			final double start_dt_h, final XY draggedXY, final DTContext dragSourceContext) {
 		this.iDecisionTable = iDecisionTable;
 		this.font = font;
 
@@ -130,11 +136,12 @@ public class DTView {
 		this.start_dt_h = 0.0;
 
 		this.draggedXY = draggedXY;
+		this.dragSourceContext = dragSourceContext;
 	}
 
 	private DTView(final IDecisionTable iDecisionTable, final Font font, final List<Column> columns,
-			final double start_dt_w, final double start_dt_h) {
-		this(iDecisionTable, font, columns, start_dt_w, start_dt_h, null);
+			final double start_dt_w, final double start_dt_h, final DTContext dragSourceContext) {
+		this(iDecisionTable, font, columns, start_dt_w, start_dt_h, null, dragSourceContext);
 	}
 
 	public Image getImage(final BinaryActionValue binaryActionValue, final double width, final double height) {
@@ -284,7 +291,28 @@ public class DTView {
 			newColumns.add(column.enlarge(factor));
 		});
 
-		return new DTView(iDecisionTable, font, newColumns, start_dt_w * factor, start_dt_h * factor);
+		return createDTView(factor, newColumns);
+	}
+
+	private DTView createDTView(final double factor, final List<Column> newColumns) {
+		return new DTView(iDecisionTable, font, newColumns, start_dt_w * factor, start_dt_h * factor,
+				dragSourceContext);
+	}
+
+	private DTView createDTView(final double new_start_dt_w) {
+		return new DTView(iDecisionTable, font, columns, new_start_dt_w, start_dt_h, dragSourceContext);
+	}
+
+	private DTView createDTView(final List<Column> newColumns) {
+		return new DTView(iDecisionTable, font, newColumns, start_dt_w, start_dt_h, dragSourceContext);
+	}
+
+	private DTView createDTView(final IDecisionTable deepcopy) {
+		return new DTView(deepcopy, font, start_dt_w, start_dt_h, getDraggedXY(), dragSourceContext);
+	}
+
+	private DTView createDTView(final XY xy) {
+		return new DTView(iDecisionTable, font, columns, start_dt_w, start_dt_h, xy, dragSourceContext);
 	}
 
 	public double getStart_dt_w() {
@@ -304,7 +332,7 @@ public class DTView {
 		} else {
 			new_start_dt_w = start_dt_w + d;
 		}
-		return new DTView(iDecisionTable, font, columns, new_start_dt_w, start_dt_h);
+		return createDTView(new_start_dt_w);
 	}
 
 	public DTView moveWidthPercentage(final double percentage) {
@@ -373,7 +401,7 @@ public class DTView {
 			newColumns.add(column.toggleSelect(cell));
 		});
 
-		return new DTView(iDecisionTable, font, newColumns, start_dt_w, start_dt_h);
+		return createDTView(newColumns);
 	}
 
 	public DTView reduce() {
@@ -402,7 +430,7 @@ public class DTView {
 				});
 			});
 
-			newDTView = new DTView(deepcopy, font, start_dt_w, start_dt_h, getDraggedXY());
+			newDTView = createDTView(deepcopy);
 		} else {
 			newDTView = this;
 		}
@@ -438,10 +466,10 @@ public class DTView {
 		final List<Column> newColumns = new ArrayList<>();
 
 		columns.stream().forEach(column -> {
-			newColumns.add(column.setSelected(cell, selected));
+			newColumns.add(column.setSelectedRow(cell, selected));
 		});
 
-		return new DTView(iDecisionTable, font, newColumns, start_dt_w, start_dt_h);
+		return createDTView(newColumns);
 	}
 
 	public DTView replace(final Cell cell, final Cell newCell) {
@@ -451,7 +479,7 @@ public class DTView {
 			newColumns.add(column.replace(cell, newCell));
 		});
 
-		return new DTView(iDecisionTable, font, newColumns, start_dt_w, start_dt_h);
+		return createDTView(newColumns);
 	}
 
 	public DTView clearAllSelected() {
@@ -461,7 +489,7 @@ public class DTView {
 			newColumns.add(column.clearAllSelected());
 		});
 
-		return new DTView(iDecisionTable, font, newColumns, start_dt_w, start_dt_h);
+		return createDTView(newColumns);
 	}
 
 	public DTView clearAllDragged() {
@@ -471,7 +499,7 @@ public class DTView {
 			newColumns.add(column.clearAllDragged());
 		});
 
-		return new DTView(iDecisionTable, font, newColumns, start_dt_w, start_dt_h);
+		return createDTView(newColumns);
 	}
 
 	public List<Cell> getSelectedCells() {
@@ -526,7 +554,7 @@ public class DTView {
 			newColumns.add(column.setDragged(condition));
 		});
 
-		return new DTView(iDecisionTable, font, newColumns, start_dt_w, start_dt_h);
+		return createDTView(newColumns);
 	}
 
 	public DTView setDraggedRow(final IAction action) {
@@ -536,7 +564,7 @@ public class DTView {
 			newColumns.add(column.setDragged(action));
 		});
 
-		return new DTView(iDecisionTable, font, newColumns, start_dt_w, start_dt_h);
+		return createDTView(newColumns);
 	}
 
 	public DTView setSelectedRow(final ICondition condition, final boolean fSelected) {
@@ -546,7 +574,7 @@ public class DTView {
 			newColumns.add(column.setSelected(condition, fSelected));
 		});
 
-		return new DTView(iDecisionTable, font, newColumns, start_dt_w, start_dt_h);
+		return createDTView(newColumns);
 	}
 
 	public DTView setSelectedRow(final IAction action, final boolean fSelected) {
@@ -556,7 +584,7 @@ public class DTView {
 			newColumns.add(column.setSelected(action, fSelected));
 		});
 
-		return new DTView(iDecisionTable, font, newColumns, start_dt_w, start_dt_h);
+		return createDTView(newColumns);
 	}
 
 	public DTView dragSelected() {
@@ -566,17 +594,53 @@ public class DTView {
 			newColumns.add(column.dragSelected());
 		});
 
-		return new DTView(iDecisionTable, font, newColumns, start_dt_w, start_dt_h);
+		return createDTView(newColumns);
 	}
 
 	public DTView drag(final double sceneX, final double sceneY) {
 		final XY xy = new XY();
 		xy.x = sceneX;
 		xy.y = sceneY;
-		return new DTView(iDecisionTable, font, columns, start_dt_w, start_dt_h, xy);
+		return createDTView(xy);
 	}
 
 	public XY getDraggedXY() {
 		return draggedXY;
+	}
+
+	public DTView toggleSelected(final boolean fCtrlPressed, final double sceneX, final double sceneY) {
+
+		final DTView newDTView;
+		if (fCtrlPressed) {
+			newDTView = this;
+		} else {
+			newDTView = clearAllSelected();
+		}
+
+		final DTContext possiblyDraggedDTContext = getDTContext(sceneX, sceneY);
+
+		//
+		final DTView dtView;
+		if (possiblyDraggedDTContext == null) {
+			// Outside every interesting
+			dtView = newDTView;
+		} else {
+			// Selecting something.
+
+			// System.out.println("setOnMousePressed: " +
+			// possiblyDraggedDTContext.getiCondition() + ","
+			// + possiblyDraggedDTContext.getiAction());
+			//
+			final ICondition iCondition = possiblyDraggedDTContext.getiCondition();
+			if (iCondition != null) {
+				dtView = newDTView.setSelectedRow(iCondition, true);
+			} else {
+				dtView = newDTView.setSelectedRow(possiblyDraggedDTContext.getiAction(), true);
+				// //
+				// getDtView().set(realDtView.setDraggedRow(possiblyDraggedDTContext.getiAction()));
+			}
+		}
+
+		return dtView;
 	}
 }

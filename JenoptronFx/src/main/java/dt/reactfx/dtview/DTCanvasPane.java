@@ -63,9 +63,8 @@ public class DTCanvasPane extends Pane {
 	private final ObjectProperty<DTView> dtView = new SimpleObjectProperty<>();
 
 	private ContextMenu contextMenu;
-	private DTContext possiblyDraggedDTContext;
 	private ImageView dragImageView;
-	private final XY mousePressedXY = new XY();
+	private boolean fCtrlPressed;
 
 	public DTCanvasPane(final IDecisionTable iDecisionTable, final Font font) {
 		getDtView().set(new DTView(iDecisionTable, font));
@@ -138,28 +137,40 @@ public class DTCanvasPane extends Pane {
 
 				contextMenu.show(canvas, event.getScreenX(), event.getScreenY());
 			} else if (event.isPrimaryButtonDown()) {
-				getDtView().set(getDtView().get().clearAllSelected());
+				getDtView().set(getDtView().get().toggleSelected(fCtrlPressed, event.getSceneX(), event.getSceneY()));
 
-				mousePressedXY.x = event.getSceneX();
-				mousePressedXY.y = event.getSceneY();
+				// if (!fCtrlPressed) {
+				// getDtView().set(getDtView().get().clearAllSelected());
+				// }
+				//
 
-				possiblyDraggedDTContext = getDtView().get().getDTContext(event.getSceneX(), event.getSceneY());
+				// mousePressedXY.x = event.getSceneX();
+				// mousePressedXY.y = event.getSceneY();
 
-				if (possiblyDraggedDTContext == null) {
-					System.out.println("setOnMousePressed: null");
-				} else {
-					System.out.println("setOnMousePressed: " + possiblyDraggedDTContext.getiCondition() + ","
-							+ possiblyDraggedDTContext.getiAction());
-
-					final ICondition iCondition = possiblyDraggedDTContext.getiCondition();
-					if (iCondition != null) {
-						getDtView().set(getDtView().get().setSelectedRow(iCondition, true));
-						// getDtView().set(realDtView.setDraggedRow(iCondition));
-					} else {
-						getDtView().set(getDtView().get().setSelectedRow(possiblyDraggedDTContext.getiAction(), true));
-						// getDtView().set(realDtView.setDraggedRow(possiblyDraggedDTContext.getiAction()));
-					}
-				}
+				// final DTContext possiblyDraggedDTContext =
+				// getDtView().get().getDTContext(event.getSceneX(),
+				// event.getSceneY());
+				//
+				// if (possiblyDraggedDTContext == null) {
+				// System.out.println("setOnMousePressed: null");
+				// } else {
+				// System.out.println("setOnMousePressed: " +
+				// possiblyDraggedDTContext.getiCondition() + ","
+				// + possiblyDraggedDTContext.getiAction());
+				//
+				// final ICondition iCondition =
+				// possiblyDraggedDTContext.getiCondition();
+				// if (iCondition != null) {
+				// getDtView().set(getDtView().get().setSelectedRow(iCondition,
+				// true));
+				// // getDtView().set(realDtView.setDraggedRow(iCondition));
+				// } else {
+				// getDtView().set(getDtView().get().setSelectedRow(possiblyDraggedDTContext.getiAction(),
+				// true));
+				// //
+				// getDtView().set(realDtView.setDraggedRow(possiblyDraggedDTContext.getiAction()));
+				// }
+				// }
 			}
 			event.consume();
 		});
@@ -203,8 +214,10 @@ public class DTCanvasPane extends Pane {
 			// + dtContext.getiAction());
 			// }
 			// }
+			// mousePressedXY.x = event.getSceneX();
+			// mousePressedXY.y = event.getSceneY();
 
-			createDraggableNode(dtCanvasPane, mousePressedXY.x, mousePressedXY.y);
+			createDraggableNode(dtCanvasPane, event.getSceneX(), event.getSceneY());
 
 			event.consume();
 		});
@@ -272,6 +285,8 @@ public class DTCanvasPane extends Pane {
 		canvas.addEventFilter(EventType.ROOT, event -> {
 			System.out.println("Event: " + event.getEventType());
 		});
+
+		addKeyEvents();
 	}
 
 	private void createContextMenu(final MouseEvent event) {
@@ -425,7 +440,9 @@ public class DTCanvasPane extends Pane {
 
 			System.out.println("code:" + code.toString());
 
-			if (code.equals(KeyCode.ADD)) {
+			if (code.equals(KeyCode.CONTROL)) {
+				fCtrlPressed = true;
+			} else if (code.equals(KeyCode.ADD)) {
 				getDtView().set(getDtView().get().enlarge(2));
 			} else if (KeyCode.SUBTRACT.equals(code)) {
 				getDtView().set(getDtView().get().enlarge(0.5));
@@ -441,6 +458,16 @@ public class DTCanvasPane extends Pane {
 				// System.out.println(code.getName());
 			}
 			this.dtViewCanvasRedrawTask.redraw(canvas.getGraphicsContext2D(), getDtView().get());
+		});
+
+		canvas.setOnKeyReleased(event -> {
+			final KeyCode code = event.getCode();
+
+			System.out.println("code:" + code.toString());
+
+			if (code.equals(KeyCode.CONTROL)) {
+				fCtrlPressed = false;
+			}
 		});
 	}
 
