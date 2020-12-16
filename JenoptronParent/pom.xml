@@ -135,10 +135,4 @@
 			</plugin>
 		</plugins>
 	</build>
-
-
-	<modules>
-		<module>../JenoptronModel</module>
-	</modules>
-
 </project>
