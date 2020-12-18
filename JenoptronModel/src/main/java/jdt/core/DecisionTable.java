@@ -674,9 +674,10 @@ public class DecisionTable extends JDTModel implements IDecisionTable {
 
 				if (sameActions(rule, otherRule)
 						&& (reduced[otherIndex] || sameStrictHandledConditions(rule, otherRule, handledConditions))) {
+					final IConditionValue irrelevantValue = condition.getIrrelevantValue();
 					if (invalidRules[index] && !invalidRules[otherIndex]) {
 						final IRule newOtherRule = otherRule.setConditionValue(condition,
-								condition.getIrrelevantValue());
+								irrelevantValue);
 
 						// Swap rules
 						_rules.set(index, newOtherRule);
@@ -688,10 +689,10 @@ public class DecisionTable extends JDTModel implements IDecisionTable {
 						invalidRules[otherIndex] = true;
 					} else if (invalidRules[otherIndex] && invalidRules[index]) {
 						// Both rules are invalid
-						_rules.set(index, rule.setConditionValue(condition, condition.getIrrelevantValue()));
+						_rules.set(index, rule.setConditionValue(condition, irrelevantValue));
 						reduced[otherIndex] = true;
 					} else {
-						_rules.set(index, rule.setConditionValue(condition, condition.getIrrelevantValue()));
+						_rules.set(index, rule.setConditionValue(condition, irrelevantValue));
 						reduced[otherIndex] = true;
 					}
 				}
@@ -1449,11 +1450,12 @@ public class DecisionTable extends JDTModel implements IDecisionTable {
 
 	@Override
 	public boolean sameConditions(final IRule rule, final List<IConditionValue> conditionValues) {
-		if (conditionValues.size() != this.tableConditions.size()) {
+		final int nrConditionValues = conditionValues.size();
+		if (nrConditionValues != this.tableConditions.size()) {
 			throw new DTException("Incorrect number of conditions");
 		}
 
-		for (int index = 0; index < conditionValues.size(); index++) {
+		for (int index = 0; index < nrConditionValues; index++) {
 			if (!rule.getConditionValue(getConditions().get(index)).equals(conditionValues.get(index))) {
 				return false;
 			}
