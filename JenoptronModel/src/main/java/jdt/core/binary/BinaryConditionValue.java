@@ -144,9 +144,11 @@ public class BinaryConditionValue implements IConditionValue {
 		if( object instanceof BinaryConditionValue) {
 			final BinaryConditionValue binaryConditionValue = (BinaryConditionValue) object;
 			final Values otherValue = binaryConditionValue.getValue();
-			if( value.ordinal() > otherValue.ordinal()) {
+			final int ordinal = value.ordinal();
+			final int otherOrdinal = otherValue.ordinal();
+			if( ordinal > otherOrdinal) {
 				result = 1;
-			} else if( value.ordinal() == otherValue.ordinal()) {
+			} else if( ordinal == otherOrdinal) {
 				result = 0;
 			}
 		}

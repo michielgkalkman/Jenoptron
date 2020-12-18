@@ -202,35 +202,37 @@ public class Rule extends Model implements IRule {
 
 	@Override
 	public String toString() {
-		final StringBuffer stringBuffer = new StringBuffer();
+		final StringBuilder stringBuilder = new StringBuilder();
 		boolean fFirst = true;
 
 		for (final ICondition condition : getConditions().keySet()) {
+			final String conditionShortDescription = condition.getShortDescription();
 			if (fFirst) {
-				stringBuffer.append(condition.getShortDescription()).append(':')
+				stringBuilder.append(conditionShortDescription).append(':')
 						.append(StringUtils.center(conditions.get(condition).toString(), 3));
 				fFirst = false;
 			} else {
-				stringBuffer.append(',').append(condition.getShortDescription()).append(':')
+				stringBuilder.append(',').append(conditionShortDescription).append(':')
 						.append(StringUtils.center(conditions.get(condition).toString(), 3));
 			}
 		}
 
 		fFirst = true;
 
-		stringBuffer.append("-->");
+		stringBuilder.append("-->");
 
 		for (final IAction action : getActions().keySet()) {
+			final String actionShortDescription = action.getShortDescription();
 			if (fFirst) {
-				stringBuffer.append(action.getShortDescription()).append(':')
+				stringBuilder.append(actionShortDescription).append(':')
 						.append(StringUtils.center(actions.get(action).toString(), 4));
 			} else {
-				stringBuffer.append(',').append(action.getShortDescription()).append(':')
+				stringBuilder.append(',').append(actionShortDescription).append(':')
 						.append(StringUtils.center(actions.get(action).toString(), 4));
 			}
 		}
 
-		return stringBuffer.toString();
+		return stringBuilder.toString();
 	}
 
 	@Override

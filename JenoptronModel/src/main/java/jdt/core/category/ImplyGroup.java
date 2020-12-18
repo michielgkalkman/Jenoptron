@@ -15,11 +15,7 @@
  *******************************************************************************/
 package jdt.core.category;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import org.apache.commons.lang.StringUtils;
 
@@ -106,28 +102,30 @@ public class ImplyGroup implements IImplyGroup {
 		}
 
 		boolean fConditionalActionsHold = true;
+		boolean fActionsHold = true;
+
 
 		if (fConditionsHold) {
-			for (final IAction action : conditionalActions.keySet()) {
+			final Set<IAction> iActions = conditionalActions.keySet();
+			for (final IAction action : iActions) {
 				final IValue value = rule.getActionValue(action);
 				if ((value == null) || !conditionalActions.get(action).equals(value)) {
 					fConditionalActionsHold = false;
 					break;
 				}
 			}
-		}
 
-		boolean fActionsHold = true;
-
-		if (fConditionsHold && fConditionalActionsHold) {
-			for (final IAction action : conditionalActions.keySet()) {
-				final IValue value = rule.getActionValue(action);
-				if ((value == null) || !conditionalActions.get(action).equals(value)) {
-					fActionsHold = false;
-					break;
+			if (fConditionalActionsHold) {
+				for (final IAction action : iActions) {
+					final IValue value = rule.getActionValue(action);
+					if ((value == null) || !conditionalActions.get(action).equals(value)) {
+						fActionsHold = false;
+						break;
+					}
 				}
 			}
 		}
+
 
 		return fConditionsHold && fConditionalActionsHold && fActionsHold;
 	}
@@ -181,56 +179,58 @@ public class ImplyGroup implements IImplyGroup {
 
 	@Override
 	public String toString() {
-		final StringBuffer stringBuffer = new StringBuffer();
+		final StringBuilder stringBuilder = new StringBuilder();
 		boolean fFirst = true;
 
 		for (final ICondition condition : this.conditions.keySet()) {
+			final String conditionShortDescription = condition.getShortDescription();
+			final String conditionString = conditions.get(condition).toString();
 			if (fFirst) {
-				stringBuffer.append(condition.getShortDescription()).append(':')
-						.append(StringUtils.center(conditions.get(condition).toString(), 3));
+				stringBuilder.append(conditionShortDescription).append(':')
+						.append(StringUtils.center(conditionString, 3));
 				fFirst = false;
 			} else {
-				stringBuffer.append(',').append(condition.getShortDescription()).append(':')
-						.append(StringUtils.center(conditions.get(condition).toString(), 3));
+				stringBuilder.append(',').append(conditionShortDescription).append(':')
+						.append(StringUtils.center(conditionString, 3));
 			}
 		}
 
 		for (final IAction action : actions.keySet()) {
 			if (fFirst) {
-				stringBuffer.append(action.getShortDescription()).append(':')
+				stringBuilder.append(action.getShortDescription()).append(':')
 						.append(StringUtils.center(actions.get(action).toString(), 4));
 			} else {
-				stringBuffer.append(',').append(action.getShortDescription()).append(':')
+				stringBuilder.append(',').append(action.getShortDescription()).append(':')
 						.append(StringUtils.center(actions.get(action).toString(), 4));
 			}
 		}
 
 		fFirst = true;
 
-		stringBuffer.append("-->");
+		stringBuilder.append("-->");
 
 		for (final ICondition condition : this.impliedConditions.keySet()) {
 			if (fFirst) {
-				stringBuffer.append(condition.getShortDescription()).append(':')
+				stringBuilder.append(condition.getShortDescription()).append(':')
 						.append(StringUtils.center(impliedConditions.get(condition).toString(), 3));
 				fFirst = false;
 			} else {
-				stringBuffer.append(',').append(condition.getShortDescription()).append(':')
+				stringBuilder.append(',').append(condition.getShortDescription()).append(':')
 						.append(StringUtils.center(impliedConditions.get(condition).toString(), 3));
 			}
 		}
 
 		for (final IAction action : impliedActions.keySet()) {
 			if (fFirst) {
-				stringBuffer.append(action.getShortDescription()).append(':')
+				stringBuilder.append(action.getShortDescription()).append(':')
 						.append(StringUtils.center(impliedActions.get(action).toString(), 4));
 			} else {
-				stringBuffer.append(',').append(action.getShortDescription()).append(':')
+				stringBuilder.append(',').append(action.getShortDescription()).append(':')
 						.append(StringUtils.center(impliedActions.get(action).toString(), 4));
 			}
 		}
 
-		return stringBuffer.toString();
+		return stringBuilder.toString();
 	}
 
 	@Override
