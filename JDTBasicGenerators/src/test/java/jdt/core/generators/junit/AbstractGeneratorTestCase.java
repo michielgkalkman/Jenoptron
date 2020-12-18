@@ -1,10 +1,10 @@
 package jdt.core.generators.junit;
 
-import jdt.core.junit.AbstractTestCase;
-import jdt.icore.IDecisionTable;
 import dt.generators.GeneratorFactorySPI;
 import dt.generators.TextGenerator;
 import dt.generators.ascii.AsciiTableOptions;
+import jdt.core.junit.AbstractTestCase;
+import jdt.icore.IDecisionTable;
 
 public abstract class AbstractGeneratorTestCase extends AbstractTestCase {
 

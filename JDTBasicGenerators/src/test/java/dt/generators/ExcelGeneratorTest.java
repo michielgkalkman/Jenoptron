@@ -1,15 +1,18 @@
 package dt.generators;
+
 import jdt.core.DecisionTable;
 import jdt.core.binary.BinaryAction;
 import jdt.core.binary.BinaryCondition;
-import jdt.core.junit.AbstractTestCase;
+import jdt.core.generators.junit.AbstractGeneratorTestCase;
 import jdt.icore.IAction;
 import jdt.icore.ICondition;
 import jdt.icore.IDecisionTable;
-
 import org.apache.log4j.Logger;
 
-public class ExcelGeneratorTest extends AbstractTestCase {
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
+
+public class ExcelGeneratorTest extends AbstractGeneratorTestCase {
 	private static final Logger logger = Logger.getLogger( ExcelGeneratorTest.class);
 
 	public void testFactory() {
@@ -24,16 +27,15 @@ public class ExcelGeneratorTest extends AbstractTestCase {
 			fail( "Generator for Excel should have been present");
 		}
 		
-		final IDecisionTable decisionTable = new DecisionTable();
-
 		final ICondition A = new BinaryCondition( "A");
 		final ICondition B = new BinaryCondition( "B");
 		final IAction action = new BinaryAction( "X");
-		decisionTable.add( action);
-		decisionTable.add( A);
-		decisionTable.add( B);
-		
-		decisionTable.split();
+
+		final IDecisionTable decisionTable = new DecisionTable()
+				.add( action)
+				.add( A)
+				.add( B)
+				.split();
 		
 		final String table = textGenerator.getText(decisionTable);
 		assertEquals(

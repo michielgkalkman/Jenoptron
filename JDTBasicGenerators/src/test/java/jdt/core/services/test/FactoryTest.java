@@ -1,11 +1,10 @@
 package jdt.core.services.test;
-import jdt.core.junit.AbstractTestCase;
-
-import org.apache.log4j.Logger;
 
 import dt.generators.Generator;
 import dt.generators.GeneratorFactorySPI;
 import dt.generators.TextGenerator;
+import jdt.core.junit.AbstractTestCase;
+import org.apache.log4j.Logger;
 
 
 public class FactoryTest extends AbstractTestCase {

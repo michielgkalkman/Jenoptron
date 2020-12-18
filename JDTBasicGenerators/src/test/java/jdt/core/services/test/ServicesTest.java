@@ -1,18 +1,16 @@
 package jdt.core.services.test;
 
-import java.util.ServiceLoader;
-
+import dt.generators.Generator;
+import dt.generators.GeneratorFactorySPI;
+import dt.generators.TextGenerator;
 import jdt.core.DecisionTable;
 import jdt.core.binary.BinaryAction;
 import jdt.core.binary.BinaryCondition;
 import jdt.core.junit.AbstractTestCase;
 import jdt.icore.IDecisionTable;
-
 import org.apache.log4j.Logger;
 
-import dt.generators.Generator;
-import dt.generators.GeneratorFactorySPI;
-import dt.generators.TextGenerator;
+import java.util.ServiceLoader;
 
 public class ServicesTest extends AbstractTestCase {
 	private static final Logger logger = Logger.getLogger( ServicesTest.class);

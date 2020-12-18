@@ -6,16 +6,16 @@
 	<artifactId>Jenoptron</artifactId>
 	<name>Jenoptron</name>
 	<version>0.28-SNAPSHOT</version>
+
+	<parent>
+		<groupId>org.taHjaj.wo</groupId>
+		<artifactId>JenoptronParent</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+		<relativePath>../JenoptronParent</relativePath>
+	</parent>
+
 	<build>
 		<plugins>
-			<plugin>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<version>2.3.2</version>
-				<configuration>
-					<source>1.8</source>
-					<target>1.8</target>
-				</configuration>
-			</plugin>
 			<plugin>
 				<artifactId>maven-surefire-plugin</artifactId>
 				<configuration>

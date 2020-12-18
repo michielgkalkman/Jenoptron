@@ -24,6 +24,10 @@
 	<modules>
 		<module>JenoptronParent</module>
 		<module>JenoptronModel</module>
+		<module>JDTBasicGenerators</module>
+		<module>JDTGenerators</module>
+		<module>JenoptronFx</module>
+<!--		<module>Jenoptron</module>-->
 	</modules>
 
 </project>

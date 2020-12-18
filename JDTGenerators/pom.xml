@@ -6,18 +6,21 @@
   <artifactId>JDTGenerators</artifactId>
   <name>JDTGenerators</name>
   <version>0.27</version>
-  <build>
-    <plugins>
-      <plugin>
-        <artifactId>maven-compiler-plugin</artifactId>
-        <configuration>
-          <source>1.8</source>
-          <target>1.8</target>
-        </configuration>
-      </plugin>
-    </plugins>
-  </build>
+
+    <parent>
+        <groupId>org.taHjaj.wo</groupId>
+        <artifactId>JenoptronParent</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
+        <relativePath>../JenoptronParent</relativePath>
+    </parent>
+
   <dependencies>
+      <dependency>
+          <groupId>org.taHjaj.wo</groupId>
+          <artifactId>JenoptronModel</artifactId>
+          <classifier>tests</classifier>
+          <version>0.0.1-SNAPSHOT</version>
+      </dependency>
   	<dependency>
   		<groupId>org.taHjaj.wo</groupId>
   		<artifactId>JenoptronModel</artifactId>
