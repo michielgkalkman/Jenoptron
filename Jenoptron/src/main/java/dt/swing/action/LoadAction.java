@@ -16,7 +16,6 @@ import javax.swing.JFileChooser;
 
 import org.apache.log4j.Logger;
 
-import jdt.xstream.IO;
 import dt.swing.DTDesktop;
 
 /**
