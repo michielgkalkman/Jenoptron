@@ -10,4 +10,6 @@ module JenoptronFx {
 
     opens dt.reactfx.dtview to javafx.fxml;
     exports dt.reactfx.dtview;
+    exports dt.fx.dtlistview;
+    exports dt.dtview;
 }

@@ -111,9 +111,12 @@ public class CanvasCell extends ListCell<DTEntry> {
 		 */
 		private void draw() {
 			final GraphicsContext gc = getGraphicsContext2D();
-			gc.clearRect(0, 0, getWidth(), getHeight());
+			final double height1 = getHeight();
+			final double width = getWidth();
+			gc.clearRect(0, 0, width, height1);
 
 			final Stop[] stops = new Stop[] { new Stop(0, Color.SKYBLUE),
+
 					new Stop(1, Color.SKYBLUE.darker().darker()) };
 			final LinearGradient gradient = new LinearGradient(0, 0, 0, 300, false, CycleMethod.NO_CYCLE, stops);
 
@@ -125,7 +128,7 @@ public class CanvasCell extends ListCell<DTEntry> {
 			if (entry != null) {
 				final List<IRule> allRules = entry.getiDecisionTable().getAllRules();
 
-				final double w = getWidth() / allRules.size();
+				final double w = width / allRules.size();
 
 				final Font font = yearLabel.getFont();
 
@@ -167,9 +170,9 @@ public class CanvasCell extends ListCell<DTEntry> {
 
 					gc.setTextAlign(TextAlignment.CENTER);
 					gc.setTextBaseline(VPos.CENTER);
-					gc.setFont(Font.font(font.getFamily(), getHeight() - height));
+					gc.setFont(Font.font(font.getFamily(), height1 - height));
 
-					gc.fillText(text2, x + w / 2, height + (getHeight() - height) / 2, w);
+					gc.fillText(text2, x + w / 2, height + (height1 - height) / 2, w);
 					// gc.fillText(text2, x, height + 2, w);
 
 					// gc.fillRect(x, height + 2, w, availableHeight - 2);
