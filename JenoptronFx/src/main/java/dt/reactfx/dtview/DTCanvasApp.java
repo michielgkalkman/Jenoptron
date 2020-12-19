@@ -15,6 +15,7 @@
  *******************************************************************************/
 package dt.reactfx.dtview;
 
+import javafx.beans.property.ObjectProperty;
 import org.controlsfx.control.MasterDetailPane;
 
 import javafx.application.Application;
@@ -45,7 +46,8 @@ public class DTCanvasApp extends Application {
 
 		final DTCanvasPane dtCanvasPane = new DTCanvasPane(iDecisionTable, font);
 
-		final DTDetailsPane dtDetailsPane = new DTDetailsPane(dtCanvasPane.getDtView().get());
+		final ObjectProperty<DTView> dtView = dtCanvasPane.getDtView();
+		final DTDetailsPane dtDetailsPane = new DTDetailsPane(dtView.get());
 
 		final MasterDetailPane masterDetailPane = new MasterDetailPane();
 
@@ -63,7 +65,7 @@ public class DTCanvasApp extends Application {
 		stage.setHeight(600);
 		stage.show();
 
-		dtCanvasPane.getDtView().bindBidirectional(dtDetailsPane.getDtViewProperty());
+		dtView.bindBidirectional(dtDetailsPane.getDtViewProperty());
 	}
 
 	public static void main(final String[] args) {

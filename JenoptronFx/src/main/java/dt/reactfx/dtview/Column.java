@@ -17,6 +17,7 @@ package dt.reactfx.dtview;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import org.taHjaj.wo.jenoptron.model.icore.IAction;
@@ -51,9 +52,7 @@ public class Column {
 	public Column enlarge(final double factor) {
 		final List<Cell> newCells = new ArrayList<>();
 
-		cells.stream().forEach(cell -> {
-			newCells.add(cell.enlarge(factor));
-		});
+		cells.stream().forEach(cell -> newCells.add(cell.enlarge(factor)));
 
 		return new Column(width * factor, newCells);
 	}
@@ -62,9 +61,7 @@ public class Column {
 		final Column newColumn;
 		if (cells.stream().anyMatch(cell -> cell.equals(newCell))) {
 			final List<Cell> newCells = new ArrayList<>();
-			cells.stream().forEach(cell -> {
-				newCells.add(cell.toggleSelect(newCell));
-			});
+			cells.stream().forEach(cell -> newCells.add(cell.toggleSelect(newCell)));
 			newColumn = new Column(width, Collections.unmodifiableList(newCells));
 		} else {
 			newColumn = this;
@@ -74,15 +71,15 @@ public class Column {
 	}
 
 	public boolean isAnyActionSelected() {
-		return cells.stream().anyMatch(cell -> cell.isSelectedAction());
+		return cells.stream().anyMatch(Cell::isSelectedAction);
 	}
 
 	public boolean isAnySelected() {
-		return cells.stream().anyMatch(cell -> cell.isSelected());
+		return cells.stream().anyMatch(Cell::isSelected);
 	}
 
 	public boolean isAnyDragged() {
-		return cells.stream().anyMatch(cell -> cell.isDragged());
+		return cells.stream().anyMatch(Cell::isDragged);
 	}
 
 	public Column setSelectedRow(final Cell cell, final boolean selected) {
@@ -152,9 +149,7 @@ public class Column {
 
 		if (isAnyDragged()) {
 			final List<Cell> newCells = new ArrayList<>();
-			cells.stream().forEach(cell -> {
-				newCells.add(cell.setDragged(false));
-			});
+			cells.stream().forEach(cell -> newCells.add(cell.setDragged(false)));
 			newColumn = new Column(width, Collections.unmodifiableList(newCells));
 		} else {
 			newColumn = this;
@@ -245,7 +240,7 @@ public class Column {
 	public Column dragSelected() {
 		final Column newColumn;
 
-		if (cells.stream().anyMatch(cell -> cell.isSelected())) {
+		if (cells.stream().anyMatch(Cell::isSelected)) {
 			final List<Cell> newCells = new ArrayList<>();
 			cells.stream().forEach(cell -> {
 				if (cell.isSelected()) {
@@ -260,5 +255,13 @@ public class Column {
 		}
 
 		return newColumn;
+	}
+
+	public String toString() {
+		final Cell max = Collections.max(cells, Comparator.comparing(cell -> cell.toString().length()));
+
+		int width = max.toString().length();
+
+		return "";
 	}
 }
