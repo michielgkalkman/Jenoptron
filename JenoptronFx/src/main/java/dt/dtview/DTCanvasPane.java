@@ -10,7 +10,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
-import jdt.icore.IDecisionTable;
+import org.taHjaj.wo.jenoptron.model.icore.IDecisionTable;
 
 public class DTCanvasPane extends Pane {
 	private final Canvas canvas = new Canvas();

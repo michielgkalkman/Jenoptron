@@ -19,16 +19,16 @@ import org.apache.log4j.Logger;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import jdt.core.DecisionTable;
-import jdt.core.binary.BinaryAction;
-import jdt.core.binary.BinaryActionValue;
-import jdt.core.binary.BinaryCondition;
-import jdt.core.category.IImplyGroup;
-import jdt.core.category.ImplyGroup;
+import org.taHjaj.wo.jenoptron.model.core.DecisionTable;
+import org.taHjaj.wo.jenoptron.model.core.binary.BinaryAction;
+import org.taHjaj.wo.jenoptron.model.core.binary.BinaryActionValue;
+import org.taHjaj.wo.jenoptron.model.core.binary.BinaryCondition;
+import org.taHjaj.wo.jenoptron.model.core.category.IImplyGroup;
+import org.taHjaj.wo.jenoptron.model.core.category.ImplyGroup;
 import jdt.core.junit.AbstractTestCase;
-import jdt.icore.IAction;
-import jdt.icore.ICondition;
-import jdt.icore.IDecisionTable;
+import org.taHjaj.wo.jenoptron.model.icore.IAction;
+import org.taHjaj.wo.jenoptron.model.icore.ICondition;
+import org.taHjaj.wo.jenoptron.model.icore.IDecisionTable;
 
 @Ignore
 public class ImplyTest extends AbstractTestCase {

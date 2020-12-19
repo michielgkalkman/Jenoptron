@@ -18,13 +18,13 @@ package jdt.core.test;
 import org.apache.log4j.Logger;
 import org.junit.Test;
 
-import jdt.core.Rule;
-import jdt.core.binary.BinaryAction;
-import jdt.core.binary.BinaryCondition;
-import jdt.core.binary.BinaryConditionValue;
+import org.taHjaj.wo.jenoptron.model.core.Rule;
+import org.taHjaj.wo.jenoptron.model.core.binary.BinaryAction;
+import org.taHjaj.wo.jenoptron.model.core.binary.BinaryCondition;
+import org.taHjaj.wo.jenoptron.model.core.binary.BinaryConditionValue;
 import jdt.core.junit.AbstractTestCase;
-import jdt.icore.ICondition;
-import jdt.icore.IRule;
+import org.taHjaj.wo.jenoptron.model.icore.ICondition;
+import org.taHjaj.wo.jenoptron.model.icore.IRule;
 
 public class RuleTest extends AbstractTestCase {
 	private static Logger logger = Logger.getLogger(RuleTest.class);

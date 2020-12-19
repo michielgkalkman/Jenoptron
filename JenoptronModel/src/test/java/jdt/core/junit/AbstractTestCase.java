@@ -18,9 +18,9 @@ package jdt.core.junit;
 import java.util.ArrayList;
 import java.util.List;
 
-import jdt.core.binary.BinaryCondition;
-import jdt.icore.ICondition;
-import jdt.icore.IDecisionTable;
+import org.taHjaj.wo.jenoptron.model.core.binary.BinaryCondition;
+import org.taHjaj.wo.jenoptron.model.icore.ICondition;
+import org.taHjaj.wo.jenoptron.model.icore.IDecisionTable;
 import junit.framework.TestCase;
 
 import org.apache.log4j.BasicConfigurator;

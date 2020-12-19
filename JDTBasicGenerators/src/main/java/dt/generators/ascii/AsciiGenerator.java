@@ -7,7 +7,7 @@ import java.io.Writer;
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
 
-import jdt.icore.IDecisionTable;
+import org.taHjaj.wo.jenoptron.model.icore.IDecisionTable;
 import dt.generators.Generator;
 import dt.generators.GeneratorOptions;
 import dt.generators.TextGenerator;

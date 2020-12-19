@@ -18,16 +18,16 @@ package jdt.core.test;
 import org.apache.log4j.Logger;
 import org.junit.Test;
 
-import jdt.core.DecisionTable;
-import jdt.core.binary.BinaryAction;
-import jdt.core.binary.BinaryActionValue;
-import jdt.core.binary.BinaryCondition;
-import jdt.core.binary.BinaryConditionValue;
-import jdt.core.category.ExclusiveConditionsGroup;
-import jdt.core.category.IExclusiveConditionGroup;
+import org.taHjaj.wo.jenoptron.model.core.DecisionTable;
+import org.taHjaj.wo.jenoptron.model.core.binary.BinaryAction;
+import org.taHjaj.wo.jenoptron.model.core.binary.BinaryActionValue;
+import org.taHjaj.wo.jenoptron.model.core.binary.BinaryCondition;
+import org.taHjaj.wo.jenoptron.model.core.binary.BinaryConditionValue;
+import org.taHjaj.wo.jenoptron.model.core.category.ExclusiveConditionsGroup;
+import org.taHjaj.wo.jenoptron.model.core.category.IExclusiveConditionGroup;
 import jdt.core.junit.AbstractTestCase;
-import jdt.icore.IDecisionTable;
-import jdt.icore.IRule;
+import org.taHjaj.wo.jenoptron.model.icore.IDecisionTable;
+import org.taHjaj.wo.jenoptron.model.icore.IRule;
 
 public class CategoryTest extends AbstractTestCase {
 	private static final Logger logger = Logger.getLogger(CategoryTest.class);

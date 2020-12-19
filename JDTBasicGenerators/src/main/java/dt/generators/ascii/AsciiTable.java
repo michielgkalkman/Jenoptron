@@ -3,13 +3,13 @@ package dt.generators.ascii;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.WordUtils;
 
-import jdt.core.binary.BinaryActionValue;
-import jdt.core.binary.BinaryConditionValue;
-import jdt.icore.IAction;
-import jdt.icore.ICondition;
-import jdt.icore.IDecisionTable;
-import jdt.icore.IRule;
-import jdt.icore.IValue;
+import org.taHjaj.wo.jenoptron.model.core.binary.BinaryActionValue;
+import org.taHjaj.wo.jenoptron.model.core.binary.BinaryConditionValue;
+import org.taHjaj.wo.jenoptron.model.icore.IAction;
+import org.taHjaj.wo.jenoptron.model.icore.ICondition;
+import org.taHjaj.wo.jenoptron.model.icore.IDecisionTable;
+import org.taHjaj.wo.jenoptron.model.icore.IRule;
+import org.taHjaj.wo.jenoptron.model.icore.IValue;
 
 /**
  *

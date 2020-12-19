@@ -2,7 +2,7 @@ package dt.generators;
 
 import java.io.Serializable;
 
-import jdt.icore.IDecisionTable;
+import org.taHjaj.wo.jenoptron.model.icore.IDecisionTable;
 
 
 public interface TextGenerator extends Generator, Serializable {

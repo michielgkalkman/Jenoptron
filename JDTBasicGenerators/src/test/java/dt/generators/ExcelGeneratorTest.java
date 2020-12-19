@@ -1,12 +1,12 @@
 package dt.generators;
 
-import jdt.core.DecisionTable;
-import jdt.core.binary.BinaryAction;
-import jdt.core.binary.BinaryCondition;
+import org.taHjaj.wo.jenoptron.model.core.DecisionTable;
+import org.taHjaj.wo.jenoptron.model.core.binary.BinaryAction;
+import org.taHjaj.wo.jenoptron.model.core.binary.BinaryCondition;
 import jdt.core.generators.junit.AbstractGeneratorTestCase;
-import jdt.icore.IAction;
-import jdt.icore.ICondition;
-import jdt.icore.IDecisionTable;
+import org.taHjaj.wo.jenoptron.model.icore.IAction;
+import org.taHjaj.wo.jenoptron.model.icore.ICondition;
+import org.taHjaj.wo.jenoptron.model.icore.IDecisionTable;
 import org.apache.log4j.Logger;
 
 import static org.junit.Assert.assertEquals;

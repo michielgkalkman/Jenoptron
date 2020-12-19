@@ -1,10 +1,10 @@
 package dt.dtview;
 
 import javafx.scene.canvas.GraphicsContext;
-import jdt.core.binary.BinaryActionValue;
-import jdt.core.binary.BinaryConditionValue;
-import jdt.icore.IAction;
-import jdt.icore.ICondition;
+import org.taHjaj.wo.jenoptron.model.core.binary.BinaryActionValue;
+import org.taHjaj.wo.jenoptron.model.core.binary.BinaryConditionValue;
+import org.taHjaj.wo.jenoptron.model.icore.IAction;
+import org.taHjaj.wo.jenoptron.model.icore.ICondition;
 
 public class Cell {
 	private final IAction action;

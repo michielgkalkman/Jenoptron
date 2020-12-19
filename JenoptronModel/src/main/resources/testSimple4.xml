@@ -16,9 +16,9 @@
  -->
 
 <java version="11" class="java.beans.XMLDecoder">
- <object class="jdt.core.binary.BinaryConditionValue"> 
+ <object class="org.taHjaj.wo.jenoptron.model.core.binary.BinaryConditionValue">
   <void property="value"> 
-   <object class="jdt.core.binary.BinaryConditionValue$Values" method="valueOf"> 
+   <object class="org.taHjaj.wo.jenoptron.model.core.binary.BinaryConditionValue$Values" method="valueOf">
     <string>NO</string> 
    </object> 
   </void> 

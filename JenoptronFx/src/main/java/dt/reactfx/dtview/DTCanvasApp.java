@@ -24,12 +24,12 @@ import javafx.scene.control.Label;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
-import jdt.core.DecisionTable;
-import jdt.core.binary.BinaryAction;
-import jdt.core.binary.BinaryActionValue;
-import jdt.core.binary.BinaryCondition;
-import jdt.icore.ICondition;
-import jdt.icore.IDecisionTable;
+import org.taHjaj.wo.jenoptron.model.core.DecisionTable;
+import org.taHjaj.wo.jenoptron.model.core.binary.BinaryAction;
+import org.taHjaj.wo.jenoptron.model.core.binary.BinaryActionValue;
+import org.taHjaj.wo.jenoptron.model.core.binary.BinaryCondition;
+import org.taHjaj.wo.jenoptron.model.icore.ICondition;
+import org.taHjaj.wo.jenoptron.model.icore.IDecisionTable;
 
 public class DTCanvasApp extends Application {
 

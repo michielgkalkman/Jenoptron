@@ -15,10 +15,10 @@
  *******************************************************************************/
 package jdt.core.test;
 
-import static jdt.core.binary.BinaryActionValue.DO;
-import static jdt.core.binary.BinaryActionValue.DONT;
-import static jdt.core.binary.BinaryConditionValue.NO;
-import static jdt.core.binary.BinaryConditionValue.YES;
+import static org.taHjaj.wo.jenoptron.model.core.binary.BinaryActionValue.DO;
+import static org.taHjaj.wo.jenoptron.model.core.binary.BinaryActionValue.DONT;
+import static org.taHjaj.wo.jenoptron.model.core.binary.BinaryConditionValue.NO;
+import static org.taHjaj.wo.jenoptron.model.core.binary.BinaryConditionValue.YES;
 
 import java.util.Arrays;
 import java.util.List;
@@ -27,16 +27,16 @@ import java.util.Map;
 import org.apache.log4j.Logger;
 import org.junit.Test;
 
-import jdt.core.DecisionTable;
-import jdt.core.binary.BinaryAction;
-import jdt.core.binary.BinaryActionValue;
-import jdt.core.binary.BinaryCondition;
+import org.taHjaj.wo.jenoptron.model.core.DecisionTable;
+import org.taHjaj.wo.jenoptron.model.core.binary.BinaryAction;
+import org.taHjaj.wo.jenoptron.model.core.binary.BinaryActionValue;
+import org.taHjaj.wo.jenoptron.model.core.binary.BinaryCondition;
 import jdt.core.junit.AbstractTestCase;
-import jdt.icore.IAction;
-import jdt.icore.ICondition;
-import jdt.icore.IConditionValue;
-import jdt.icore.IDecisionTable;
-import jdt.icore.IRule;
+import org.taHjaj.wo.jenoptron.model.icore.IAction;
+import org.taHjaj.wo.jenoptron.model.icore.ICondition;
+import org.taHjaj.wo.jenoptron.model.icore.IConditionValue;
+import org.taHjaj.wo.jenoptron.model.icore.IDecisionTable;
+import org.taHjaj.wo.jenoptron.model.icore.IRule;
 
 public class SubtableTest extends AbstractTestCase {
 	private static final Logger logger = Logger.getLogger(PropertyChangeTest.class);

@@ -17,12 +17,12 @@ package jdt.core.test;
 
 import org.junit.Test;
 
-import jdt.core.DecisionTable;
-import jdt.core.binary.BinaryAction;
-import jdt.core.binary.BinaryActionValue;
+import org.taHjaj.wo.jenoptron.model.core.DecisionTable;
+import org.taHjaj.wo.jenoptron.model.core.binary.BinaryAction;
+import org.taHjaj.wo.jenoptron.model.core.binary.BinaryActionValue;
 import jdt.core.junit.AbstractTestCase;
-import jdt.icore.IAction;
-import jdt.icore.IDecisionTable;
+import org.taHjaj.wo.jenoptron.model.icore.IAction;
+import org.taHjaj.wo.jenoptron.model.icore.IDecisionTable;
 
 public class ActionTest extends AbstractTestCase {
 	

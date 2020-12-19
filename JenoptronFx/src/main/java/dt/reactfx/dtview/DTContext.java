@@ -15,8 +15,8 @@
  *******************************************************************************/
 package dt.reactfx.dtview;
 
-import jdt.icore.IAction;
-import jdt.icore.ICondition;
+import org.taHjaj.wo.jenoptron.model.icore.IAction;
+import org.taHjaj.wo.jenoptron.model.icore.ICondition;
 
 public class DTContext {
 	private final int cellX;

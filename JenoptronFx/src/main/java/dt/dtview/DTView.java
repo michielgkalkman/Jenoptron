@@ -16,9 +16,9 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
-import jdt.core.binary.BinaryActionValue;
-import jdt.core.binary.BinaryConditionValue;
-import jdt.icore.IDecisionTable;
+import org.taHjaj.wo.jenoptron.model.core.binary.BinaryActionValue;
+import org.taHjaj.wo.jenoptron.model.core.binary.BinaryConditionValue;
+import org.taHjaj.wo.jenoptron.model.icore.IDecisionTable;
 
 public class DTView {
 	private static final Paint PAINT_RESOLVED = Paint.valueOf(Color.KHAKI.toString());

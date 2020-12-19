@@ -54,9 +54,9 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
-import jdt.icore.IAction;
-import jdt.icore.ICondition;
-import jdt.icore.IDecisionTable;
+import org.taHjaj.wo.jenoptron.model.icore.IAction;
+import org.taHjaj.wo.jenoptron.model.icore.ICondition;
+import org.taHjaj.wo.jenoptron.model.icore.IDecisionTable;
 
 public class DTCanvasPane extends Pane {
 	private final Canvas canvas = new Canvas();

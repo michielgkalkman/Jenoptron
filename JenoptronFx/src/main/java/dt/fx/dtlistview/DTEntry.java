@@ -1,7 +1,7 @@
 package dt.fx.dtlistview;
 
-import jdt.icore.ICondition;
-import jdt.icore.IDecisionTable;
+import org.taHjaj.wo.jenoptron.model.icore.ICondition;
+import org.taHjaj.wo.jenoptron.model.icore.IDecisionTable;
 
 public class DTEntry {
 

@@ -3,11 +3,11 @@ package jdt.core.services.test;
 import dt.generators.Generator;
 import dt.generators.GeneratorFactorySPI;
 import dt.generators.TextGenerator;
-import jdt.core.DecisionTable;
-import jdt.core.binary.BinaryAction;
-import jdt.core.binary.BinaryCondition;
+import org.taHjaj.wo.jenoptron.model.core.DecisionTable;
+import org.taHjaj.wo.jenoptron.model.core.binary.BinaryAction;
+import org.taHjaj.wo.jenoptron.model.core.binary.BinaryCondition;
 import jdt.core.junit.AbstractTestCase;
-import jdt.icore.IDecisionTable;
+import org.taHjaj.wo.jenoptron.model.icore.IDecisionTable;
 import org.apache.log4j.Logger;
 
 import java.util.ServiceLoader;

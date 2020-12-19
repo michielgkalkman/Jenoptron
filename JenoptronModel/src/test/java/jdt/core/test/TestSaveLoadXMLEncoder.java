@@ -28,15 +28,15 @@ import java.io.OutputStream;
 
 import javax.swing.JFrame;
 
-import jdt.core.DecisionTable;
-import jdt.core.binary.BinaryAction;
-import jdt.core.binary.BinaryCondition;
-import jdt.core.binary.BinaryConditionValue;
+import org.taHjaj.wo.jenoptron.model.core.DecisionTable;
+import org.taHjaj.wo.jenoptron.model.core.binary.BinaryAction;
+import org.taHjaj.wo.jenoptron.model.core.binary.BinaryCondition;
+import org.taHjaj.wo.jenoptron.model.core.binary.BinaryConditionValue;
 import jdt.core.junit.AbstractTestCase;
-import jdt.icore.IAction;
-import jdt.icore.ICondition;
-import jdt.icore.IDecisionTable;
-import jdt.util.xmlencoder.XMLEncoderFactory;
+import org.taHjaj.wo.jenoptron.model.icore.IAction;
+import org.taHjaj.wo.jenoptron.model.icore.ICondition;
+import org.taHjaj.wo.jenoptron.model.icore.IDecisionTable;
+import org.taHjaj.wo.jenoptron.model.util.xmlencoder.XMLEncoderFactory;
 
 import org.apache.commons.lang.SystemUtils;
 import org.apache.log4j.Logger;

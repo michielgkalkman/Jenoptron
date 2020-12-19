@@ -16,22 +16,22 @@
  -->
 
 <java version="11" class="java.beans.XMLDecoder">
- <object class="jdt.core.DecisionTable"> 
+ <object class="org.taHjaj.wo.jenoptron.model.core.DecisionTable">
   <void property="actions"> 
    <void method="add"> 
-    <object id="BinaryAction0" class="jdt.core.binary.BinaryAction"> 
+    <object id="BinaryAction0" class="org.taHjaj.wo.jenoptron.model.core.binary.BinaryAction">
      <void property="shortDescription"> 
       <string>blub</string> 
      </void> 
     </object> 
    </void> 
    <void method="add"> 
-    <object id="BinaryAction1" class="jdt.core.binary.BinaryAction"/> 
+    <object id="BinaryAction1" class="org.taHjaj.wo.jenoptron.model.core.binary.BinaryAction"/>
    </void> 
   </void> 
   <void property="conditions"> 
    <void method="add"> 
-    <object id="BinaryCondition0" class="jdt.core.binary.BinaryCondition"> 
+    <object id="BinaryCondition0" class="org.taHjaj.wo.jenoptron.model.core.binary.BinaryCondition">
      <void property="shortDescription"> 
       <string>yak</string> 
      </void> 
@@ -40,13 +40,13 @@
   </void> 
   <void property="rules"> 
    <void method="add"> 
-    <object class="jdt.core.Rule"> 
+    <object class="org.taHjaj.wo.jenoptron.model.core.Rule">
      <void property="actions"> 
       <void method="put"> 
        <object idref="BinaryAction1"/> 
-       <object id="BinaryActionValue0" class="jdt.core.binary.BinaryActionValue"> 
+       <object id="BinaryActionValue0" class="org.taHjaj.wo.jenoptron.model.core.binary.BinaryActionValue">
         <void property="value"> 
-         <object class="jdt.core.binary.BinaryActionValue$Values" method="valueOf"> 
+         <object class="org.taHjaj.wo.jenoptron.model.core.binary.BinaryActionValue$Values" method="valueOf">
           <string>UNKNOWN</string> 
          </object> 
         </void> 
@@ -60,9 +60,9 @@
      <void property="conditions"> 
       <void method="put"> 
        <object idref="BinaryCondition0"/> 
-       <object class="jdt.core.binary.BinaryConditionValue"> 
+       <object class="org.taHjaj.wo.jenoptron.model.core.binary.BinaryConditionValue">
         <void property="value"> 
-         <object class="jdt.core.binary.BinaryConditionValue$Values" method="valueOf"> 
+         <object class="org.taHjaj.wo.jenoptron.model.core.binary.BinaryConditionValue$Values" method="valueOf">
           <string>YES</string> 
          </object> 
         </void> 
@@ -72,7 +72,7 @@
     </object> 
    </void> 
    <void method="add"> 
-    <object class="jdt.core.Rule"> 
+    <object class="org.taHjaj.wo.jenoptron.model.core.Rule">
      <void property="actions"> 
       <void method="put"> 
        <object idref="BinaryAction1"/> 
@@ -86,9 +86,9 @@
      <void property="conditions"> 
       <void method="put"> 
        <object idref="BinaryCondition0"/> 
-       <object class="jdt.core.binary.BinaryConditionValue"> 
+       <object class="org.taHjaj.wo.jenoptron.model.core.binary.BinaryConditionValue">
         <void property="value"> 
-         <object class="jdt.core.binary.BinaryConditionValue$Values" method="valueOf"> 
+         <object class="org.taHjaj.wo.jenoptron.model.core.binary.BinaryConditionValue$Values" method="valueOf">
           <string>NO</string> 
          </object> 
         </void> 

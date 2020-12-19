@@ -22,6 +22,6 @@
           http://www.springframework.org/schema/tx           
           http://www.springframework.org/schema/tx/spring-tx-2.0.xsd"
           xmlns:tx="http://www.springframework.org/schema/tx">
-	<bean id="defaultPlugin" class="jdt.core.DecisionTable">
+	<bean id="defaultPlugin" class="org.taHjaj.wo.jenoptron.model.core.DecisionTable">
 	</bean>
 </beans>

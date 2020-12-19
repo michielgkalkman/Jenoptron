@@ -2,9 +2,9 @@ package dt.generators.excel;
 
 import java.io.Serializable;
 
-import jdt.core.binary.BinaryActionValue;
-import jdt.core.binary.BinaryConditionValue;
-import jdt.icore.IValue;
+import org.taHjaj.wo.jenoptron.model.core.binary.BinaryActionValue;
+import org.taHjaj.wo.jenoptron.model.core.binary.BinaryConditionValue;
+import org.taHjaj.wo.jenoptron.model.icore.IValue;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;

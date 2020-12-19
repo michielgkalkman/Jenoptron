@@ -19,8 +19,8 @@ import javafx.scene.paint.Paint;
 import javafx.scene.paint.Stop;
 import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
-import jdt.core.binary.BinaryConditionValue;
-import jdt.icore.IRule;
+import org.taHjaj.wo.jenoptron.model.core.binary.BinaryConditionValue;
+import org.taHjaj.wo.jenoptron.model.icore.IRule;
 
 public class CanvasCell extends ListCell<DTEntry> {
 

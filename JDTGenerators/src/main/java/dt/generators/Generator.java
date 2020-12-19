@@ -4,7 +4,7 @@ import java.io.FileFilter;
 import java.io.IOException;
 import java.io.Writer;
 
-import jdt.icore.IDecisionTable;
+import org.taHjaj.wo.jenoptron.model.icore.IDecisionTable;
 
 public interface Generator {
 	public Generator setDecisionTable( final IDecisionTable decisionTable);

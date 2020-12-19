@@ -18,11 +18,11 @@ package dt.reactfx.dtview;
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
 
-import jdt.core.binary.BinaryActionValue;
-import jdt.core.binary.BinaryConditionValue;
-import jdt.icore.IAction;
-import jdt.icore.ICondition;
-import jdt.icore.IRule;
+import org.taHjaj.wo.jenoptron.model.core.binary.BinaryActionValue;
+import org.taHjaj.wo.jenoptron.model.core.binary.BinaryConditionValue;
+import org.taHjaj.wo.jenoptron.model.icore.IAction;
+import org.taHjaj.wo.jenoptron.model.icore.ICondition;
+import org.taHjaj.wo.jenoptron.model.icore.IRule;
 
 public class Cell {
 	private final IRule iRule;

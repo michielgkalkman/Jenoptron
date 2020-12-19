@@ -4,12 +4,12 @@ import java.io.FileFilter;
 import java.io.IOException;
 import java.io.Writer;
 
-import jdt.icore.IAction;
-import jdt.icore.ICondition;
-import jdt.icore.IConditionValue;
-import jdt.icore.IDecisionTable;
-import jdt.icore.IRule;
-import jdt.icore.IValue;
+import org.taHjaj.wo.jenoptron.model.icore.IAction;
+import org.taHjaj.wo.jenoptron.model.icore.ICondition;
+import org.taHjaj.wo.jenoptron.model.icore.IConditionValue;
+import org.taHjaj.wo.jenoptron.model.icore.IDecisionTable;
+import org.taHjaj.wo.jenoptron.model.icore.IRule;
+import org.taHjaj.wo.jenoptron.model.icore.IValue;
 import dt.generators.Generator;
 import dt.generators.GeneratorOptions;
 import dt.generators.TextGenerator;

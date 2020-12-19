@@ -1,8 +1,8 @@
 package dt.dtview;
 
-import jdt.icore.IAction;
-import jdt.icore.ICondition;
-import jdt.icore.IRule;
+import org.taHjaj.wo.jenoptron.model.icore.IAction;
+import org.taHjaj.wo.jenoptron.model.icore.ICondition;
+import org.taHjaj.wo.jenoptron.model.icore.IRule;
 
 public class DTContext {
 	private final IRule iRule;
