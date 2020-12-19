@@ -30,4 +30,5 @@ public interface IImplyGroup extends IGroup {
 	void implies( final IAction action);
 	void implies( final ICondition condition, final IValue value);
 	void implies( final IAction action, final IValue value);
+
 }

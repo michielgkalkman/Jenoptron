@@ -36,10 +36,6 @@ public class ExclusiveConditionsGroup implements IExclusiveConditionGroup {
 	private final List<ICondition> mutualExclusiveConditions;
 	private final String shortDescription;
 
-	ExclusiveConditionsGroup() {
-		this("Deze constructor niet gebruiken !");
-	}
-
 	public ExclusiveConditionsGroup(final String shortDescription) {
 		this(shortDescription, null);
 	}
@@ -57,9 +53,7 @@ public class ExclusiveConditionsGroup implements IExclusiveConditionGroup {
 		if (mutualExclusiveConditions != null) {
 			newMutualExclusiveConditions.addAll(mutualExclusiveConditions);
 		}
-		for (final ICondition condition : conditions) {
-			newMutualExclusiveConditions.add(condition);
-		}
+		Collections.addAll(newMutualExclusiveConditions, conditions);
 		return new ExclusiveConditionsGroup(shortDescription, newMutualExclusiveConditions);
 	}
 
@@ -111,6 +105,11 @@ public class ExclusiveConditionsGroup implements IExclusiveConditionGroup {
 	@Override
 	public String getShortDescription(final String groupMemberShortDescription) {
 		return getShortDescription() + ":" + groupMemberShortDescription;
+	}
+
+	@Override
+	public void toString(StringBuilder stringBuilder) {
+		stringBuilder.append(toString());
 	}
 
 	@Override

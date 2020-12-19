@@ -34,4 +34,6 @@ public interface IGroup extends Serializable {
 	String getShortDescription();
 
 	String getShortDescription(final String groupMemberShortDescription);
+
+	void toString(StringBuilder stringBuilder);
 }

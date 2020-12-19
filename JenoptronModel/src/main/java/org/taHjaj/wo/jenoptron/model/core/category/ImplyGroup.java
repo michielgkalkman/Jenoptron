@@ -45,11 +45,11 @@ public class ImplyGroup implements IImplyGroup {
 	public ImplyGroup(final String shortDescription) {
 		this.shortDescription = shortDescription;
 
-		actions = new HashMap<IAction, IValue>();
-		conditionalActions = new HashMap<IAction, IValue>();
-		conditions = new HashMap<ICondition, IValue>();
-		impliedActions = new HashMap<IAction, IValue>();
-		impliedConditions = new HashMap<ICondition, IValue>();
+		actions = new HashMap<>();
+		conditionalActions = new HashMap<>();
+		conditions = new HashMap<>();
+		impliedActions = new HashMap<>();
+		impliedConditions = new HashMap<>();
 	}
 
 	@Override
@@ -163,7 +163,7 @@ public class ImplyGroup implements IImplyGroup {
 
 	@Override
 	public List<ICondition> conditions() {
-		final List<ICondition> list = new ArrayList<ICondition>();
+		final List<ICondition> list = new ArrayList<>();
 		list.addAll(conditions.keySet());
 		list.addAll(impliedConditions.keySet());
 
@@ -172,7 +172,7 @@ public class ImplyGroup implements IImplyGroup {
 
 	@Override
 	public List<IAction> actions() {
-		final List<IAction> list = new ArrayList<IAction>();
+		final List<IAction> list = new ArrayList<>();
 		list.addAll(actions.keySet());
 		list.addAll(impliedActions.keySet());
 
@@ -182,6 +182,13 @@ public class ImplyGroup implements IImplyGroup {
 	@Override
 	public String toString() {
 		final StringBuilder stringBuilder = new StringBuilder();
+		toString(stringBuilder);
+
+		return stringBuilder.toString();
+	}
+
+	@Override
+	public void toString(StringBuilder stringBuilder) {
 		boolean fFirst = true;
 
 		for (final ICondition condition : this.conditions.keySet()) {
@@ -198,11 +205,12 @@ public class ImplyGroup implements IImplyGroup {
 		}
 
 		for (final IAction action : actions.keySet()) {
+			final String actionShortDescription = action.getShortDescription();
 			if (fFirst) {
-				stringBuilder.append(action.getShortDescription()).append(':')
+				stringBuilder.append(actionShortDescription).append(':')
 						.append(StringUtils.center(actions.get(action).toString(), 4));
 			} else {
-				stringBuilder.append(',').append(action.getShortDescription()).append(':')
+				stringBuilder.append(',').append(actionShortDescription).append(':')
 						.append(StringUtils.center(actions.get(action).toString(), 4));
 			}
 		}
@@ -231,8 +239,6 @@ public class ImplyGroup implements IImplyGroup {
 						.append(StringUtils.center(impliedActions.get(action).toString(), 4));
 			}
 		}
-
-		return stringBuilder.toString();
 	}
 
 	@Override
