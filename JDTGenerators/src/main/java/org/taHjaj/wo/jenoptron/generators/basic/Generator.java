@@ -1,4 +1,4 @@
-package dt.generators;
+package org.taHjaj.wo.jenoptron.generators.basic;
 
 import java.io.FileFilter;
 import java.io.IOException;

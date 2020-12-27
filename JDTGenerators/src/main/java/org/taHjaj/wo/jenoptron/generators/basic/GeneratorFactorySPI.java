@@ -1,4 +1,4 @@
-package dt.generators;
+package org.taHjaj.wo.jenoptron.generators.basic;
 
 import java.util.ArrayList;
 import java.util.List;
