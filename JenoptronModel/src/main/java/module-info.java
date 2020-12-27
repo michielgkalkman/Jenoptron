@@ -1,4 +1,4 @@
-module org.taHjaj.wo.jenoptron.model {
+open module org.taHjaj.wo.jenoptron.model {
     requires commons.collections;
     requires log4j;
     requires rxjava;

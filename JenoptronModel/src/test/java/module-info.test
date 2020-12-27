@@ -1,0 +1,9 @@
+module org.taHjaj.wo.jenoptron.model {
+    requires commons.collections;
+    requires log4j;
+    requires rxjava;
+    requires commons.lang;
+    requires commons.io;
+    requires java.desktop;
+    opens org.taHjaj.wo.jenoptron.model.junit;
+}
