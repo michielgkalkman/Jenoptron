@@ -5,7 +5,6 @@
 	<artifactId>JDTBasicGenerators</artifactId>
 	<groupId>www.taHjaj-wo.org</groupId>
 	<name>JDTBasicGenerators</name>
-	<version>0.28-SNAPSHOT</version>
 
 	<parent>
 		<groupId>org.taHjaj.wo</groupId>
@@ -30,13 +29,8 @@
 		<dependency>
 			<groupId>www.taHjaj-wo.org</groupId>
 			<artifactId>JDTGenerators</artifactId>
-			<version>0.27</version>
+			<version>0.0.1-SNAPSHOT</version>
 			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring</artifactId>
-			<version>2.5.6</version>
 		</dependency>
 		<dependency>
 			<groupId>commons-lang</groupId>
@@ -63,19 +57,6 @@
 			<groupId>org.junit.jupiter</groupId>
 			<artifactId>junit-jupiter-engine</artifactId>
 			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.taHjaj.wo</groupId>
-			<artifactId>JenoptronModel</artifactId>
-			<classifier>tests</classifier>
-			<type>test-jar</type>
-			<scope>test</scope>
-			<version>0.0.1-SNAPSHOT</version>
-		</dependency>
-		<dependency>
-			<groupId>org.taHjaj.wo</groupId>
-			<artifactId>JenoptronModel</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
 	</dependencies>
 </project>

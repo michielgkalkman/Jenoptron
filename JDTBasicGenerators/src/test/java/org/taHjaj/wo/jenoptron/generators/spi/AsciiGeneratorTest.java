@@ -1,7 +1,7 @@
-package org.taHjaj.wo.jenoptron.generators.basic;
+package org.taHjaj.wo.jenoptron.generators.spi;
 
 import org.apache.log4j.Logger;
-import org.taHjaj.wo.jenoptron.generators.basic.ascii.AsciiTableOptions;
+import org.taHjaj.wo.jenoptron.generators.spi.ascii.AsciiTableOptions;
 import org.taHjaj.wo.jenoptron.model.core.DecisionTable;
 import org.taHjaj.wo.jenoptron.model.core.binary.BinaryAction;
 import org.taHjaj.wo.jenoptron.model.core.binary.BinaryCondition;

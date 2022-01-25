@@ -1,4 +1,4 @@
-package org.taHjaj.wo.jenoptron.generators.basic.excel;
+package org.taHjaj.wo.jenoptron.generators.spi.ascii;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
@@ -9,32 +9,48 @@ import org.taHjaj.wo.jenoptron.model.icore.IValue;
 import java.io.Serializable;
 
 
-public class ExcelTableOptionsWrapper implements Serializable {
+public class AsciiTableOptionsWrapper implements Serializable {
 	/**
 	 *
 	 */
 	private static final long serialVersionUID = 4649208529586279970L;
-	private final ExcelTableOptions tableOptions;
+	private final AsciiTableOptions asciiTableOptions;
 
-	public ExcelTableOptionsWrapper( final boolean fBorders, final boolean fConditionActionSeparator,
+	public AsciiTableOptionsWrapper( final boolean fBorders, final boolean fConditionActionSeparator,
 			final boolean fWrapping, final int wrapLength) {
-		tableOptions = new ExcelTableOptions( fBorders);
+		asciiTableOptions = new AsciiTableOptions( fBorders, fConditionActionSeparator, fWrapping, wrapLength);
 	}
 
-	public ExcelTableOptionsWrapper( final ExcelTableOptions asciiTableOptions) {
-		this.tableOptions = asciiTableOptions;
+	public AsciiTableOptionsWrapper( final AsciiTableOptions asciiTableOptions) {
+		this.asciiTableOptions = asciiTableOptions;
 	}
 
 	public String getCrossing() {
-		return tableOptions.isFBorders() ? "+" : "";
+		return asciiTableOptions.isFBorders() ? "+" : "";
+	}
+
+	public String getConditionActionSeparator() {
+		return asciiTableOptions.isFConditionActionSeparator() ? "=" : "";
+	}
+
+	public boolean hasConditionActionSeparator() {
+		return asciiTableOptions.isFConditionActionSeparator();
 	}
 
 	public String getVerticalSeparator() {
-		return tableOptions.isFBorders() ? "|" : "";
+		return asciiTableOptions.isFBorders() ? "|" : "";
 	}
 
 	public String getHorizontalSeparator() {
-		return tableOptions.isFBorders() ? "-" : "";
+		return asciiTableOptions.isFBorders() ? "-" : "";
+	}
+
+	public boolean isWrapping() {
+		return asciiTableOptions.isFWrapping();
+	}
+
+	public int getWrapLength() {
+		return asciiTableOptions.getWrapLength();
 	}
 
 	public String getBackgroundChar() {
@@ -78,10 +94,30 @@ public class ExcelTableOptionsWrapper implements Serializable {
 	}
 
 	public void setFBorders(final boolean borders) {
-		tableOptions.setFBorders( borders);
+		asciiTableOptions.setFBorders( borders);
 	}
 
-	public ExcelTableOptions getTableOptions() {
-		return tableOptions;
+	public boolean isFConditionActionSeparator() {
+		return asciiTableOptions.isFConditionActionSeparator();
+	}
+
+	public void setFConditionActionSeparator(final boolean conditionActionSeparator) {
+		asciiTableOptions.setFConditionActionSeparator( conditionActionSeparator);
+	}
+
+	public boolean isFWrapping() {
+		return asciiTableOptions.isFWrapping();
+	}
+
+	public void setFWrapping(final boolean wrapping) {
+		asciiTableOptions.setFWrapping(wrapping);
+	}
+
+	public void setWrapLength(final int wrapLength) {
+		asciiTableOptions.setWrapLength( wrapLength);
+	}
+
+	public AsciiTableOptions getAsciiTableOptions() {
+		return asciiTableOptions;
 	}
 }

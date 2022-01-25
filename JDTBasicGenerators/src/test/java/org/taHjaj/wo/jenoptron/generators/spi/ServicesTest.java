@@ -1,4 +1,4 @@
-package org.taHjaj.wo.jenoptron.generators.basic;
+package org.taHjaj.wo.jenoptron.generators.spi;
 
 import org.apache.log4j.Logger;
 import org.taHjaj.wo.jenoptron.model.core.DecisionTable;

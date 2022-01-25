@@ -1,8 +1,8 @@
-package org.taHjaj.wo.jenoptron.generators.basic.ascii;
+package org.taHjaj.wo.jenoptron.generators.spi.ascii;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
-import org.taHjaj.wo.jenoptron.generators.basic.GeneratorOptions;
+import org.taHjaj.wo.jenoptron.generators.spi.GeneratorOptions;
 
 public class AsciiTableOptions implements GeneratorOptions {
 	@Override

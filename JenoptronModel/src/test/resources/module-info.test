@@ -4,7 +4,7 @@
 
 // Allow deep reflection for test discovery - repeat for each test library you need
 --add-opens
-  org.taHjaj.wo.jenoptron.model/org.taHjaj.wo.jenoptron.model.junit=ALL-UNNAMEDAbstractGeneratorTestCase
+  org.taHjaj.wo.jenoptron.model/org.taHjaj.wo.jenoptron.model.junit=ALL-UNNAMED
 
 // "requires org.junit.jupiter.api"
 --add-reads

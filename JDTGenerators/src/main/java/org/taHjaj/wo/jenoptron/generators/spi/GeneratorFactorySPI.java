@@ -1,4 +1,4 @@
-package org.taHjaj.wo.jenoptron.generators.basic;
+package org.taHjaj.wo.jenoptron.generators.spi;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,7 +9,7 @@ public abstract class GeneratorFactorySPI {
 	public abstract List<Generator> getGenerators();
 
 	public static Iterable<Generator> getAllGenerators() {
-		final List<Generator> generators = new ArrayList<Generator>();
+		final List<Generator> generators = new ArrayList<>();
 
 		final ServiceLoader<GeneratorFactorySPI> generatorFactories
 	     = ServiceLoader.load(GeneratorFactorySPI.class);
@@ -22,15 +22,13 @@ public abstract class GeneratorFactorySPI {
 
 	// @todo use a predicate
 	public static Iterable<Generator> getAllFileGenerators() {
-		final List<Generator> generators = new ArrayList<Generator>();
+		final List<Generator> generators = new ArrayList<>();
 
 		final ServiceLoader<GeneratorFactorySPI> generatorFactories
 	     = ServiceLoader.load(GeneratorFactorySPI.class);
 
 		for( final GeneratorFactorySPI generatorFactory : generatorFactories) {
-			for( final Generator generator : generatorFactory.getGenerators()) {
-				generators.add( generator);
-			}
+			generators.addAll(generatorFactory.getGenerators());
 		}
 		return generators;
 	}
@@ -97,7 +95,7 @@ public abstract class GeneratorFactorySPI {
 	}
 
 	public static List<TextGenerator> getTextGenerators() {
-		List<TextGenerator> textGenerators = new ArrayList<TextGenerator>();
+		List<TextGenerator> textGenerators = new ArrayList<>();
 
 		final ServiceLoader<GeneratorFactorySPI> generatorFactories
 	     = ServiceLoader.load(GeneratorFactorySPI.class);

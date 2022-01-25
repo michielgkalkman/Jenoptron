@@ -1,0 +1,2 @@
+org.taHjaj.wo.jenoptron.generators.spi.ascii.AsciiGeneratorSPI
+org.taHjaj.wo.jenoptron.generators.spi.excel.ExcelGeneratorSPI

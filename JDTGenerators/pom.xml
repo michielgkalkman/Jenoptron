@@ -5,7 +5,6 @@
   <groupId>www.taHjaj-wo.org</groupId>
   <artifactId>JDTGenerators</artifactId>
   <name>JDTGenerators</name>
-  <version>0.27</version>
 
     <parent>
         <groupId>org.taHjaj.wo</groupId>
@@ -19,6 +18,7 @@
           <groupId>org.taHjaj.wo</groupId>
           <artifactId>JenoptronModel</artifactId>
           <classifier>tests</classifier>
+          <type>test-jar</type>
           <version>0.0.1-SNAPSHOT</version>
       </dependency>
   	<dependency>

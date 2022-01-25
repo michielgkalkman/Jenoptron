@@ -1,8 +1,8 @@
 package org.taHjaj.wo.jenoptron.generators.junit;
 
-import org.taHjaj.wo.jenoptron.generators.basic.GeneratorFactorySPI;
-import org.taHjaj.wo.jenoptron.generators.basic.TextGenerator;
-import org.taHjaj.wo.jenoptron.generators.basic.ascii.AsciiTableOptions;
+import org.taHjaj.wo.jenoptron.generators.spi.GeneratorFactorySPI;
+import org.taHjaj.wo.jenoptron.generators.spi.TextGenerator;
+import org.taHjaj.wo.jenoptron.generators.spi.ascii.AsciiTableOptions;
 import org.taHjaj.wo.jenoptron.model.icore.IDecisionTable;
 import org.taHjaj.wo.jenoptron.model.junit.AbstractTestCase;
 

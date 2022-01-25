@@ -1,4 +1,4 @@
-package org.taHjaj.wo.jenoptron.generators.basic.ascii;
+package org.taHjaj.wo.jenoptron.generators.spi.ascii;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.WordUtils;

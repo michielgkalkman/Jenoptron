@@ -1,8 +1,8 @@
-package org.taHjaj.wo.jenoptron.generators.basic.excel;
+package org.taHjaj.wo.jenoptron.generators.spi.excel;
 
-import org.taHjaj.wo.jenoptron.generators.basic.Generator;
-import org.taHjaj.wo.jenoptron.generators.basic.GeneratorOptions;
-import org.taHjaj.wo.jenoptron.generators.basic.TextGenerator;
+import org.taHjaj.wo.jenoptron.generators.spi.Generator;
+import org.taHjaj.wo.jenoptron.generators.spi.GeneratorOptions;
+import org.taHjaj.wo.jenoptron.generators.spi.TextGenerator;
 import org.taHjaj.wo.jenoptron.model.icore.*;
 
 import java.io.FileFilter;

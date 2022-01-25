@@ -1,7 +1,7 @@
-package org.taHjaj.wo.jenoptron.generators.basic.excel;
+package org.taHjaj.wo.jenoptron.generators.spi.excel;
 
 import com.jgoodies.binding.beans.ExtendedPropertyChangeSupport;
-import org.taHjaj.wo.jenoptron.generators.basic.GeneratorOptions;
+import org.taHjaj.wo.jenoptron.generators.spi.GeneratorOptions;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
